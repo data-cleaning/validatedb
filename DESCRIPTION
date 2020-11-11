@@ -1,0 +1,19 @@
+Package: validatedb
+Title: Validate on a table in a DB, using dbplyr
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Edwin",
+           family = "de Jonge",
+           role = c("aut", "cre"),
+           email = "edwindjonge@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Validate on a table in a DB, using dbplyr
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    validate,
+    dplyr,
+    dbplyr
