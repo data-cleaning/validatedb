@@ -4,6 +4,9 @@
 # validatedb
 
 <!-- badges: start -->
+
+[![R build
+status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
 <!-- badges: end -->
 
 The goal of validatedb is to …
