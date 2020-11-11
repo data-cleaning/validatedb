@@ -20,3 +20,5 @@ Imports:
 Suggests: 
     testthat,
     RSQLite
+URL: https://github.com/edwindj/validatedb
+BugReports: https://github.com/edwindj/validatedb/issues
