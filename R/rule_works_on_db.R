@@ -2,12 +2,13 @@
 #' 
 #' @param tbl a `tbl` object with columns used in `x`
 #' @param x a [validate::validator()] object
+#' @importFrom utils head
 rule_works_on_db <- function(tbl, x){
   l <- confront_sparse(head(tbl), x, union_all = F)
   sapply(l, function(qry){
     works <- FALSE
     try({
-      collect(head(qry))
+      dplyr::collect(head(qry))
       works <- TRUE
     }, silent = TRUE)
     works

@@ -1,26 +1,27 @@
 
 #' create a table with per record if it abides to the rule.
-confront_wide <- function(tbl_d, x, compute = FALSE, ...){
-  exprs <- x$exprs(replace_in = FALSE, vectorize=FALSE)
-
-  is_assignment <- sapply(exprs, function(e){
-    e[[1]] == ":="
-  })
+confront_wide <- function(tbl, x, compute = FALSE, ...){
+  exprs <- x$exprs( replace_in = FALSE
+                  , vectorize=FALSE
+                  , expand_assignments = TRUE
+                  )
   
-  asgnmt <- exprs[is_assignment]
-  names(asgnmt) <- NULL
-  value <- sapply(asgnmt, function(e){
-    setNames(as.expression(e[[3]]), as.character(e[[2]]))
-  }) 
-  .data <- bquote(mutate(tbl_d, ..(value)), splice=TRUE)
-  
-  exprs <- exprs[!is_assignment]
-  valid_qry <- bquote(dplyr::transmute(tbl_d, ..(exprs)), splice = TRUE)
+  working <- rule_works_on_db(tbl, x)
+  if (any(!working)){
+    nw <- exprs[!working]
+    # should this be in the error object?
+    warning("Detected rules that do not work on this table/db.\n",
+    "Ignoring:\n",
+    paste0("\t", names(nw),": ", nw, collapse="\n")
+    )
+  }
+  exprs <- exprs[working]
+  valid_qry <- bquote(dplyr::transmute(tbl, ..(exprs)), splice = TRUE)
   valid_qry <- eval(valid_qry)
-  collect(valid_qry)
+  valid_qry
 }
 
 
 # x <- validator(x > 1, y > 1)
 # d <- data.frame(x = 1:2, y = c(2,NA))
-confront_wide(tbl_d, x)
+# confront_wide(tbl_d, x)
