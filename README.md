@@ -5,45 +5,59 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build
 status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
 <!-- badges: end -->
 
-The goal of validatedb is to …
+## WORK IN PROGRESS!
+
+`validatedb` executes validation checks written with R package
+`validate` on a database. This allows for checking the validity of
+records in a database.
 
 ## Installation
 
 You can install the released version of validatedb from
 [CRAN](https://CRAN.R-project.org) with:
 
-    install.packages("validatedb")
+``` r
+remotes::install_github("edwindj/validatedb")
+```
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-    library(validatedb)
-    #> Loading required package: validate
-    ## basic example code
+``` r
+library(validatedb)
+#> Loading required package: validate
+library(validate)
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+rules <- validator( is_adult   = age >= 18
+                  , has_income = salary > 0
+                  )
 
-    summary(cars)
-    #>      speed           dist       
-    #>  Min.   : 4.0   Min.   :  2.00  
-    #>  1st Qu.:12.0   1st Qu.: 26.00  
-    #>  Median :15.0   Median : 36.00  
-    #>  Mean   :15.4   Mean   : 42.98  
-    #>  3rd Qu.:19.0   3rd Qu.: 56.00  
-    #>  Max.   :25.0   Max.   :120.00
+# create a table in a database
+income <- data.frame(age=c(12,35), salary = c(1000,NA))
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
+# demo in memory db
+con <- dbplyr::src_memdb()
+tbl_income <- dplyr::copy_to(con, income)
+print(tbl_income)
+#> # Source:   table<income> [?? x 2]
+#> # Database: sqlite 3.30.1 [:memory:]
+#>     age salary
+#>   <dbl>  <dbl>
+#> 1    12   1000
+#> 2    35     NA
 
-You can also embed plots, for example:
-
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub!
+validatedb:::confront_wide(tbl_income, rules)
+#> # Source:   lazy query [?? x 2]
+#> # Database: sqlite 3.30.1 [:memory:]
+#>   is_adult has_income
+#>      <int>      <int>
+#> 1        0          1
+#> 2        1         NA
+```

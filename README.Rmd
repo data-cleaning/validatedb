@@ -16,17 +16,21 @@ knitr::opts_chunk$set(
 # validatedb
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
 <!-- badges: end -->
 
-The goal of validatedb is to ...
+## WORK IN PROGRESS!
+
+`validatedb` executes validation checks written with R package `validate` on a 
+database. This allows for checking the validity of records in a database.
 
 ## Installation
 
 You can install the released version of validatedb from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("validatedb")
+remotes::install_github("edwindj/validatedb")
 ```
 
 ## Example
@@ -35,21 +39,20 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(validatedb)
-## basic example code
+library(validate)
+
+rules <- validator( is_adult   = age >= 18
+                  , has_income = salary > 0
+                  )
+
+# create a table in a database
+income <- data.frame(age=c(12,35), salary = c(1000,NA))
+
+# demo in memory db
+con <- dbplyr::src_memdb()
+tbl_income <- dplyr::copy_to(con, income)
+print(tbl_income)
+
+validatedb:::confront_wide(tbl_income, rules)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
