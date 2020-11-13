@@ -26,6 +26,7 @@ Imports:
     methods
 Suggests: 
     testthat,
-    RSQLite
+    RSQLite,
+    covr
 URL: https://github.com/data-cleaning/validatedb
 BugReports: https://github.com/data-cleaning/validatedb/issues

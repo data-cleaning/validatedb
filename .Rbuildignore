@@ -9,3 +9,4 @@
 ^\.circleci$
 ^\.circleci/config\.yml$
 ^example$
+^codecov\.yml$

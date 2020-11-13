@@ -11,6 +11,8 @@ status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project
 status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
 [![CircleCI build
 status](https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg)](https://circleci.com/gh/data-cleaning/validatedb)
+[![Codecov test
+coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
 <!-- badges: end -->
 
 ## WORK IN PROGRESS!
@@ -35,7 +37,6 @@ remotes::install_github("data-cleaning/validatedb")
 ``` r
 library(validatedb)
 #> Loading required package: validate
-library(validate)
 ```
 
 First we setup a table in a database (for demo purpose)
