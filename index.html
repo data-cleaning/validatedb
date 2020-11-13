@@ -123,8 +123,9 @@
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Confrontations: 2</span>
-<span class="co">#&gt; Fails         : [??] (see `values`)</span>
+<span class="co">#&gt; Confrontations: 0</span>
+<span class="co">#&gt; With fails    : 0</span>
+<span class="co">#&gt; Warnings      : 0</span>
 <span class="co">#&gt; Errors        : 0</span></code></pre></div>
 <p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -145,8 +146,13 @@
 <span class="co">#&gt; 2        1         NA</span></code></pre></div>
 <p>We can see the sql code by using <code>show_query</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
+<span class="co">#&gt; &lt;SQL&gt;</span>
+<span class="co">#&gt; SELECT (`age` - 18.0) &gt;= -1e-08 AS `is_adult`, `salary` &gt; 0.0 AS `has_income`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co"># or</span>
+<span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT (`age` - 18.0) &gt;= -1e-08 AS `is_adult`, `salary` &gt; 0.0 AS `has_income`</span>
 <span class="co">#&gt; FROM `income`</span></code></pre></div>
@@ -184,7 +190,6 @@
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=validatedb"><img src="https://www.r-pkg.org/badges/version/validatedb" alt="CRAN status"></a></li>
 <li><a href="https://github.com/edwindj/validatedb/actions"><img src="https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://circleci.com/gh/data-cleaning/validatedb"><img src="https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg" alt="CircleCI build status"></a></li>
 <li><a href="https://codecov.io/gh/data-cleaning/validatedb?branch=master"><img src="https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>

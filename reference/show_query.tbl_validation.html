@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>create a table with per record if it abides to the rule. — confront_tbl • validatedb</title>
+<title>Show generated sql code — show_query.tbl_validation • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="create a table with per record if it abides to the rule. — confront_tbl" />
-<meta property="og:description" content="create a table with per record if it abides to the rule." />
+<meta property="og:title" content="Show generated sql code — show_query.tbl_validation" />
+<meta property="og:description" content="Shows the generated sql code for the validation of the tbl." />
 
 
 
@@ -111,35 +111,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>create a table with per record if it abides to the rule.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/confront_tbl.R'><code>R/confront_tbl.R</code></a></small>
-    <div class="hidden name"><code>confront_tbl.Rd</code></div>
+    <h1>Show generated sql code</h1>
+    <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/show_query.R'><code>R/show_query.R</code></a></small>
+    <div class="hidden name"><code>show_query.tbl_validation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>create a table with per record if it abides to the rule.</p>
+    <p>Shows the generated sql code for the validation of the tbl.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>confront_tbl</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for tbl_validation</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tbl</th>
-      <td><p>tbl object</p></td>
-    </tr>
-    <tr>
       <th>x</th>
-      <td><p><code>validator</code> object</p></td>
-    </tr>
-    <tr>
-      <th>key</th>
-      <td><p>character of key column (not working)</p></td>
+      <td><p><code><a href='tbl_validation-class.html'>tbl_validation()</a></code> object, result of a <code><a href='confront.tbl_sql.html'>confront.tbl_sql()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>passed through.</p></td>
     </tr>
     </table>
 
