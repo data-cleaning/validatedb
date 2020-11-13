@@ -93,8 +93,7 @@
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-cleaning/validatedb">validatedb</a></span><span class="op">)</span>
-<span class="co">#&gt; Loading required package: validate</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-cleaning/validate">validate</a></span><span class="op">)</span></code></pre></div>
+<span class="co">#&gt; Loading required package: validate</span></code></pre></div>
 <p>First we setup a table in a database (for demo purpose)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create a table in a database</span>
@@ -113,12 +112,12 @@
 <span class="co">#&gt; 2    35     NA</span></code></pre></div>
 <p>Let’s define a rule set and confront the table with it:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
+<code class="sourceCode R"><span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu">validator</span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
                   , has_income <span class="op">=</span> <span class="va">salary</span> <span class="op">&gt;</span> <span class="fl">0</span>
                   <span class="op">)</span>
 
 <span class="co"># and confront!</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu">confront</span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt; Object of class 'tbl_validation'</span>
 <span class="co">#&gt; Call:</span>
@@ -129,7 +128,7 @@
 <span class="co">#&gt; Errors        : 0</span></code></pre></div>
 <p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span>
 <span class="co">#&gt; $is_adult</span>
 <span class="co">#&gt; [1] FALSE  TRUE</span>
 <span class="co">#&gt; </span>
@@ -137,7 +136,7 @@
 <span class="co">#&gt; [1] TRUE   NA</span></code></pre></div>
 <p>But often this seems more handy:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 2]</span>
 <span class="co">#&gt; # Database: sqlite 3.30.1 []</span>
 <span class="co">#&gt;   is_adult has_income</span>
@@ -146,7 +145,7 @@
 <span class="co">#&gt; 2        1         NA</span></code></pre></div>
 <p>We can see the sql code by using <code>show_query</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">v</span> <span class="op">&lt;-</span> <span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">v</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT (`age` - 18.0) &gt;= -1e-08 AS `is_adult`, `salary` &gt; 0.0 AS `has_income`</span>
@@ -185,6 +184,8 @@
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=validatedb"><img src="https://www.r-pkg.org/badges/version/validatedb" alt="CRAN status"></a></li>
 <li><a href="https://github.com/edwindj/validatedb/actions"><img src="https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://circleci.com/gh/data-cleaning/validatedb"><img src="https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg" alt="CircleCI build status"></a></li>
+<li><a href="https://codecov.io/gh/data-cleaning/validatedb?branch=master"><img src="https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 </div>

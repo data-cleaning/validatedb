@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a query object for sparse table validation — confront_tbl_sparse • validatedb</title>
+<title>Create a sparse confrontation query — confront_tbl_sparse • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,13 @@
 
 
 
-<meta property="og:title" content="Create a query object for sparse table validation — confront_tbl_sparse" />
-<meta property="og:description" content="Confront tbl_sql objects with validator rules." />
+<meta property="og:title" content="Create a sparse confrontation query — confront_tbl_sparse" />
+<meta property="og:description" content="Create a sparse confrontation query. Only errors and missing are stored.
+This can be useful alternative to confront_tbl() which stores all results
+of a tbl validation in a table with length(rules) columns and nrow(tbl)
+rows. Note that the result of this function is a (lazy) query object that
+still needs to be executed in the database, e.g. with dplyr::collect(), dplyr::collapse() or
+dplyr::compute()." />
 
 
 
@@ -111,13 +116,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a query object for sparse table validation</h1>
+    <h1>Create a sparse confrontation query</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/confront_tbl_sparse.R'><code>R/confront_tbl_sparse.R</code></a></small>
     <div class="hidden name"><code>confront_tbl_sparse.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Confront <code>tbl_sql</code> objects with <code>validator</code> rules.</p>
+    <p>Create a sparse confrontation query. Only errors and missing are stored.
+This can be useful alternative to <code><a href='confront_tbl.html'>confront_tbl()</a></code> which stores all results
+of a <code>tbl</code> validation in a table with <code><a href='https://rdrr.io/r/base/length.html'>length(rules)</a></code> columns and <code><a href='https://rdrr.io/r/base/nrow.html'>nrow(tbl)</a></code>
+rows. Note that the result of this function is a (lazy) query object that
+still needs to be executed in the database, e.g. with <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::collect()</a></code>, <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::collapse()</a></code> or
+<code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::compute()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>confront_tbl_sparse</span><span class='op'>(</span>
