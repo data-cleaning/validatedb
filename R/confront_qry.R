@@ -1,6 +1,6 @@
 
 #' create a table with per record if it abides to the rule.
-confront_wide <- function(tbl, x, compute = FALSE, ...){
+confront_tbl <- function(tbl, x, key = NULL, ...){
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize=FALSE
                   , expand_assignments = TRUE
@@ -15,10 +15,18 @@ confront_wide <- function(tbl, x, compute = FALSE, ...){
     paste0("\t", names(nw),": ", nw, collapse="\n")
     )
   }
+  # TODO promote n to argument?
+  record_based <- is_record_based(tbl, x, n = 5)
   exprs <- exprs[working]
   valid_qry <- bquote(dplyr::transmute(tbl, ..(exprs)), splice = TRUE)
   valid_qry <- eval(valid_qry)
-  valid_qry
+  
+  list( query        = valid_qry
+      , tbl          = tbl
+      , record_based = record_based
+      , nexprs       = length(working)
+      , errors       = nw
+      )
 }
 
 

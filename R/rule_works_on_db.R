@@ -4,8 +4,9 @@
 #' @param x a [validate::validator()] object
 #' @importFrom utils head
 rule_works_on_db <- function(tbl, x){
-  l <- confront_sparse(head(tbl), x, union_all = F)
-  sapply(l, function(qry){
+  res <- confront_tbl_sparse(head(tbl), x, union_all = FALSE, check_rules = FALSE)
+  # TODO extract information on the error...
+  sapply(res$query, function(qry){
     works <- FALSE
     try({
       dplyr::collect(head(qry))

@@ -1,30 +1,29 @@
 
 #' create a table with only fails
-confront_sparse <- function(tbl
-                           , x
-                           , compute = FALSE
-                           , union_all = TRUE
-                           , ...
-                           , check_rules = TRUE){
+confront_tbl_sparse <- function( tbl
+                               , x
+                               , compute = FALSE
+                               , union_all = TRUE
+                               , ...
+                               , check_rules = TRUE){
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize = FALSE
                   , expand_assigments = TRUE
                   )
+  nexprs <- length(exprs)
+  if (check_rules){
+    working <- rule_works_on_db(tbl, x)
+    if (any(!working)){
+      nw <- exprs[!working]
+      # should this be in the error object?
+      warning("Detected rules that do not work on this table/db.\n",
+              "Ignoring:\n",
+              paste0("\t", names(nw),": ", nw, collapse="\n")
+      )
+    }
+    exprs <- exprs[working]
+  }
 
-  # # extract?
-  # is_assignment <- sapply(exprs, function(e){
-  #   e[[1]] == ":="
-  # })
-  # 
-  # asgnmt <- exprs[is_assignment]
-  # names(asgnmt) <- NULL
-  # value <- sapply(asgnmt, function(e){
-  #   setNames(as.expression(e[[3]]), as.character(e[[2]]))
-  # }) 
-  # .data <- bquote(mutate(tbl_d, ..(value)), splice=TRUE)
-  # 
-  # exprs <- exprs[!is_assignment]
-  
   qry_e <- lapply(names(exprs), function(rule_name){
     e <- exprs[[rule_name]]
     fails <- substitute(dplyr::filter(tbl, dplyr::coalesce(!e, TRUE)))
@@ -39,7 +38,10 @@ confront_sparse <- function(tbl
   if (isTRUE(union_all)){
     qry <- Reduce(dplyr::union_all, qry)
   }
-  qry
+  list( query  = qry
+      , tbl    = tbl
+      , nexprs = nexprs
+      )
 }
 
 

@@ -43,21 +43,16 @@ rules <- validator( is_adult   = age >= 18
 income <- data.frame(age=c(12,35), salary = c(1000,NA))
 
 # demo in memory db
-con <- dbplyr::src_memdb()
-tbl_income <- dplyr::copy_to(con, income)
+con <- DBI::dbConnect(RSQLite::SQLite())
+DBI::dbWriteTable(con, "income", income)
+
+tbl_income <- dplyr::tbl(con, "income")
 print(tbl_income)
 #> # Source:   table<income> [?? x 2]
-#> # Database: sqlite 3.30.1 [:memory:]
+#> # Database: sqlite 3.30.1 []
 #>     age salary
 #>   <dbl>  <dbl>
 #> 1    12   1000
 #> 2    35     NA
-
-validatedb:::confront_wide(tbl_income, rules)
-#> # Source:   lazy query [?? x 2]
-#> # Database: sqlite 3.30.1 [:memory:]
-#>   is_adult has_income
-#>      <int>      <int>
-#> 1        0          1
-#> 2        1         NA
+#confront(tbl_income, rules)
 ```
