@@ -2,7 +2,7 @@
 % Please edit documentation in R/confront_tbl_sparse.R
 \name{confront_tbl_sparse}
 \alias{confront_tbl_sparse}
-\title{Create a query object for sparse table validation}
+\title{Create a sparse confrontation query}
 \usage{
 confront_tbl_sparse(
   tbl,
@@ -27,6 +27,11 @@ confront_tbl_sparse(
 \item{check_rules}{if \code{TRUE} it is checked which rules 'work' on the db.}
 }
 \description{
-Confront \code{tbl_sql} objects with \code{validator} rules.
+Create a sparse confrontation query. Only errors and missing are stored.
+This can be useful alternative to \code{\link[=confront_tbl]{confront_tbl()}} which stores all results
+of a \code{tbl} validation in a table with \code{length(rules)} columns and \code{nrow(tbl)}
+rows. Note that the result of this function is a (lazy) query object that
+still needs to be executed in the database, e.g. with \code{\link[dplyr:compute]{dplyr::collect()}}, \code{\link[dplyr:compute]{dplyr::collapse()}} or
+\code{\link[dplyr:compute]{dplyr::compute()}}.
 }
 \concept{confront}

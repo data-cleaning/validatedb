@@ -1,6 +1,12 @@
 
-#' Create a query object for sparse table validation
+#' Create a sparse confrontation query
 #' 
+#' Create a sparse confrontation query. Only errors and missing are stored.
+#' This can be useful alternative to [confront_tbl()] which stores all results
+#' of a `tbl` validation in a table with `length(rules)` columns and `nrow(tbl)`
+#' rows. Note that the result of this function is a (lazy) query object that 
+#' still needs to be executed in the database, e.g. with [dplyr::collect()], [dplyr::collapse()] or
+#' [dplyr::compute()].
 #' @inherit confront.tbl_sql
 #' @param union_all if `FALSE` each rule is a separate query.
 #' @param check_rules if `TRUE` it is checked which rules 'work' on the db.

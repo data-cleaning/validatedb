@@ -9,7 +9,8 @@
 status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build
 status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
-<!-- [![CircleCI build status](https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg)](https://circleci.com/gh/data-cleaning/validatedb) -->
+[![CircleCI build
+status](https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg)](https://circleci.com/gh/data-cleaning/validatedb)
 <!-- badges: end -->
 
 ## WORK IN PROGRESS!

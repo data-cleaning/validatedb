@@ -12,8 +12,8 @@ This package validates data in table using rules specified with `validate`
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/edwindj/validatedb}
-  \item Report bugs at \url{https://github.com/edwindj/validatedb/issues}
+  \item \url{https://github.com/data-cleaning/validatedb}
+  \item Report bugs at \url{https://github.com/data-cleaning/validatedb/issues}
 }
 
 }
