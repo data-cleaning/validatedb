@@ -6,6 +6,7 @@
 #' @param type whether to return a list/matrix or to return a query on the database.
 #' @param ... not used
 #' @export
+#' @example ./example/confront.R
 setMethod("values", signature = c("tbl_validation"), function( x
                                                              , simplify = FALSE
                                                              , type = c("list", "tbl")

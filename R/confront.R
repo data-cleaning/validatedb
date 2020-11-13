@@ -1,15 +1,18 @@
 setOldClass("tbl_sql")
 
-#' Confront `tbl_sql` objects with `validator` rules.
+#' Confront `tbl_sql` with `validator` rules.
 #' 
-#' Confront `tbl_sql` objects with `validator` rules.
+#' Confront `tbl_sql` objects with `validator` rules. This function makes it 
+#' possible to execute `validator()` rules on database tables. 
+#' 
 #' @param tbl tbl object
 #' @param x `validator` object
 #' @param ref reference object (not working)
 #' @param key character of key column (not working)
 #' @param sparse `logical` should only errors be stored in the db?
 #' @param compute `logical` if `TRUE` the check stores a temporary table in the database.
-#' @param ... not
+#' @param ... not used
+#' @example ./example/confront.R
 #' @export
 confront.tbl_sql <- function( tbl
                             , x

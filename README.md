@@ -9,8 +9,6 @@
 status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build
 status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
-[![CircleCI build
-status](https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg)](https://circleci.com/gh/data-cleaning/validatedb)
 [![Codecov test
 coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
 <!-- badges: end -->
@@ -75,8 +73,9 @@ print(cf)
 #> Call:
 #>     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #> 
-#> Confrontations: 2
-#> Fails         : [??] (see `values`)
+#> Confrontations: 0
+#> With fails    : 0
+#> Warnings      : 0
 #> Errors        : 0
 ```
 
@@ -107,8 +106,13 @@ values(cf, type = "tbl")
 We can see the sql code by using `show_query`:
 
 ``` r
+show_query(cf)
+#> <SQL>
+#> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`
+#> FROM `income`
+# or
 v <- values(cf, type = "tbl")
-dplyr::show_query(v)
+show_query(v)
 #> <SQL>
 #> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`
 #> FROM `income`

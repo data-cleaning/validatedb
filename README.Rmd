@@ -18,8 +18,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
-[![CircleCI build status](https://circleci.com/gh/data-cleaning/validatedb.svg?style=svg)](https://circleci.com/gh/data-cleaning/validatedb)
-[![Codecov test coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
+[![Codecov test
+coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
 <!-- badges: end -->
 
 ## WORK IN PROGRESS!
@@ -84,7 +84,9 @@ values(cf, type = "tbl")
 We can see the sql code by using `show_query`:
 
 ```{r}
+show_query(cf)
+# or
 v <- values(cf, type = "tbl")
-dplyr::show_query(v)
+show_query(v)
 ```
 

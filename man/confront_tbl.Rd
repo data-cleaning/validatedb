@@ -13,7 +13,7 @@ confront_tbl(tbl, x, key = NULL, ...)
 
 \item{key}{character of key column (not working)}
 
-\item{...}{not}
+\item{...}{not used}
 }
 \description{
 create a table with per record if it abides to the rule.

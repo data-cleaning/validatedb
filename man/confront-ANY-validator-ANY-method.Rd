@@ -19,7 +19,7 @@ This method is used for object that implement the \code{tbl_sql} interface used 
 
 \item{sparse}{\code{logical} should only errors be stored in the db?}
 
-\item{...}{not}
+\item{...}{not used}
 }
 \description{
 Implementation for database tables.
