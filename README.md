@@ -19,8 +19,10 @@ records in a database.
 
 ## Installation
 
-You can install the released version of validatedb from
-[CRAN](https://CRAN.R-project.org) with:
+`validatedb` is in heavy development and should not yet be used for
+production. You can install a development version with
+
+<!-- You can install the released version of validatedb from [CRAN](https://CRAN.R-project.org) with: -->
 
 ``` r
 remotes::install_github("data-cleaning/validatedb")
