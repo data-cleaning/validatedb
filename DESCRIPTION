@@ -1,12 +1,17 @@
 Package: validatedb
 Title: Validate on a table in a DB, using dbplyr
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
     person(given = "Edwin",
            family = "de Jonge",
            role = c("aut", "cre"),
            email = "edwindjonge@gmail.com",
-           comment = c(ORCID="0000-0002-6580-4718"))
+           comment = c(ORCID="0000-0002-6580-4718")),
+    person(given = "Mark",
+           family = "van der Loo",
+           role = c("aut"),
+           )
+    )
 Description: This package validates data in table using rules specified with `validate`
    on a table in a DB, using `dbplyr`.
 License: GPL-3
