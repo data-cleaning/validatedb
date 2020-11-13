@@ -23,12 +23,10 @@ You can install the released version of validatedb from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-remotes::install_github("edwindj/validatedb")
+remotes::install_github("data-cleaning/validatedb")
 ```
 
 ## Example
-
-This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(validatedb)
