@@ -3,7 +3,7 @@
 #' @param tbl a `tbl` object with columns used in `x`
 #' @param x a [validate::validator()] object
 #' @importFrom utils head
-rule_works_on_db <- function(tbl, x){
+rule_works_on_tbl <- function(tbl, x){
   res <- confront_tbl_sparse(head(tbl), x, union_all = FALSE, check_rules = FALSE)
   # TODO extract information on the error...
   sapply(res$query, function(qry){

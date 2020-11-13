@@ -1,4 +1,4 @@
-describe("rule_works_on_db", {
+describe("rule_works_on_tbl", {
   it ("works with numeric checks",{
     rules <- validator(x > 1, y < x, x == 0)
     con <- dbplyr::src_memdb()
@@ -6,7 +6,7 @@ describe("rule_works_on_db", {
     d <- data.frame(x = 1, y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
     
-    res <- rule_works_on_db(tbl_d, rules)
+    res <- rule_works_on_tbl(tbl_d, rules)
     expect_equal(res, c(TRUE, TRUE, TRUE))
   })
   
@@ -18,7 +18,7 @@ describe("rule_works_on_db", {
     d <- data.frame(x = 1, y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
     
-    res <- rule_works_on_db(tbl_d, rules)
+    res <- rule_works_on_tbl(tbl_d, rules)
     expect_equal(res, c(TRUE, FALSE))
   })
 })

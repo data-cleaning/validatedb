@@ -1,14 +1,18 @@
 
 #' create a table with per record if it abides to the rule.
+#' 
+#' create a table with per record if it abides to the rule.
+#' @inheritParams confront.tbl_sql
 confront_tbl <- function(tbl, x, key = NULL, ...){
+  
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize=FALSE
                   , expand_assignments = TRUE
                   )
   
-  working <- rule_works_on_db(tbl, x)
-  if (any(!working)){
-    nw <- exprs[!working]
+  working <- rule_works_on_tbl(tbl, x)
+  nw <- exprs[!working]
+  if (length(nw)){
     # should this be in the error object?
     warning("Detected rules that do not work on this table/db.\n",
     "Ignoring:\n",
@@ -17,6 +21,7 @@ confront_tbl <- function(tbl, x, key = NULL, ...){
   }
   # TODO promote n to argument?
   record_based <- is_record_based(tbl, x, n = 5)
+  
   exprs <- exprs[working]
   valid_qry <- bquote(dplyr::transmute(tbl, ..(exprs)), splice = TRUE)
   valid_qry <- eval(valid_qry)

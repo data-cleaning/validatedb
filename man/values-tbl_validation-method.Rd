@@ -2,10 +2,19 @@
 % Please edit documentation in R/values.R
 \name{values,tbl_validation-method}
 \alias{values,tbl_validation-method}
-\title{testing 1, 1,2}
+\title{Retrieve the result of a validation/confront}
 \usage{
 \S4method{values}{tbl_validation}(x, simplify = FALSE, type = c("list", "tbl"), ...)
 }
+\arguments{
+\item{x}{object of type \code{tbl_validation}}
+
+\item{simplify}{only use when \code{type} = "list" see \code{validate::values}}
+
+\item{type}{whether to return a list/matrix or to return a query on the database.}
+
+\item{...}{not used}
+}
 \description{
-testing 1, 1,2
+Retrieve the result of a validation/confront
 }

@@ -1,8 +1,13 @@
 
-#' create a table with only fails
+#' Create a query object for sparse table validation
+#' 
+#' @inherit confront.tbl_sql
+#' @param union_all if `FALSE` each rule is a separate query.
+#' @param check_rules if `TRUE` it is checked which rules 'work' on the db.
+#' @family confront
 confront_tbl_sparse <- function( tbl
                                , x
-                               , compute = FALSE
+                               , key = NULL
                                , union_all = TRUE
                                , ...
                                , check_rules = TRUE){
@@ -12,7 +17,7 @@ confront_tbl_sparse <- function( tbl
                   )
   nexprs <- length(exprs)
   if (check_rules){
-    working <- rule_works_on_db(tbl, x)
+    working <- rule_works_on_tbl(tbl, x)
     if (any(!working)){
       nw <- exprs[!working]
       # should this be in the error object?
