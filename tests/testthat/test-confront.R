@@ -6,7 +6,7 @@ describe("Confront", {
     d <- data.frame(x = 1, y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
     cf <- confront(tbl_d, rules)
-    expect_true(is(cf, "validation"))
+    #expect_true(is(cf, "validation"))
     expect_true(is(cf, "tbl_validation"))
   })
   

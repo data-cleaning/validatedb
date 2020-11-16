@@ -73,9 +73,8 @@ print(cf)
 #> Call:
 #>     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #> 
-#> Confrontations: 0
-#> With fails    : 0
-#> Warnings      : 0
+#> Confrontations: 2
+#> Fails         : [??] (see `values`)
 #> Errors        : 0
 ```
 

@@ -19,16 +19,13 @@ confront_tbl <- function(tbl, x, key = NULL, ...){
     paste0("\t", names(nw),": ", nw, collapse="\n")
     )
   }
-  # TODO promote n to argument?
-  record_based <- is_record_based(tbl, x, n = 5)
-  
   exprs <- exprs[working]
   valid_qry <- bquote(dplyr::transmute(tbl, ..(exprs)), splice = TRUE)
   valid_qry <- eval(valid_qry)
   
   list( query        = valid_qry
       , tbl          = tbl
-      , record_based = record_based
+#      , record_based = record_based
       , nexprs       = length(working)
       , errors       = nw
       )

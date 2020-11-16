@@ -25,3 +25,6 @@ show_query(cf)
 
 # identical
 show_query(values(cf, type = "tbl"))
+
+cf <- confront(tbl_income, rules, sparse=TRUE)
+values(cf, type="tbl")

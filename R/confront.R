@@ -25,17 +25,20 @@ confront.tbl_sql <- function( tbl
   res <- if (sparse){
     confront_tbl_sparse(tbl = tbl, x = x, key = key, ...)
   } else {
-    res <- confront_tbl(tbl = tbl, x = x, key = key, ...)
+    confront_tbl(tbl = tbl, x = x, key = key, ...)
   }
   
   # store the result in the DB
   if (isTRUE(compute)){
     res$query <- dplyr::compute(res$query, ...)
   }
+  # TODO promote n to argument?
+  record_based <- is_record_based(tbl, x, n = 5)
+  
   tbl_validation( ._call = match.call()
                 , query = res$query
                 , tbl   = tbl
-                , record_based = res$record_based
+                , record_based = record_based
                 , nexprs = res$nexprs
                 , errors = res$errors
                 , sparse = sparse

@@ -22,10 +22,11 @@ confront_tbl_sparse <- function( tbl
                   , expand_assigments = TRUE
                   )
   nexprs <- length(exprs)
+  nw = list()
   if (check_rules){
     working <- rule_works_on_tbl(tbl, x)
+    nw <- exprs[!working]
     if (any(!working)){
-      nw <- exprs[!working]
       # should this be in the error object?
       warning("Detected rules that do not work on this table/db.\n",
               "Ignoring:\n",
@@ -37,13 +38,14 @@ confront_tbl_sparse <- function( tbl
 
   qry_e <- lapply(names(exprs), function(rule_name){
     e <- exprs[[rule_name]]
-    fails <- substitute(dplyr::filter(tbl, dplyr::coalesce(!e, TRUE)))
-    bquote(dplyr::transmute(.(fails)
-                           , .r    = row_number()
-                           , rule  = .(rule_name)
-                           , value = .(e)
+    bquote({
+      d <- dplyr::transmute( tbl
+                           , rule = .(rule_name)
+                           , row = row_number()
+                           , fail = !.(e)
                            )
-          )
+      dplyr::filter(d, dplyr::coalesce(fail, TRUE))
+    })
   })
   qry <- lapply(qry_e, eval.parent, n=1)
   if (isTRUE(union_all)){
@@ -52,6 +54,7 @@ confront_tbl_sparse <- function( tbl
   list( query  = qry
       , tbl    = tbl
       , nexprs = nexprs
+      , errors = nw
       )
 }
 

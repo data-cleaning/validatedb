@@ -13,7 +13,7 @@ tbl_validation <-
                               , errors = "list"
                               , sparse = "logical"
                               )
-               , contains="validation"
+#               , contains="validation"
                , methods = list(
       show = function(){
         cat(sprintf("Object of class '%s'\n",class(.self)))
