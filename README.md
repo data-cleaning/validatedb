@@ -49,7 +49,7 @@ DBI::dbWriteTable(con, "income", income)
 We retrieve a reference/handle to the table in the DB with `dplyr`
 
 ``` r
-tbl_income <- dplyr::tbl(con, "income")
+tbl_income <- tbl(con, "income")
 print(tbl_income)
 #> # Source:   table<income> [?? x 2]
 #> # Database: sqlite 3.30.1 []

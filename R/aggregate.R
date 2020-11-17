@@ -22,13 +22,14 @@ aggregate_by_rule <- function(x, ...){
     # drop key column
     rules <- rules[-1]
   }
-  vars <- lapply(rules, as.symbol)
+  rules <- lapply(rules, as.symbol)
   qry <- compute(x$query)
-  qr_e <- lapply(vars, function(v){
-    bquote(summarize(qry
+  qr_e <- lapply(rules, function(v){
+    bquote(summarize( qry
                     , rule = .(as.character(v))
-                    , fail = sum(.(v) == 0, na.rm=T)
-                    , na   = sum(is.na(.(v)), na.rm = T)
+                    , npass = sum(.(v), na.rm=T)
+                    , nfail = sum(.(v) == 0, na.rm=T)
+                    , nNA   = sum(is.na(.(v)), na.rm = T)
                     )
           )
   })
@@ -62,8 +63,8 @@ aggregate_by_record <- function(x, ...){
   }
   qry_e <- bquote( dplyr::transmute(x$query
                                    , ..(key_expr)
-                                   , fails = .(fails)
-                                   , nas = .(nas))
+                                   , nfails = .(fails)
+                                   , nNA = .(nas))
                   , splice = TRUE
                   )
   qry <- eval(qry_e)
