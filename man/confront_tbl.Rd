@@ -7,13 +7,13 @@
 confront_tbl(tbl, x, key = NULL, ...)
 }
 \arguments{
-\item{tbl}{tbl object}
+\item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
 
-\item{x}{\code{validator} object}
+\item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{character of key column (not working)}
+\item{key}{\code{character} with key column name (not working)}
 
-\item{...}{not used}
+\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
 }
 \description{
 create a table with per record if it abides to the rule.

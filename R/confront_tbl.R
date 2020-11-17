@@ -20,11 +20,20 @@ confront_tbl <- function(tbl, x, key = NULL, ...){
     )
   }
   exprs <- exprs[working]
-  valid_qry <- bquote(dplyr::transmute(tbl, ..(exprs)), splice = TRUE)
+  key_expr <- list()
+  if (is.character(key)){
+    if (!key[1] %in% dplyr::tbl_vars(tbl)){
+      stop("key='",key[1],"' is not recognized as a column", call. = FALSE)
+    }
+    # TODO put key column first
+    key_expr <- list(as.symbol(key[1]))
+  }
+  valid_qry <- bquote(dplyr::transmute(tbl, ..(key_expr),  ..(exprs)), splice = TRUE)
   valid_qry <- eval(valid_qry)
   
   list( query        = valid_qry
       , tbl          = tbl
+      , key          = key
 #      , record_based = record_based
       , nexprs       = length(working)
       , errors       = nw

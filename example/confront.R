@@ -1,5 +1,5 @@
 # create a table in a database
-income <- data.frame(age=c(12,35), salary = c(1000,NA))
+income <- data.frame(id = 1:2, age=c(12,35), salary = c(1000,NA))
 con <- dbplyr::src_memdb()
 tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
 print(tbl_income)

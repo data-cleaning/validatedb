@@ -5,6 +5,7 @@
 #' @param simplify only use when `type` = "list" see `validate::values`
 #' @param type whether to return a list/matrix or to return a query on the database.
 #' @param ... not used
+#' @importFrom validate values
 #' @export
 #' @example ./example/confront.R
 setMethod("values", signature = c("tbl_validation"), function( x

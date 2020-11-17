@@ -14,15 +14,15 @@ confront_tbl_sparse(
 )
 }
 \arguments{
-\item{tbl}{tbl object}
+\item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
 
-\item{x}{\code{validator} object}
+\item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{character of key column (not working)}
+\item{key}{\code{character} with key column name (not working)}
 
 \item{union_all}{if \code{FALSE} each rule is a separate query.}
 
-\item{...}{not used}
+\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
 
 \item{check_rules}{if \code{TRUE} it is checked which rules 'work' on the db.}
 }
@@ -36,7 +36,7 @@ still needs to be executed in the database, e.g. with \code{\link[dplyr:compute]
 }
 \examples{
 # create a table in a database
-income <- data.frame(age=c(12,35), salary = c(1000,NA))
+income <- data.frame(id = 1:2, age=c(12,35), salary = c(1000,NA))
 con <- dbplyr::src_memdb()
 tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
 print(tbl_income)
@@ -62,5 +62,8 @@ show_query(cf)
 
 # identical
 show_query(values(cf, type = "tbl"))
+
+cf <- confront(tbl_income, rules, sparse=TRUE)
+values(cf, type="tbl")
 }
 \concept{confront}

@@ -4,7 +4,7 @@
 \name{validatedb-package}
 \alias{validatedb}
 \alias{validatedb-package}
-\title{validatedb: Validate on a table in a DB, using dbplyr}
+\title{validatedb: Validate on a table in a DB, using  `dbplyr`}
 \description{
 This package validates data in table using rules specified with `validate`
    on a table in a DB, using `dbplyr`.

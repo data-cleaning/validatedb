@@ -1,5 +1,4 @@
 #' @keywords internal
-#' @import validate
 "_PACKAGE"
 
 # The following block is used by usethis to automatically manage

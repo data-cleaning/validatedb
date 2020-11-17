@@ -3,7 +3,7 @@
 \name{confront,ANY,validator,ANY-method}
 \alias{confront,ANY,validator,ANY-method}
 \title{Implementation for database tables.
-This method is used for object that implement the \code{tbl_sql} interface used in
+This method is used for objects that implement the \code{tbl_sql} interface used in
 \code{dbplyr}.}
 \usage{
 \S4method{confront}{ANY,validator,ANY}(dat, x, ref, key = NULL, sparse = FALSE, ...)
@@ -11,18 +11,18 @@ This method is used for object that implement the \code{tbl_sql} interface used 
 \arguments{
 \item{dat}{an object of class `tbl_sql``.}
 
-\item{x}{\code{validator} object}
+\item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
 \item{ref}{reference object (not working)}
 
-\item{key}{character of key column (not working)}
+\item{key}{\code{character} with key column name (not working)}
 
-\item{sparse}{\code{logical} should only errors be stored in the db?}
+\item{sparse}{\code{logical} should only fails be stored in the db?}
 
-\item{...}{not used}
+\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
 }
 \description{
 Implementation for database tables.
-This method is used for object that implement the \code{tbl_sql} interface used in
+This method is used for objects that implement the \code{tbl_sql} interface used in
 \code{dbplyr}.
 }

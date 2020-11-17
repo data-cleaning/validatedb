@@ -1,5 +1,5 @@
 Package: validatedb
-Title: Validate on a table in a DB, using dbplyr
+Title: Validate on a table in a DB, using  `dbplyr` 
 Version: 0.1.0.9000
 Authors@R: c(
     person(given = "Edwin",
@@ -26,7 +26,6 @@ Imports:
     methods
 Suggests: 
     testthat,
-    RSQLite,
-    covr
+    RSQLite
 URL: https://github.com/data-cleaning/validatedb
 BugReports: https://github.com/data-cleaning/validatedb/issues

@@ -35,17 +35,26 @@ confront_tbl_sparse <- function( tbl
     }
     exprs <- exprs[working]
   }
+  
+  key_expr <- list(row = quote(row_number()))
+  if (is.character(key)){
+    if (!key[1] %in% dplyr::tbl_vars(tbl)){
+      stop("key='",key[1],"' is not recognized as a column", call. = FALSE)
+    }
+    key_expr <- list(as.symbol(key[1]))
+  }
+  
 
   qry_e <- lapply(names(exprs), function(rule_name){
     e <- exprs[[rule_name]]
     bquote({
       d <- dplyr::transmute( tbl
+                           , ..(key_expr)
                            , rule = .(rule_name)
-                           , row = row_number()
                            , fail = !.(e)
                            )
       dplyr::filter(d, dplyr::coalesce(fail, TRUE))
-    })
+    }, splice=TRUE)
   })
   qry <- lapply(qry_e, eval.parent, n=1)
   if (isTRUE(union_all)){
@@ -53,6 +62,7 @@ confront_tbl_sparse <- function( tbl
   }
   list( query  = qry
       , tbl    = tbl
+      , key    = key
       , nexprs = nexprs
       , errors = nw
       )

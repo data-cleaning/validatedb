@@ -8,6 +8,7 @@ tbl_validation <-
                , fields = list( ._call = "call"
                               , query  = "ANY"
                               , tbl    = "ANY"
+                              , key    = "character"
                               , record_based = "logical"
                               , nexprs = "numeric"
                               , errors = "list"
@@ -17,6 +18,9 @@ tbl_validation <-
                , methods = list(
       show = function(){
         cat(sprintf("Object of class '%s'\n",class(.self)))
+        if (sparse){
+          cat("--Sparse storage--\n")
+        }
         cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
         cat(sprintf('Confrontations: %d\n', .self$nexprs))
         cat(sprintf('Fails         : [??] (see `values`)\n'))

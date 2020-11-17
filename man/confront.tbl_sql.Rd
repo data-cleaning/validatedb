@@ -7,19 +7,19 @@
 confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 }
 \arguments{
-\item{tbl}{tbl object}
+\item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
 
-\item{x}{\code{validator} object}
+\item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
 \item{ref}{reference object (not working)}
 
-\item{key}{character of key column (not working)}
+\item{key}{\code{character} with key column name (not working)}
 
-\item{sparse}{\code{logical} should only errors be stored in the db?}
+\item{sparse}{\code{logical} should only fails be stored in the db?}
 
 \item{compute}{\code{logical} if \code{TRUE} the check stores a temporary table in the database.}
 
-\item{...}{not used}
+\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
 }
 \description{
 Confront \code{tbl_sql} objects with \code{validator} rules. This function makes it
@@ -27,7 +27,7 @@ possible to execute \code{validator()} rules on database tables.
 }
 \examples{
 # create a table in a database
-income <- data.frame(age=c(12,35), salary = c(1000,NA))
+income <- data.frame(id = 1:2, age=c(12,35), salary = c(1000,NA))
 con <- dbplyr::src_memdb()
 tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
 print(tbl_income)
@@ -53,4 +53,7 @@ show_query(cf)
 
 # identical
 show_query(values(cf, type = "tbl"))
+
+cf <- confront(tbl_income, rules, sparse=TRUE)
+values(cf, type="tbl")
 }
