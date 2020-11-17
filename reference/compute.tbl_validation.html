@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • validatedb</title>
+<title>Store the result of the validation in the db — compute.tbl_validation • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,12 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Store the result of the validation in the db — compute.tbl_validation" />
+<meta property="og:description" content="Stores the result of the validation in the db using
+the dplyr::compute() of the db back end.
+This method changes the tbl_validation object!
+Note that for most back ends the default settings are
+a temporary table with a random name." />
 
 
 
@@ -58,7 +63,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -108,98 +113,43 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Store the result of the validation in the db</h1>
+    <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/compute.R'><code>R/compute.R</code></a></small>
+    <div class="hidden name"><code>compute.tbl_validation.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Stores the result of the validation in the db using
+the <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::compute()</a></code> of the db back end.
+This method changes the <code>tbl_validation</code> object!
+Note that for most back ends the default settings are
+a temporary table with a random name.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='co'># S3 method for tbl_validation</span>
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>name</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="aggregate.tbl_validation.html">aggregate(<i>&lt;tbl_validation&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Aggregate a validation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="compute.tbl_validation.html">compute(<i>&lt;tbl_validation&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Store the result of the validation in the db</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="confront-ANY-validator-ANY-method.html">confront(<i>&lt;ANY&gt;</i>,<i>&lt;validator&gt;</i>,<i>&lt;ANY&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Implementation for database tables.
-This method is used for objects that implement the <code>tbl_sql</code> interface used in
-<code>dbplyr</code>.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="confront.tbl_sql.html">confront.tbl_sql()</a></code> </p>
-        </td>
-        <td><p>Confront <code>tbl_sql</code> with <code>validator</code> rules.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="confront_tbl.html">confront_tbl()</a></code> </p>
-        </td>
-        <td><p>create a table with per record if it abides to the rule.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="confront_tbl_sparse.html">confront_tbl_sparse()</a></code> </p>
-        </td>
-        <td><p>Create a sparse confrontation query</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rule_works_on_tbl.html">rule_works_on_tbl()</a></code> </p>
-        </td>
-        <td><p>tests for each rule if it can be executed on the database</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="show_query.tbl_validation.html">show_query(<i>&lt;tbl_validation&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Show generated sql code</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tbl_validation-class.html">tbl_validation-class</a></code> </p>
-        </td>
-        <td><p>Validation object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="values-tbl_validation-method.html">values(<i>&lt;tbl_validation&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Retrieve the result of a validation/confront</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p><code>tbl_validation</code> object</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>optional, when omitted, a random name is used.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>passed through to <code>compute</code> on <code>x$query</code></p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

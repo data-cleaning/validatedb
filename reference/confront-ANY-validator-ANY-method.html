@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Implementation for database tables.
-This method is used for object that implement the tbl_sql interface used in
+This method is used for objects that implement the tbl_sql interface used in
 dbplyr. — confront,ANY,validator,ANY-method • validatedb</title>
 
 
@@ -42,10 +42,10 @@ dbplyr. — confront,ANY,validator,ANY-method • validatedb</title>
 
 
 <meta property="og:title" content="Implementation for database tables.
-This method is used for object that implement the tbl_sql interface used in
+This method is used for objects that implement the tbl_sql interface used in
 dbplyr. — confront,ANY,validator,ANY-method" />
 <meta property="og:description" content="Implementation for database tables.
-This method is used for object that implement the tbl_sql interface used in
+This method is used for objects that implement the tbl_sql interface used in
 dbplyr." />
 
 
@@ -118,7 +118,7 @@ dbplyr." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Implementation for database tables.
-This method is used for object that implement the <code>tbl_sql</code> interface used in
+This method is used for objects that implement the <code>tbl_sql</code> interface used in
 <code>dbplyr</code>.</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/confront.R'><code>R/confront.R</code></a></small>
     <div class="hidden name"><code>confront-ANY-validator-ANY-method.Rd</code></div>
@@ -126,7 +126,7 @@ This method is used for object that implement the <code>tbl_sql</code> interface
 
     <div class="ref-description">
     <p>Implementation for database tables.
-This method is used for object that implement the <code>tbl_sql</code> interface used in
+This method is used for objects that implement the <code>tbl_sql</code> interface used in
 <code>dbplyr</code>.</p>
     </div>
 
@@ -142,7 +142,7 @@ This method is used for object that implement the <code>tbl_sql</code> interface
     </tr>
     <tr>
       <th>x</th>
-      <td><p><code>validator</code> object</p></td>
+      <td><p><code><a href='https://rdrr.io/pkg/validate/man/validator.html'>validate::validator()</a></code> object with validation rules.</p></td>
     </tr>
     <tr>
       <th>ref</th>
@@ -150,15 +150,15 @@ This method is used for object that implement the <code>tbl_sql</code> interface
     </tr>
     <tr>
       <th>key</th>
-      <td><p>character of key column (not working)</p></td>
+      <td><p><code>character</code> with key column name (not working)</p></td>
     </tr>
     <tr>
       <th>sparse</th>
-      <td><p><code>logical</code> should only errors be stored in the db?</p></td>
+      <td><p><code>logical</code> should only fails be stored in the db?</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>not used</p></td>
+      <td><p>passed through to <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code>, if <code>compute</code> is <code>TRUE</code></p></td>
     </tr>
     </table>
 
