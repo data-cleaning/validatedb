@@ -120,7 +120,7 @@
     <p>create a table with per record if it abides to the rule.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>confront_tbl</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>confront_tbl</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -135,11 +135,7 @@
     </tr>
     <tr>
       <th>key</th>
-      <td><p><code>character</code> with key column name (not working)</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>passed through to <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code>, if <code>compute</code> is <code>TRUE</code></p></td>
+      <td><p><code>character</code> with key column name.</p></td>
     </tr>
     </table>
 

@@ -130,14 +130,7 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::compute()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>confront_tbl_sparse</span><span class='op'>(</span>
-  <span class='va'>tbl</span>,
-  <span class='va'>x</span>,
-  key <span class='op'>=</span> <span class='cn'>NULL</span>,
-  union_all <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  <span class='va'>...</span>,
-  check_rules <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>confront_tbl_sparse</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, union_all <span class='op'>=</span> <span class='cn'>TRUE</span>, check_rules <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -152,15 +145,11 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
     </tr>
     <tr>
       <th>key</th>
-      <td><p><code>character</code> with key column name (not working)</p></td>
+      <td><p><code>character</code> with key column name.</p></td>
     </tr>
     <tr>
       <th>union_all</th>
       <td><p>if <code>FALSE</code> each rule is a separate query.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>passed through to <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code>, if <code>compute</code> is <code>TRUE</code></p></td>
     </tr>
     <tr>
       <th>check_rules</th>
