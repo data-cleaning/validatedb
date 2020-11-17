@@ -102,7 +102,7 @@
 <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span>, <span class="va">income</span><span class="op">)</span></code></pre></div>
 <p>We retrieve a reference/handle to the table in the DB with <code>dplyr</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tbl_income</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   table&lt;income&gt; [?? x 2]</span>
 <span class="co">#&gt; # Database: sqlite 3.30.1 []</span>
