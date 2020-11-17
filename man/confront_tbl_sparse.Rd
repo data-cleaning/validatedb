@@ -4,25 +4,16 @@
 \alias{confront_tbl_sparse}
 \title{Create a sparse confrontation query}
 \usage{
-confront_tbl_sparse(
-  tbl,
-  x,
-  key = NULL,
-  union_all = TRUE,
-  ...,
-  check_rules = TRUE
-)
+confront_tbl_sparse(tbl, x, key = NULL, union_all = TRUE, check_rules = TRUE)
 }
 \arguments{
 \item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{\code{character} with key column name (not working)}
+\item{key}{\code{character} with key column name.}
 
 \item{union_all}{if \code{FALSE} each rule is a separate query.}
-
-\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
 
 \item{check_rules}{if \code{TRUE} it is checked which rules 'work' on the db.}
 }

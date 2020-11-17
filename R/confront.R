@@ -8,7 +8,7 @@ setOldClass("tbl_sql")
 #' @param tbl tbl_sql object, table in a database, retrieved with [dplyr::tbl()]
 #' @param x [validate::validator()] object with validation rules.
 #' @param ref reference object (not working)
-#' @param key `character` with key column name (not working)
+#' @param key `character` with key column name.
 #' @param sparse `logical` should only fails be stored in the db?
 #' @param compute `logical` if `TRUE` the check stores a temporary table in the database.
 #' @param ... passed through to [compute()], if `compute` is `TRUE`
@@ -23,9 +23,9 @@ confront.tbl_sql <- function( tbl
                             , ...
                             ){
   res <- if (sparse){
-    confront_tbl_sparse(tbl = tbl, x = x, key = key, ...)
+    confront_tbl_sparse(tbl = tbl, x = x, key = key)
   } else {
-    confront_tbl(tbl = tbl, x = x, key = key, ...)
+    confront_tbl(tbl = tbl, x = x, key = key)
   }
   
   # store the result in the DB
@@ -40,9 +40,9 @@ confront.tbl_sql <- function( tbl
                 , tbl    = tbl
                 , key    = as.character(key)
                 , record_based = record_based
-                , nexprs  = res$nexprs
-                , errors  = res$errors
-                , sparse  = sparse
+                , nexprs = res$nexprs
+                , errors = res$errors
+                , sparse = sparse
                 )
 }
 

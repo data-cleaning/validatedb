@@ -15,7 +15,7 @@ This method is used for objects that implement the \code{tbl_sql} interface used
 
 \item{ref}{reference object (not working)}
 
-\item{key}{\code{character} with key column name (not working)}
+\item{key}{\code{character} with key column name.}
 
 \item{sparse}{\code{logical} should only fails be stored in the db?}
 

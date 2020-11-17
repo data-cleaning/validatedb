@@ -4,16 +4,14 @@
 \alias{confront_tbl}
 \title{create a table with per record if it abides to the rule.}
 \usage{
-confront_tbl(tbl, x, key = NULL, ...)
+confront_tbl(tbl, x, key = NULL)
 }
 \arguments{
 \item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{\code{character} with key column name (not working)}
-
-\item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
+\item{key}{\code{character} with key column name.}
 }
 \description{
 create a table with per record if it abides to the rule.

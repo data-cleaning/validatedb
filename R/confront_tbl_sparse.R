@@ -15,7 +15,7 @@ confront_tbl_sparse <- function( tbl
                                , x
                                , key = NULL
                                , union_all = TRUE
-                               , ...
+                               # , ...
                                , check_rules = TRUE){
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize = FALSE
@@ -61,8 +61,8 @@ confront_tbl_sparse <- function( tbl
     qry <- Reduce(dplyr::union_all, qry)
   }
   list( query  = qry
-      , tbl    = tbl
-      , key    = key
+      # , tbl    = tbl
+      # , key    = key
       , nexprs = nexprs
       , errors = nw
       )

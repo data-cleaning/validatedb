@@ -13,7 +13,7 @@ confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 
 \item{ref}{reference object (not working)}
 
-\item{key}{\code{character} with key column name (not working)}
+\item{key}{\code{character} with key column name.}
 
 \item{sparse}{\code{logical} should only fails be stored in the db?}
 

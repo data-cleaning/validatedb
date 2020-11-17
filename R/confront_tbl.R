@@ -3,7 +3,9 @@
 #' 
 #' create a table with per record if it abides to the rule.
 #' @inheritParams confront.tbl_sql
-confront_tbl <- function(tbl, x, key = NULL, ...){
+confront_tbl <- function(tbl, x, key = NULL
+                        # , ...
+                        ){
   
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize=FALSE
@@ -32,9 +34,9 @@ confront_tbl <- function(tbl, x, key = NULL, ...){
   valid_qry <- eval(valid_qry)
   
   list( query        = valid_qry
-      , tbl          = tbl
-      , key          = key
-#      , record_based = record_based
+#     , tbl          = tbl
+#     , key          = key
+#     , record_based = record_based
       , nexprs       = length(working)
       , errors       = nw
       )
