@@ -1,6 +1,10 @@
 #' Aggregate a validation
 #' 
-#' Create either statistics by rule or record
+#' Create either statistics by rule or record.
+#' 
+#' The result of a [confront()] on a db  `tbl` results in a lazy query. That
+#' is it builds a query without executing it. To store the result in the database
+#' use [compute()] or [values()].
 #' @param x `tbl_validation` object
 #' @param by either by "rule" or by "record"
 #' @param ... not used

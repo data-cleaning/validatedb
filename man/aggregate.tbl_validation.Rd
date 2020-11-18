@@ -28,7 +28,12 @@ rules <- validator( is_adult   = age >= 18
 )
 
 # and confront!
+# in general with a db table it is handy to use a key
 cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
+aggregate(cf, by = "record")
+
+# but without key works too
+cf <- confront(tbl_income, rules)
 aggregate(cf, by = "record")
 }

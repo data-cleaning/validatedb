@@ -7,17 +7,18 @@
 #' @param ... not used
 #' @importFrom validate values
 #' @export
+#' @family confront
 #' @example ./example/confront.R
 setMethod("values", signature = c("tbl_validation"), function( x
-                                                             , simplify = FALSE
-                                                             , type = c("list", "tbl")
+                                                             , simplify = TRUE
+                                                             , type = c("tbl", "list")
                                                              , ...
                                                              ){
   if (missing(type)){
-    warning("Please specify 'type' argument. Default setting (type = 'list')\n", 
-     "is identical to 'confront' on a data.frame, but type = 'tbl' is \n",
-     "preferable when working with data in a data base."
-     , call. = FALSE
+    warning("Please specify 'type' argument. Default setting `type = 'tbl'` ", 
+     "returns a query to the database.\nTo retrieve identical results as ",
+     "`validate` on a data.frame, use `type = 'list'`.\n",
+     call. = FALSE
      )
   }
   type = match.arg(type)
@@ -27,18 +28,35 @@ setMethod("values", signature = c("tbl_validation"), function( x
     return(x$query)
   }
   
-  #TODO implement simplify
-  val_df <- dplyr::collect(x$query)
-  
   if (x$sparse){
     stop("Not implemented")
   }
   
+  val_df <- dplyr::collect(x$query)
+  
   # first column is row_number, should also remove key column
+  if (length(x$key)){
+    val_df <- val_df[-1]
+  }
+  # to cope with non working rules / missing variables...
+  record_based <- x$record_based[names(val_df)]
+  if (simplify){
+    if (all(record_based)){
+      return(val_df > 0)
+    }
+    return(list(
+      val_df[record_based] > 0,
+      val_df[1,!record_based] > 0
+    ))
+  }
+  
   vals <- lapply(val_df, function(x){
     x > 0
   })
+  vals[!record_based] <- lapply(vals[!record_based], function(v) v[1])
+  
   names(vals) <- names(val_df)
+  # TODO add rules that were missed due to missing variables?
   vals
 })
 

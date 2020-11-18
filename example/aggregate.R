@@ -9,6 +9,22 @@ rules <- validator( is_adult   = age >= 18
 )
 
 # and confront!
+# in general with a db table it is handy to use a key
 cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
 aggregate(cf, by = "record")
+
+# to tweak performance of the db query the following options are available
+# 1) store validation result in db
+cf <- confront(tbl_income, rules, key="id", compute = TRUE)
+# or identical
+cf <- confront(tbl_income, rules, key="id")
+cf <- compute(cf)
+
+
+
+# 2) Store the validation sparsely
+cf <- confront(tbl_income, rules, key="id", sparse=TRUE )
+
+show_query(compute(cf))
+values(cf, type="tbl")

@@ -50,3 +50,10 @@ show_query(values(cf, type = "tbl"))
 cf <- confront(tbl_income, rules, sparse=TRUE)
 values(cf, type="tbl")
 }
+\seealso{
+Other confront: 
+\code{\link{confront.tbl_sql}()},
+\code{\link{confront_tbl_sparse}()},
+\code{\link{tbl_validation-class}}
+}
+\concept{confront}

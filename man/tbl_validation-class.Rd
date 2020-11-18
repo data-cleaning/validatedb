@@ -9,3 +9,10 @@
 Validation information
 }
 
+\seealso{
+Other confront: 
+\code{\link{confront.tbl_sql}()},
+\code{\link{confront_tbl_sparse}()},
+\code{\link{values,tbl_validation-method}}
+}
+\concept{confront}
