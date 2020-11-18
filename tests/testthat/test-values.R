@@ -4,7 +4,6 @@ describe("values", {
                       , b %in% c("B1", "B2")
                       , mean(x, na.rm=TRUE) > 0
     )
-    
     con <- dbplyr::src_memdb()
     
     d <- data.frame(a = c("A1", "A3", NA), b = c("B3", NA, "B2"), x = 0)

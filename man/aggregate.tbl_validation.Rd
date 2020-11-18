@@ -14,7 +14,12 @@
 \item{...}{not used}
 }
 \description{
-Create either statistics by rule or record
+Create either statistics by rule or record.
+}
+\details{
+The result of a \code{\link[=confront]{confront()}} on a db  \code{tbl} results in a lazy query. That
+is it builds a query without executing it. To store the result in the database
+use \code{\link[=compute]{compute()}} or \code{\link[=values]{values()}}.
 }
 \examples{
 income <- data.frame(id = 1:2, age=c(12,35), salary = c(1000,NA))
@@ -33,7 +38,18 @@ cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
 aggregate(cf, by = "record")
 
-# but without key works too
-cf <- confront(tbl_income, rules)
-aggregate(cf, by = "record")
+# to tweak performance of the db query the following options are available
+# 1) store validation result in db
+cf <- confront(tbl_income, rules, key="id", compute = TRUE)
+# or identical
+cf <- confront(tbl_income, rules, key="id")
+cf <- compute(cf)
+
+
+
+# 2) Store the validation sparsely
+cf <- confront(tbl_income, rules, key="id", sparse=TRUE )
+
+show_query(compute(cf))
+values(cf, type="tbl")
 }
