@@ -10,8 +10,9 @@
 #' @family confront
 #' @example ./example/confront.R
 setMethod("values", signature = c("tbl_validation"), function( x
-                                                             , simplify = TRUE
-                                                             , type = c("tbl", "list")
+                                                             #, simplify = TRUE
+                                                             , simplify = type == "matrix"
+                                                             , type = c("tbl", "matrix", "list")
                                                              , ...
                                                              ){
   if (missing(type)){
@@ -23,13 +24,16 @@ setMethod("values", signature = c("tbl_validation"), function( x
   }
   type = match.arg(type)
   
-  # TODO something with sparse? warn
   if (type == "tbl"){
     return(x$query)
   }
   
+  if (type == "matrix"){
+    simplify <- TRUE
+  }
+
   if (x$sparse){
-    stop("Not implemented")
+    stop("type='",type,"' for sparse validation not implemented.")
   }
   
   val_df <- dplyr::collect(x$query)

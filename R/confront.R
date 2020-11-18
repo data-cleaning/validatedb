@@ -57,7 +57,9 @@ confront.tbl_sql <- function( tbl
 #' @export
 setMethod("confront", signature("ANY","validator"), function(dat, x, ref, key = NULL, sparse = FALSE, ...){
   if (inherits(dat, "tbl_sql")){
-    return(confront.tbl_sql(dat, x, ref = ref, key = key, sparse = sparse, ...))
+    cf <- confront.tbl_sql(dat, x, ref = ref, key = key, sparse = sparse, ...)
+    #cf$._call <- sys.call(1)
+    return(cf)
   }
   stop("No implementation found for type ", paste0(class(dat), ", "))
 })

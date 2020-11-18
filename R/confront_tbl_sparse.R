@@ -1,4 +1,3 @@
-
 #' Create a sparse confrontation query
 #' 
 #' Create a sparse confrontation query. Only errors and missing are stored.

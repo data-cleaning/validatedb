@@ -4,7 +4,8 @@
 \alias{is_record_based}
 \title{determine the dimensional structure of \code{values} so that it conforms to
 \code{validate}. Only used for values \code{simplify}.
-Works heuristically: get a subset out of db and executes validate::confront on it.}
+Works heuristically: get a subset out of db and executes validate::confront on it.
+Note, this returns also a value for rules that do not work on db!}
 \usage{
 is_record_based(tbl, x, n = 5)
 }
@@ -12,5 +13,6 @@ is_record_based(tbl, x, n = 5)
 determine the dimensional structure of \code{values} so that it conforms to
 \code{validate}. Only used for values \code{simplify}.
 Works heuristically: get a subset out of db and executes validate::confront on it.
+Note, this returns also a value for rules that do not work on db!
 }
 \keyword{internal}

@@ -79,15 +79,13 @@ print(cf)
 ```
 
 Values (i.e. validations on the table) can be retrieved like in
-`validate` with `type="list"`
+`validate` with `type="matrix"` or `type="list"`
 
 ``` r
-values(cf, type = "list")
-#> $is_adult
-#> [1] FALSE  TRUE
-#> 
-#> $has_income
-#> [1] TRUE   NA
+values(cf, type = "matrix")
+#>      is_adult has_income
+#> [1,]    FALSE       TRUE
+#> [2,]     TRUE         NA
 ```
 
 But often this seems more handy:

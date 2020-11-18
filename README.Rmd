@@ -70,9 +70,9 @@ print(cf)
 ```
 
 Values (i.e. validations on the table) can be retrieved like in `validate` with
-`type="list"`
+`type="matrix"` or `type="list"`
 ```{r}
-values(cf, type = "list")
+values(cf, type = "matrix")
 ```
 
 But often this seems more handy:

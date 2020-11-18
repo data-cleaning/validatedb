@@ -35,7 +35,7 @@ print(tbl_income)
 # Let's define a rule set and confront the table with it:
 rules <- validator( is_adult   = age >= 18
                   , has_income = salary > 0
-                  , mean(age,na.rm=TRUE) > 20
+                  , mean_age   = mean(age,na.rm=TRUE) > 20
                   )
 
 # and confront!
@@ -43,8 +43,8 @@ cf <- confront(tbl_income, rules)
 print(cf)
 
 # Values (i.e. validations on the table) can be retrieved like in `validate` 
-# with`type="list"`
-values(cf, type = "list")
+# with`type="matrix"` (simplify = TRUE)
+values(cf, type = "matrix")
 
 # But often this seems more handy:
 values(cf, type = "tbl")
