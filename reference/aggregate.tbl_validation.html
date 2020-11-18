@@ -158,6 +158,7 @@
 <span class='op'>)</span>
 
 <span class='co'># and confront!</span>
+<span class='co'># in general with a db table it is handy to use a key</span>
 <span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"rule"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 4]</span><span>
@@ -171,7 +172,16 @@
 #&gt;      id nfails   nNA
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span>     1      1     0
-#&gt; </span><span style='color: #555555;'>2</span><span>     2      0     1</div></span></pre>
+#&gt; </span><span style='color: #555555;'>2</span><span>     2      0     1</div><div class='input'>
+<span class='co'># but without key works too</span>
+<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"record"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 2]</span><span>
+#&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
+#&gt;   nfails   nNA
+#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>      1     0
+#&gt; </span><span style='color: #555555;'>2</span><span>      0     1</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
