@@ -126,14 +126,12 @@
 <span class="co">#&gt; Confrontations: 2</span>
 <span class="co">#&gt; Fails         : [??] (see `values`)</span>
 <span class="co">#&gt; Errors        : 0</span></code></pre></div>
-<p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="list"</code></p>
+<p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="matrix"</code> or <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"list"</span><span class="op">)</span>
-<span class="co">#&gt; $is_adult</span>
-<span class="co">#&gt; [1] FALSE  TRUE</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $has_income</span>
-<span class="co">#&gt; [1] TRUE   NA</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
+<span class="co">#&gt;      is_adult has_income</span>
+<span class="co">#&gt; [1,]    FALSE       TRUE</span>
+<span class="co">#&gt; [2,]     TRUE         NA</span></code></pre></div>
 <p>But often this seems more handy:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
