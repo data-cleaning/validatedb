@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Aggregate a validation — aggregate.tbl_validation" />
-<meta property="og:description" content="Create either statistics by rule or record" />
+<meta property="og:description" content="Create either statistics by rule or record." />
 
 
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Create either statistics by rule or record</p>
+    <p>Create either statistics by rule or record.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_validation</span>
@@ -140,6 +140,11 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The result of a <code>confront()</code> on a db  <code>tbl</code> results in a lazy query. That
+is it builds a query without executing it. To store the result in the database
+use <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code> or <code>values()</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>income</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, age<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>,<span class='fl'>35</span><span class='op'>)</span>, salary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
@@ -173,15 +178,28 @@
 #&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>  </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
 #&gt; </span><span style='color: #555555;'>1</span><span>     1      1     0
 #&gt; </span><span style='color: #555555;'>2</span><span>     2      0     1</div><div class='input'>
-<span class='co'># but without key works too</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"record"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 2]</span><span>
+<span class='co'># to tweak performance of the db query the following options are available</span>
+<span class='co'># 1) store validation result in db</span>
+<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, compute <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='co'># or identical</span>
+<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span>
+<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span>
+
+
+
+<span class='co'># 2) Store the validation sparsely</span>
+<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span> <span class='op'>)</span>
+
+<span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; &lt;SQL&gt;
+#&gt; SELECT *
+#&gt; FROM `dbplyr_004`</div><div class='input'><span class='fu'>values</span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   table&lt;dbplyr_004&gt; [?? x 3]</span><span>
 #&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
-#&gt;   nfails   nNA
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>      1     0
-#&gt; </span><span style='color: #555555;'>2</span><span>      0     1</div></span></pre>
+#&gt;      id rule        fail
+#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>     1 is_adult       1
+#&gt; </span><span style='color: #555555;'>2</span><span>     2 has_income    </span><span style='color: #BB0000;'>NA</span><span></div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
