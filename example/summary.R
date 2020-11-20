@@ -3,11 +3,11 @@ income <- data.frame(id = 1:2, age=c(12,35), salary = c(1000,NA))
 tbl_income <- dbplyr::memdb_frame(income)
 
 # Let's define a rule set and confront the table with it:
-f <- function(x) x
+f <- function(x) "echo"
 rules <- validator( is_adult   = age >= 18
                     , has_income = salary > 0
                   , mean(salary, na.rm=TRUE) > 0
-                  , f(x) < 0
+                  , y < 0
 )
 
 # and confront!

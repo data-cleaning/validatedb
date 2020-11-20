@@ -87,9 +87,11 @@ setMethod("values", signature = c("tbl_validation"), function( x
   
   names(vals) <- names(val_df)
   rules <- names(x$exprs)
+  
+  # adding rules that are not working
   nw <- rules[!x$working]
   vals[nw] <- list(NULL)
-  # TODO add rules that were missed due to missing variables?
+  
   vals[rules]
 })
 
