@@ -21,6 +21,8 @@ confront_tbl_sparse <- function( tbl
                   , expand_assigments = TRUE
                   )
   nexprs <- length(exprs)
+  exprs_all <- exprs
+  working <- NA
   nw = list()
   if (check_rules){
     working <- rule_works_on_tbl(tbl, x)
@@ -59,11 +61,10 @@ confront_tbl_sparse <- function( tbl
   if (isTRUE(union_all)){
     qry <- Reduce(dplyr::union_all, qry)
   }
-  list( query  = qry
-      # , tbl    = tbl
-      # , key    = key
-      , nexprs = nexprs
-      , errors = nw
+  list( query   = qry
+      , errors  = nw
+      , exprs   = exprs_all
+      , working = working
       )
 }
 

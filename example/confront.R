@@ -27,10 +27,11 @@ show_query(cf)
 # identical
 show_query(values(cf, type = "tbl"))
 
+# adding a key often is handy in a database
 cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 values(cf, type="tbl")
 
 # sparse results in db
-cf <- confront(tbl_income, rules, sparse=TRUE)
-values(cf, type="tbl")
+cf_sparse <- confront(tbl_income, rules, sparse=TRUE)
+values(cf_sparse, type="tbl")

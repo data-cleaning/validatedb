@@ -12,20 +12,28 @@
 #' @importFrom dplyr tbl_vars coalesce transmute summarize
 #' @example ./example/aggregate.R
 #' @export
-aggregate.tbl_validation <- function(x, by = c("rule", "record"), ...){
+aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
   by = match.arg(by)
+  if (x$sparse){
+    # trick to pass CRAN checks
+    rule <- NULL
+    fail <- NULL
+    
+    qry = switch( by,
+                  rule = dplyr::count(x$query, rule, fail),
+                  dplyr::count(x$query, row, fail)
+                )
+    return(qry)
+  }
+  
   switch( by,
           rule   = aggregate_by_rule(x, ...),
-          record = aggregate_by_record(x, ...)
+          aggregate_by_record(x, ...)
         )
 }
 
 aggregate_by_rule <- function(x, ...){
-  rules <- tbl_vars(x$query)
-  if (length(x$key)){
-    # drop key column
-    rules <- rules[-1]
-  }
+  rules <- names(x$exprs)[x$working]
   rules <- lapply(rules, as.symbol)
   qry <- compute(x$query)
   qr_e <- lapply(rules, function(v){

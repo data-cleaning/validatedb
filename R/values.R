@@ -1,24 +1,35 @@
-#' Retrieve the result of a validation/confront
+#' Retrieve the result of a validation/confrontation
 #' 
-#' Retrieve the result of a validation/confront
+#' Retrieve the result of a validation/confrontation.
+#' 
+#' Since the validation is done on a database, there are multiple options
+#' for storing the result of the validation.
+#' 
+#' - Use `compute` (see [confront.tbl_sql()]) to store the result in the database
+#' - Use `sparse` to only calculate "fails" and "missings"
+#' 
+#' Default type "tbl" is that the everything is "lazy", so the query and/or storage has to
+#' be done explicitly by the user. 
+#' The other types execute the query and retrieve the result into R. When this
+#' creates memory problems, the `tbl` option is to be preferred.
 #' @param x object of type `tbl_validation`
 #' @param simplify only use when `type` = "list" see `validate::values`
 #' @param type whether to return a list/matrix or to return a query on the database.
 #' @param ... not used
 #' @importFrom validate values
 #' @export
-#' @family confront
+#' @family validation
 #' @example ./example/confront.R
 setMethod("values", signature = c("tbl_validation"), function( x
                                                              #, simplify = TRUE
                                                              , simplify = type == "matrix"
-                                                             , type = c("tbl", "matrix", "list")
+                                                             , type = c("tbl", "matrix", "list","data.frame")
                                                              , ...
                                                              ){
   if (missing(type)){
     warning("Please specify 'type' argument. Default setting `type = 'tbl'` ", 
      "returns a query to the database.\nTo retrieve identical results as ",
-     "`validate` on a data.frame, use `type = 'list'`.\n",
+     "`validate` on a data.frame, use `type = 'matrix' or 'list'`.\n",
      call. = FALSE
      )
   }
@@ -28,12 +39,27 @@ setMethod("values", signature = c("tbl_validation"), function( x
     return(x$query)
   }
   
+  if (type == "data.frame"){
+    df <- as.data.frame(x$query)
+    if (x$sparse){
+      return(df)
+    }
+    # turn into logical
+    is_num <- sapply(df, is.numeric)
+    df[is_num] <- lapply(df[is_num], function(x){x > 0})
+    return(df)
+  }
+  
   if (type == "matrix"){
     simplify <- TRUE
   }
 
   if (x$sparse){
-    stop("type='",type,"' for sparse validation not implemented.")
+    stop("type='",type,"' for sparse validation not implemented: it seems\n"
+        ,"not wise to expand a sparse validation result into a full validation result."
+        , "Either use `type` with `tbl` or `data.frame`, method `aggregate`, or \n"
+        , "do a dense confrontation."
+        )
   }
   
   val_df <- dplyr::collect(x$query)
@@ -60,7 +86,10 @@ setMethod("values", signature = c("tbl_validation"), function( x
   vals[!record_based] <- lapply(vals[!record_based], function(v) v[1])
   
   names(vals) <- names(val_df)
+  rules <- names(x$exprs)
+  nw <- rules[!x$working]
+  vals[nw] <- list(NULL)
   # TODO add rules that were missed due to missing variables?
-  vals
+  vals[rules]
 })
 

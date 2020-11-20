@@ -25,6 +25,13 @@ rows. Note that the result of this function is a (lazy) query object that
 still needs to be executed in the database, e.g. with \code{\link[dplyr:compute]{dplyr::collect()}}, \code{\link[dplyr:compute]{dplyr::collapse()}} or
 \code{\link[dplyr:compute]{dplyr::compute()}}.
 }
+\details{
+\code{validatedb} builds upon \code{dplyr} and \code{dbplyr}, so it works on all databases
+that have a dbplyr compatible database driver (DBI / odbc).
+\code{validatedb} translates \code{validator} rules into \code{dplyr} commands resulting in
+a lazy query object. The result of a validation can be stored in the database
+using \code{compute} or retrieved into R with \code{values}.
+}
 \examples{
 # create a table in a database
 income <- data.frame(id = letters[1:2], age=c(12,35), salary = c(1000,NA))
@@ -55,17 +62,17 @@ show_query(cf)
 # identical
 show_query(values(cf, type = "tbl"))
 
+# adding a key often is handy in a database
 cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 values(cf, type="tbl")
 
 # sparse results in db
-cf <- confront(tbl_income, rules, sparse=TRUE)
-values(cf, type="tbl")
+cf_sparse <- confront(tbl_income, rules, sparse=TRUE)
+values(cf_sparse, type="tbl")
 }
 \seealso{
-Other confront: 
-\code{\link{confront.tbl_sql}()},
+Other validation: 
 \code{\link{tbl_validation-class}},
 \code{\link{values,tbl_validation-method}}
 }

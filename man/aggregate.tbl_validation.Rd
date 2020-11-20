@@ -4,7 +4,7 @@
 \alias{aggregate.tbl_validation}
 \title{Aggregate a validation}
 \usage{
-\method{aggregate}{tbl_validation}(x, by = c("rule", "record"), ...)
+\method{aggregate}{tbl_validation}(x, by = c("rule", "record", "id"), ...)
 }
 \arguments{
 \item{x}{\code{tbl_validation} object}
@@ -44,8 +44,6 @@ cf <- confront(tbl_income, rules, key="id", compute = TRUE)
 # or identical
 cf <- confront(tbl_income, rules, key="id")
 cf <- compute(cf)
-
-
 
 # 2) Store the validation sparsely
 cf <- confront(tbl_income, rules, key="id", sparse=TRUE )

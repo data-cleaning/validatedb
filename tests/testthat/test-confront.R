@@ -73,7 +73,9 @@ describe("Confront", {
     expect_warning(cf <- confront(tbl_d, rules))
     res <- values(cf, type = "list", simplify=FALSE)
     expect_equal(res, list(
-       V2 = c(NA, TRUE, FALSE)
+       V1 = NULL,
+       V2 = c(NA, TRUE, FALSE),
+       V3 = NULL
     ))
     expect_equal(length(cf$errors), 2)
   })

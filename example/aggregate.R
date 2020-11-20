@@ -21,8 +21,6 @@ cf <- confront(tbl_income, rules, key="id", compute = TRUE)
 cf <- confront(tbl_income, rules, key="id")
 cf <- compute(cf)
 
-
-
 # 2) Store the validation sparsely
 cf <- confront(tbl_income, rules, key="id", sparse=TRUE )
 

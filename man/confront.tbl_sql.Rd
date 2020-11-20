@@ -2,9 +2,12 @@
 % Please edit documentation in R/confront.R
 \name{confront.tbl_sql}
 \alias{confront.tbl_sql}
+\alias{confront,ANY,validator,ANY-method}
 \title{Confront \code{tbl_sql} with \code{validator} rules.}
 \usage{
 confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
+
+\S4method{confront}{ANY,validator,ANY}(dat, x, ref, key = NULL, sparse = FALSE, ...)
 }
 \arguments{
 \item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
@@ -20,10 +23,20 @@ confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 \item{compute}{\code{logical} if \code{TRUE} the check stores a temporary table in the database.}
 
 \item{...}{passed through to \code{\link[=compute]{compute()}}, if \code{compute} is \code{TRUE}}
+
+\item{dat}{an object of class `tbl_sql``.}
 }
 \description{
-Confront \code{tbl_sql} objects with \code{validator} rules. This function makes it
-possible to execute \code{validator()} rules on database tables.
+Confront \code{tbl_sql} objects with \code{\link[=validator]{validator()}} rules, making it
+possible to execute \code{validator()} rules on database tables. Validation results
+can be stored in the db or retrieved into R.
+}
+\details{
+\code{validatedb} builds upon \code{dplyr} and \code{dbplyr}, so it works on all databases
+that have a dbplyr compatible database driver (DBI / odbc).
+\code{validatedb} translates \code{validator} rules into \code{dplyr} commands resulting in
+a lazy query object. The result of a validation can be stored in the database
+using \code{compute} or retrieved into R with \code{values}.
 }
 \examples{
 # create a table in a database
@@ -55,18 +68,18 @@ show_query(cf)
 # identical
 show_query(values(cf, type = "tbl"))
 
+# adding a key often is handy in a database
 cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 values(cf, type="tbl")
 
 # sparse results in db
-cf <- confront(tbl_income, rules, sparse=TRUE)
-values(cf, type="tbl")
+cf_sparse <- confront(tbl_income, rules, sparse=TRUE)
+values(cf_sparse, type="tbl")
 }
 \seealso{
-Other confront: 
-\code{\link{confront_tbl_sparse}()},
+Other validation: 
 \code{\link{tbl_validation-class}},
 \code{\link{values,tbl_validation-method}}
 }
-\concept{confront}
+\concept{validation}

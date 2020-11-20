@@ -2,7 +2,8 @@
 #' 
 #' Validation information
 #' @importFrom methods new
-#' @family confront
+#' @family validation
+#' @family tbl_validation
 #' @export
 tbl_validation <- 
   setRefClass( "tbl_validation"
@@ -11,7 +12,8 @@ tbl_validation <-
                               , tbl    = "ANY"
                               , key    = "character"
                               , record_based = "logical"
-                              , nexprs = "numeric"
+                              , exprs  = "list"
+                              , working = "logical"
                               , errors = "list"
                               , sparse = "logical"
                               )
@@ -19,17 +21,26 @@ tbl_validation <-
                , methods = list(
       show = function(){
         cat(sprintf("Object of class '%s'\n",class(.self)))
-        if (sparse){
-          cat("--Sparse storage--\n")
-        }
         cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
-        cat(sprintf('Confrontations: %d\n', .self$nexprs))
+        cat(sprintf('Confrontations: %d\n', length(.self$exprs)))
+        cat(sprintf('Tbl           : %s (%s)\n', tblname(tbl), dbname(tbl)))
+        #cat(sprintf('Database      : "%s"\n', dbname(tbl)))
         if (length(key)){
-                cat("key column    : '",key,"'\n", sep="")
+                cat('Key column    : ',key,'\n', sep="")
         }
-        cat(sprintf('Fails         : [??] (see `values`)\n'))
+        cat(sprintf('Sparse        : %s\n', sparse))
+        cat(sprintf('Fails         : [??] (see `values`, `summary`)\n'))
         cat(sprintf('Errors        : %d\n', length(.self$errors)))
       }
     )
   )
 
+
+tblname <- function(tbl){
+  id <- unclass(tbl)$ops$x
+  as.character(id)
+}
+
+dbname <- function(tbl){
+  unclass(tbl)$src$con@dbname
+}

@@ -20,4 +20,8 @@ This method changes the \code{tbl_validation} object!
 Note that for most back ends the default settings are
 a temporary table with a random name.
 }
+\seealso{
+Other tbl_validation: 
+\code{\link{tbl_validation-class}}
+}
 \concept{tbl_validation}

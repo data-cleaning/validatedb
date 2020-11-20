@@ -2,9 +2,14 @@
 % Please edit documentation in R/values.R
 \name{values,tbl_validation-method}
 \alias{values,tbl_validation-method}
-\title{Retrieve the result of a validation/confront}
+\title{Retrieve the result of a validation/confrontation}
 \usage{
-\S4method{values}{tbl_validation}(x, simplify = type == "matrix", type = c("tbl", "matrix", "list"), ...)
+\S4method{values}{tbl_validation}(
+  x,
+  simplify = type == "matrix",
+  type = c("tbl", "matrix", "list", "data.frame"),
+  ...
+)
 }
 \arguments{
 \item{x}{object of type \code{tbl_validation}}
@@ -16,7 +21,20 @@
 \item{...}{not used}
 }
 \description{
-Retrieve the result of a validation/confront
+Retrieve the result of a validation/confrontation.
+}
+\details{
+Since the validation is done on a database, there are multiple options
+for storing the result of the validation.
+\itemize{
+\item Use \code{compute} (see \code{\link[=confront.tbl_sql]{confront.tbl_sql()}}) to store the result in the database
+\item Use \code{sparse} to only calculate "fails" and "missings"
+}
+
+Default type "tbl" is that the everything is "lazy", so the query and/or storage has to
+be done explicitly by the user.
+The other types execute the query and retrieve the result into R. When this
+creates memory problems, the \code{tbl} option is to be preferred.
 }
 \examples{
 # create a table in a database
@@ -48,18 +66,18 @@ show_query(cf)
 # identical
 show_query(values(cf, type = "tbl"))
 
+# adding a key often is handy in a database
 cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 values(cf, type="tbl")
 
 # sparse results in db
-cf <- confront(tbl_income, rules, sparse=TRUE)
-values(cf, type="tbl")
+cf_sparse <- confront(tbl_income, rules, sparse=TRUE)
+values(cf_sparse, type="tbl")
 }
 \seealso{
-Other confront: 
+Other validation: 
 \code{\link{confront.tbl_sql}()},
-\code{\link{confront_tbl_sparse}()},
 \code{\link{tbl_validation-class}}
 }
-\concept{confront}
+\concept{validation}

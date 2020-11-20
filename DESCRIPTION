@@ -26,6 +26,22 @@ Imports:
     methods
 Suggests: 
     testthat,
-    RSQLite
+    RSQLite,
+    covr
 URL: https://github.com/data-cleaning/validatedb
 BugReports: https://github.com/data-cleaning/validatedb/issues
+Collate: 
+    'aggregate.R'
+    'tbl_validation.R'
+    'as-data-frame.R'
+    'compute.R'
+    'confront.R'
+    'confront_tbl.R'
+    'confront_tbl_sparse.R'
+    'is_record_based.R'
+    'rule_works_on_tbl.R'
+    'show_query.R'
+    'summary.R'
+    'tbl.R'
+    'validatedb-package.R'
+    'values.R'
