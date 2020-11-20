@@ -54,6 +54,7 @@ rules <- validator( is_adult   = age >= 18
 # and confront!
 cf <- confront(tbl_income, rules)
 print(cf)
+summary(cf)
 
 # Values (i.e. validations on the table) can be retrieved like in `validate` 
 # with`type="matrix"` (simplify = TRUE)
