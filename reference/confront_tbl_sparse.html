@@ -157,10 +157,16 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p><code>validatedb</code> builds upon <code>dplyr</code> and <code>dbplyr</code>, so it works on all databases
+that have a dbplyr compatible database driver (DBI / odbc).
+<code>validatedb</code> translates <code>validator</code> rules into <code>dplyr</code> commands resulting in
+a lazy query object. The result of a validation can be stored in the database
+using <code>compute</code> or retrieved into R with <code>values</code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other confront: 
-<code><a href='confront.tbl_sql.html'>confront.tbl_sql</a>()</code>,
+    <div class='dont-index'><p>Other validation: 
 <code><a href='tbl_validation-class.html'>tbl_validation-class</a></code>,
 <code><a href='values,tbl_validation-method.html'>values,tbl_validation-method</a></code></p></div>
 
@@ -190,7 +196,9 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 #&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #&gt; 
 #&gt; Confrontations: 3
-#&gt; Fails         : [??] (see `values`)
+#&gt; Tbl           : income (:memory:)
+#&gt; Sparse        : FALSE
+#&gt; Fails         : [??] (see `values`, `summary`)
 #&gt; Errors        : 0</div><div class='input'>
 <span class='co'># Values (i.e. validations on the table) can be retrieved like in `validate` </span>
 <span class='co'># with`type="matrix"` (simplify = TRUE)</span>
@@ -222,6 +230,7 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 </div><div class='output co'>#&gt; &lt;SQL&gt;
 #&gt; SELECT (`age` - 18.0) &gt;= -1e-08 AS `is_adult`, `salary` &gt; 0.0 AS `has_income`, AVG(`age`) OVER () &gt; 20.0 AS `mean_age`
 #&gt; FROM `income`</div><div class='input'>
+<span class='co'># adding a key often is handy in a database</span>
 <span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Object of class 'tbl_validation'
@@ -229,8 +238,10 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 #&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #&gt; 
 #&gt; Confrontations: 3
-#&gt; key column    : 'id'
-#&gt; Fails         : [??] (see `values`)
+#&gt; Tbl           : income (:memory:)
+#&gt; Key column    : id
+#&gt; Sparse        : FALSE
+#&gt; Fails         : [??] (see `values`, `summary`)
 #&gt; Errors        : 0</div><div class='input'><span class='fu'>values</span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 4]</span><span>
 #&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
@@ -239,8 +250,8 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 #&gt; </span><span style='color: #555555;'>1</span><span> a            0          1        1
 #&gt; </span><span style='color: #555555;'>2</span><span> b            1         </span><span style='color: #BB0000;'>NA</span><span>        1</div><div class='input'>
 <span class='co'># sparse results in db</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'>values</span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
+<span class='va'>cf_sparse</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>values</span><span class='op'>(</span><span class='va'>cf_sparse</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 3]</span><span>
 #&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
 #&gt;     row rule        fail

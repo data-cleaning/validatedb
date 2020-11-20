@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Retrieve the result of a validation/confront — values,tbl_validation-method • validatedb</title>
+<title>Retrieve the result of a validation/confrontation — values,tbl_validation-method • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Retrieve the result of a validation/confront — values,tbl_validation-method" />
-<meta property="og:description" content="Retrieve the result of a validation/confront" />
+<meta property="og:title" content="Retrieve the result of a validation/confrontation — values,tbl_validation-method" />
+<meta property="og:description" content="Retrieve the result of a validation/confrontation." />
 
 
 
@@ -111,17 +111,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Retrieve the result of a validation/confront</h1>
+    <h1>Retrieve the result of a validation/confrontation</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/values.R'><code>R/values.R</code></a></small>
     <div class="hidden name"><code>values-tbl_validation-method.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Retrieve the result of a validation/confront</p>
+    <p>Retrieve the result of a validation/confrontation.</p>
     </div>
 
     <pre class="usage"><span class='co'># S4 method for tbl_validation</span>
-<span class='fu'>values</span><span class='op'>(</span><span class='va'>x</span>, simplify <span class='op'>=</span> <span class='va'>type</span> <span class='op'>==</span> <span class='st'>"matrix"</span>, type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tbl"</span>, <span class='st'>"matrix"</span>, <span class='st'>"list"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>values</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  simplify <span class='op'>=</span> <span class='va'>type</span> <span class='op'>==</span> <span class='st'>"matrix"</span>,
+  type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tbl"</span>, <span class='st'>"matrix"</span>, <span class='st'>"list"</span>, <span class='st'>"data.frame"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -144,11 +149,22 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Since the validation is done on a database, there are multiple options
+for storing the result of the validation.</p><ul>
+<li><p>Use <code>compute</code> (see <code><a href='confront.tbl_sql.html'>confront.tbl_sql()</a></code>) to store the result in the database</p></li>
+<li><p>Use <code>sparse</code> to only calculate "fails" and "missings"</p></li>
+</ul>
+
+<p>Default type "tbl" is that the everything is "lazy", so the query and/or storage has to
+be done explicitly by the user.
+The other types execute the query and retrieve the result into R. When this
+creates memory problems, the <code>tbl</code> option is to be preferred.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other confront: 
+    <div class='dont-index'><p>Other validation: 
 <code><a href='confront.tbl_sql.html'>confront.tbl_sql</a>()</code>,
-<code><a href='confront_tbl_sparse.html'>confront_tbl_sparse</a>()</code>,
 <code><a href='tbl_validation-class.html'>tbl_validation-class</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -177,7 +193,9 @@
 #&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #&gt; 
 #&gt; Confrontations: 3
-#&gt; Fails         : [??] (see `values`)
+#&gt; Tbl           : income (:memory:)
+#&gt; Sparse        : FALSE
+#&gt; Fails         : [??] (see `values`, `summary`)
 #&gt; Errors        : 0</div><div class='input'>
 <span class='co'># Values (i.e. validations on the table) can be retrieved like in `validate` </span>
 <span class='co'># with`type="matrix"` (simplify = TRUE)</span>
@@ -209,6 +227,7 @@
 </div><div class='output co'>#&gt; &lt;SQL&gt;
 #&gt; SELECT (`age` - 18.0) &gt;= -1e-08 AS `is_adult`, `salary` &gt; 0.0 AS `has_income`, AVG(`age`) OVER () &gt; 20.0 AS `mean_age`
 #&gt; FROM `income`</div><div class='input'>
+<span class='co'># adding a key often is handy in a database</span>
 <span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Object of class 'tbl_validation'
@@ -216,8 +235,10 @@
 #&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #&gt; 
 #&gt; Confrontations: 3
-#&gt; key column    : 'id'
-#&gt; Fails         : [??] (see `values`)
+#&gt; Tbl           : income (:memory:)
+#&gt; Key column    : id
+#&gt; Sparse        : FALSE
+#&gt; Fails         : [??] (see `values`, `summary`)
 #&gt; Errors        : 0</div><div class='input'><span class='fu'>values</span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 4]</span><span>
 #&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
@@ -226,8 +247,8 @@
 #&gt; </span><span style='color: #555555;'>1</span><span> a            0          1        1
 #&gt; </span><span style='color: #555555;'>2</span><span> b            1         </span><span style='color: #BB0000;'>NA</span><span>        1</div><div class='input'>
 <span class='co'># sparse results in db</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'>values</span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
+<span class='va'>cf_sparse</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>values</span><span class='op'>(</span><span class='va'>cf_sparse</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </span><span style='color: #555555;'># Source:   lazy query [?? x 3]</span><span>
 #&gt; </span><span style='color: #555555;'># Database: sqlite 3.33.0 [:memory:]</span><span>
 #&gt;     row rule        fail
