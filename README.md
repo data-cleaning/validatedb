@@ -52,7 +52,7 @@ We retrieve a reference/handle to the table in the DB with `dplyr`
 tbl_income <- tbl(con, "income")
 print(tbl_income)
 #> # Source:   table<income> [?? x 2]
-#> # Database: sqlite 3.30.1 []
+#> # Database: sqlite 3.33.0 []
 #>     age salary
 #>   <dbl>  <dbl>
 #> 1    12   1000
@@ -64,18 +64,28 @@ Let’s define a rule set and confront the table with it:
 ``` r
 rules <- validator( is_adult   = age >= 18
                   , has_income = salary > 0
+                  , mean_age   = mean(age,na.rm=TRUE) > 24
                   )
 
 # and confront!
 cf <- confront(tbl_income, rules)
+
 print(cf)
 #> Object of class 'tbl_validation'
 #> Call:
 #>     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #> 
-#> Confrontations: 2
-#> Fails         : [??] (see `values`)
+#> Confrontations: 3
+#> Tbl           : income ()
+#> Sparse        : FALSE
+#> Fails         : [??] (see `values`, `summary`)
 #> Errors        : 0
+
+summary(cf)
+#>         name items npass nfail nNA warning error                   expression
+#> 1   is_adult     2     1     1   0   FALSE FALSE         (age - 18) >= -1e-08
+#> 2 has_income     2     1     0   1   FALSE FALSE                   salary > 0
+#> 3   mean_age     1     0     1   0   FALSE FALSE mean(age, na.rm = TRUE) > 24
 ```
 
 Values (i.e. validations on the table) can be retrieved like in
@@ -83,21 +93,26 @@ Values (i.e. validations on the table) can be retrieved like in
 
 ``` r
 values(cf, type = "matrix")
+#> [[1]]
 #>      is_adult has_income
 #> [1,]    FALSE       TRUE
 #> [2,]     TRUE         NA
+#> 
+#> [[2]]
+#>      mean_age
+#> [1,]    FALSE
 ```
 
 But often this seems more handy:
 
 ``` r
 values(cf, type = "tbl")
-#> # Source:   lazy query [?? x 2]
-#> # Database: sqlite 3.30.1 []
-#>   is_adult has_income
-#>      <int>      <int>
-#> 1        0          1
-#> 2        1         NA
+#> # Source:   lazy query [?? x 3]
+#> # Database: sqlite 3.33.0 []
+#>   is_adult has_income mean_age
+#>      <int>      <int>    <int>
+#> 1        0          1        0
+#> 2        1         NA        0
 ```
 
 We can see the sql code by using `show_query`:
@@ -105,12 +120,6 @@ We can see the sql code by using `show_query`:
 ``` r
 show_query(cf)
 #> <SQL>
-#> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`
-#> FROM `income`
-# or
-v <- values(cf, type = "tbl")
-show_query(v)
-#> <SQL>
-#> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`
+#> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`, AVG(`age`) OVER () > 24.0 AS `mean_age`
 #> FROM `income`
 ```
