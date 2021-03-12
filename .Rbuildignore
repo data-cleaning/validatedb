@@ -11,3 +11,4 @@
 ^\.circleci/config\.yml$
 ^example$
 ^codecov\.yml$
+^inst/user2021$

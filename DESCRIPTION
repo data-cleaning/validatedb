@@ -1,6 +1,6 @@
 Package: validatedb
 Title: Validate Data in a Database using 'validate' 
-Version: 0.1.1
+Version: 0.1.1.9000
 Authors@R: c(
     person(given = "Edwin",
            family = "de Jonge",
