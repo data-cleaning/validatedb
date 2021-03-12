@@ -5,7 +5,7 @@ tbl_income <- dbplyr::memdb_frame(income)
 # Let's define a rule set and confront the table with it:
 f <- function(x) "echo"
 rules <- validator( is_adult   = age >= 18
-                    , has_income = salary > 0
+                  , has_income = salary > 0
                   , mean(salary, na.rm=TRUE) > 0
                   , y < 0
 )

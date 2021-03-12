@@ -12,9 +12,9 @@ Authors@R: c(
            role = c("aut")
            )
     )
-Description: Check whether records in a database table are valid using rules in 
-   R syntax specified with R package `validate`. R validation checks are automatically 
-   translated in SQL using `dbplyr`.
+Description: Check whether records in a database table are valid using 
+   validation rules in R syntax specified with R package 'validate'. 
+   R validation checks are automatically translated in SQL using 'dbplyr'.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -43,7 +43,6 @@ Collate:
     'rule_works_on_tbl.R'
     'show_query.R'
     'summary.R'
-    'syntax.R'
     'tbl.R'
     'validatedb-package.R'
     'values.R'
