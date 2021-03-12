@@ -22,14 +22,11 @@ knitr::opts_chunk$set(
 <!-- coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master) -->
 <!-- badges: end -->
 
-## WORK IN PROGRESS!
-
 `validatedb` executes validation checks written with R package `validate` on a 
 database. This allows for checking the validity of records in a database.
 
 ## Installation
 
-`validatedb` is in heavy development and should not yet be used for production.
 You can install a development version with 
 
 <!-- You can install the released version of validatedb from [CRAN](https://CRAN.R-project.org) with: -->
@@ -53,6 +50,7 @@ DBI::dbWriteTable(con, "income", income)
 ```
 
 We retrieve a reference/handle to the table in the DB with `dplyr`
+
 ```{r}
 tbl_income <- tbl(con, "income")
 print(tbl_income)
@@ -75,6 +73,7 @@ summary(cf)
 
 Values (i.e. validations on the table) can be retrieved like in `validate` with
 `type="matrix"` or `type="list"`
+
 ```{r}
 values(cf, type = "matrix")
 ```
@@ -89,5 +88,12 @@ We can see the sql code by using `show_query`:
 
 ```{r}
 show_query(cf)
+```
+
+
+### Aggregate example
+
+```{r aggregate, code = readLines("./example/aggregate.R")}
+
 ```
 
