@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -205,14 +205,21 @@
 <span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">compute</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 
 <span class="co"># 2) Store the validation sparsely</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu">confront</span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span> <span class="op">)</span>
+<span class="va">cf_sparse</span> <span class="op">&lt;-</span> <span class="fu">confront</span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span> <span class="op">)</span>
 
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">compute</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf_sparse</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT *</span>
-<span class="co">#&gt; FROM `dbplyr_005`</span>
-<span class="fu">values</span><span class="op">(</span><span class="va">cf</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
-<span class="co">#&gt; # Source:   table&lt;dbplyr_005&gt; [?? x 3]</span>
+<span class="co">#&gt; FROM (SELECT `id`, 'is_adult' AS `rule`, NOT((`age` - 18.0) &gt;= -1e-08) AS `fail`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (COALESCE(`fail`, 1))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT *</span>
+<span class="co">#&gt; FROM (SELECT `id`, 'has_income' AS `rule`, NOT(`salary` &gt; 0.0) AS `fail`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (COALESCE(`fail`, 1))</span>
+<span class="fu">values</span><span class="op">(</span><span class="va">cf_sparse</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
+<span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.34.1 [:memory:]</span>
 <span class="co">#&gt;      id rule        fail</span>
 <span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;      &lt;int&gt;</span>
@@ -252,7 +259,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=validatedb"><img src="https://www.r-pkg.org/badges/version/validatedb" alt="CRAN status"></a></li>
-<li><a href="https://github.com/edwindj/validatedb/actions"><img src="https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://github.com/data-cleaning/validatedb/actions"><img src="https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 </ul>
 </div>
 </div>
