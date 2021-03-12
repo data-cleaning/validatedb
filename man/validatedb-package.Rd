@@ -4,10 +4,11 @@
 \name{validatedb-package}
 \alias{validatedb}
 \alias{validatedb-package}
-\title{validatedb: Validate on a table in a DB, using  `dbplyr`}
+\title{validatedb: Validate Data in a Database using 'validate'}
 \description{
-This package validates data in table using rules specified with `validate`
-   on a table in a DB, using `dbplyr`.
+Check whether records in a database table are valid using rules in 
+   R syntax specified with R package `validate`. R validation checks are automatically 
+   translated in SQL using `dbplyr`.
 }
 \seealso{
 Useful links:
