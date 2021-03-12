@@ -8,7 +8,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build
-status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
+status](https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/data-cleaning/validatedb/actions)
 <!-- [![Codecov test -->
 <!-- coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master) -->
 <!-- badges: end -->
@@ -166,14 +166,21 @@ cf <- confront(tbl_income, rules, key="id")
 cf <- compute(cf)
 
 # 2) Store the validation sparsely
-cf <- confront(tbl_income, rules, key="id", sparse=TRUE )
+cf_sparse <- confront(tbl_income, rules, key="id", sparse=TRUE )
 
-show_query(compute(cf))
+show_query(cf_sparse)
 #> <SQL>
 #> SELECT *
-#> FROM `dbplyr_005`
-values(cf, type="tbl")
-#> # Source:   table<dbplyr_005> [?? x 3]
+#> FROM (SELECT `id`, 'is_adult' AS `rule`, NOT((`age` - 18.0) >= -1e-08) AS `fail`
+#> FROM `income`)
+#> WHERE (COALESCE(`fail`, 1))
+#> UNION ALL
+#> SELECT *
+#> FROM (SELECT `id`, 'has_income' AS `rule`, NOT(`salary` > 0.0) AS `fail`
+#> FROM `income`)
+#> WHERE (COALESCE(`fail`, 1))
+values(cf_sparse, type="tbl")
+#> # Source:   lazy query [?? x 3]
 #> # Database: sqlite 3.34.1 [:memory:]
 #>      id rule        fail
 #>   <int> <chr>      <int>

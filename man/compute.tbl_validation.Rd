@@ -15,9 +15,9 @@
 }
 \description{
 Stores the result of the validation in the db using
-the \code{\link[dplyr:compute]{dplyr::compute()}} of the db back end.
+the \code{\link[dplyr:compute]{dplyr::compute()}} of the db back-end.
 This method changes the \code{tbl_validation} object!
-Note that for most back ends the default settings are
+Note that for most back-ends the default setting is
 a temporary table with a random name.
 }
 \seealso{

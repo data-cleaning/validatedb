@@ -22,7 +22,7 @@ cf <- confront(tbl_income, rules, key="id")
 cf <- compute(cf)
 
 # 2) Store the validation sparsely
-cf <- confront(tbl_income, rules, key="id", sparse=TRUE )
+cf_sparse <- confront(tbl_income, rules, key="id", sparse=TRUE )
 
-show_query(compute(cf))
-values(cf, type="tbl")
+show_query(cf_sparse)
+values(cf_sparse, type="tbl")

@@ -7,7 +7,7 @@ dplyr::compute
 #' Stores the result of the validation in the db using
 #' the [dplyr::compute()] of the db back-end.
 #' This method changes the `tbl_validation` object!
-#' Note that for most back-ends the default settings is 
+#' Note that for most back-ends the default setting is 
 #' a temporary table with a random name.
 #' @param x `tbl_validation` object
 #' @param name optional, when omitted, a random name is used.

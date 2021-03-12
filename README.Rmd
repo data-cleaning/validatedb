@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
-[![R build status](https://github.com/edwindj/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/edwindj/validatedb/actions)
+[![R build status](https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/data-cleaning/validatedb/actions)
 <!-- [![Codecov test -->
 <!-- coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master) -->
 <!-- badges: end -->
