@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -138,6 +138,19 @@
       <td><p><code>character</code> with key column name.</p></td>
     </tr>
     </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a list with needed information, see details.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The return value of the function is a list with:</p><ul>
+<li><p><code>$query</code>: A <code><a href='https://dbplyr.tidyverse.org/reference/tbl.src_dbi.html'>dbplyr::tbl_dbi()</a></code> object that refers to the confrontation query.</p></li>
+<li><p><code>$errors</code>: The validation rules that are not working on the database</p></li>
+<li><p><code>$working</code>: A <code>logical</code> with which expression are working on the database.</p></li>
+<li><p><code>$exprs</code>: All validation expressions.</p></li>
+<li><p><code>$nexprs</code>: Number of working expression.</p></li>
+</ul>
 
 
   </div>

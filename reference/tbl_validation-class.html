@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Validation object — tbl_validation-class • validatedb</title>
+<title>Validation object for tbl object — tbl_validation-class • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Validation object — tbl_validation-class" />
-<meta property="og:description" content="Validation information" />
+<meta property="og:title" content="Validation object for tbl object — tbl_validation-class" />
+<meta property="og:description" content="Validation information for a database table tbl." />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -111,16 +111,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Validation object</h1>
+    <h1>Validation object for <code>tbl</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/tbl_validation.R'><code>R/tbl_validation.R</code></a></small>
     <div class="hidden name"><code>tbl_validation-class.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Validation information</p>
+    <p>Validation information for a database table <code>tbl</code>.</p>
     </div>
 
 
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>tbl_validation</code> object. See details.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The <code>tbl_validation</code> object contains all information needed for the confrontation
+of validation rules with the data in the database table. It contains:</p><ul>
+<li><p><code>$query</code>: a <a href='https://dbplyr.tidyverse.org/reference/tbl.src_dbi.html'>dbplyr::tbl_dbi</a> object with the query to be executed on the database</p></li>
+<li><p><code>$tbl</code>: the <a href='https://dbplyr.tidyverse.org/reference/tbl.src_dbi.html'>dbplyr::tbl_dbi</a> pointing to the table in the database</p></li>
+<li><p><code>$key</code>: Whether there is a key column, and if so, what it is.</p></li>
+<li><p><code>$record_based</code>: <code>logical</code> with which rules are record based.</p></li>
+<li><p><code>$exprs</code>: list of validation rule expressions</p></li>
+<li><p><code>$working</code>: <code>logical</code>, which of the rules work on the database. (whether the database supports this expression)</p></li>
+<li><p><code>$errors</code>: list of validation rules that did not execute on the database.</p></li>
+<li><p><code>$sparse</code>: If <code>TRUE</code> the query is stored as a sparse validation object.</p></li>
+</ul>
 
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
