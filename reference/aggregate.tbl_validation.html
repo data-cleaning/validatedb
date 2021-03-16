@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Aggregate a validation — aggregate.tbl_validation • validatedb</title>
+<title>Count the number of invalid rules or records. — aggregate.tbl_validation • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Aggregate a validation — aggregate.tbl_validation" />
-<meta property="og:description" content="Create either statistics by rule or record." />
+<meta property="og:title" content="Count the number of invalid rules or records. — aggregate.tbl_validation" />
+<meta property="og:description" content="See the number of valid and invalid checks either by rule or by record." />
 
 
 
@@ -111,13 +111,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Aggregate a validation</h1>
+    <h1>Count the number of invalid rules or records.</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/aggregate.R'><code>R/aggregate.R</code></a></small>
     <div class="hidden name"><code>aggregate.tbl_validation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create either statistics by rule or record.</p>
+    <p>See the number of valid and invalid checks either by rule or by record.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for tbl_validation</span>
@@ -128,7 +128,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_validation</code> object</p></td>
+      <td><p><code><a href='tbl_validation-class.html'>tbl_validation()</a></code> object</p></td>
     </tr>
     <tr>
       <th>by</th>
@@ -146,7 +146,7 @@
 (to be executed) on the database.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The result of a <code>confront()</code> on a db  <code>tbl</code> results in a lazy query. That
+    <p>The result of a <code>confront()</code> on a db  <code>tbl</code> results in a lazy squery. That
 is it builds a query without executing it. To store the result in the database
 use <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code> or <code>values()</code>.</p>
 

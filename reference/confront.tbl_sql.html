@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Confront tbl_sql with validator rules. — confront.tbl_sql • validatedb</title>
+<title>Validate data in database tbl with validator rules. — confront.tbl_sql • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Confront tbl_sql with validator rules. — confront.tbl_sql" />
-<meta property="og:description" content="Confront tbl_sql objects with validator() rules, making it
+<meta property="og:title" content="Validate data in database tbl with validator rules. — confront.tbl_sql" />
+<meta property="og:description" content="Confront dbplyr::tbl_dbi() objects with validate::validator() rules, making it
 possible to execute validator() rules on database tables. Validation results
 can be stored in the db or retrieved into R." />
 
@@ -113,13 +113,13 @@ can be stored in the db or retrieved into R." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Confront <code>tbl_sql</code> with <code>validator</code> rules.</h1>
+    <h1>Validate data in database <code>tbl</code> with <code>validator</code> rules.</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/confront.R'><code>R/confront.R</code></a></small>
     <div class="hidden name"><code>confront.tbl_sql.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Confront <code>tbl_sql</code> objects with <code>validator()</code> rules, making it
+    <p>Confront <code><a href='https://dbplyr.tidyverse.org/reference/tbl.src_dbi.html'>dbplyr::tbl_dbi()</a></code> objects with <code><a href='https://rdrr.io/pkg/validate/man/validator.html'>validate::validator()</a></code> rules, making it
 possible to execute <code>validator()</code> rules on database tables. Validation results
 can be stored in the db or retrieved into R.</p>
     </div>
@@ -134,7 +134,7 @@ can be stored in the db or retrieved into R.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>tbl</th>
-      <td><p>tbl_sql object, table in a database, retrieved with <code><a href='https://dplyr.tidyverse.org/reference/tbl.html'>dplyr::tbl()</a></code></p></td>
+      <td><p><code><a href='https://dbplyr.tidyverse.org/reference/tbl.src_dbi.html'>dbplyr::tbl_dbi()</a></code> table in a database, retrieved with <code><a href='https://dplyr.tidyverse.org/reference/tbl.html'>tbl()</a></code></p></td>
     </tr>
     <tr>
       <th>x</th>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Store the result of the validation in the db — compute.tbl_validation • validatedb</title>
+<title>Store the validation result in the db — compute.tbl_validation • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Store the result of the validation in the db — compute.tbl_validation" />
-<meta property="og:description" content="Stores the result of the validation in the db using
+<meta property="og:title" content="Store the validation result in the db — compute.tbl_validation" />
+<meta property="og:description" content="Stores the validation result in the db using
 the dplyr::compute() of the db back-end.
 This method changes the tbl_validation object!
 Note that for most back-ends the default setting is
@@ -115,13 +115,13 @@ a temporary table with a random name." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Store the result of the validation in the db</h1>
+    <h1>Store the validation result in the db</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/compute.R'><code>R/compute.R</code></a></small>
     <div class="hidden name"><code>compute.tbl_validation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Stores the result of the validation in the db using
+    <p>Stores the validation result in the db using
 the <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>dplyr::compute()</a></code> of the db back-end.
 This method changes the <code>tbl_validation</code> object!
 Note that for most back-ends the default setting is
@@ -136,7 +136,7 @@ a temporary table with a random name.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>tbl_validation</code> object</p></td>
+      <td><p><code><a href='tbl_validation-class.html'>tbl_validation()</a></code>, result of a <code>confront()</code> of <code>tbl</code> with a rule set.</p></td>
     </tr>
     <tr>
       <th>name</th>
