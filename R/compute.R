@@ -13,6 +13,8 @@ dplyr::compute
 #' @param name optional, when omitted, a random name is used.
 #' @param ... passed through to `compute` on `x$query`
 #' @family tbl_validation
+#' @return A [dbplyr::tbl_dbi()] object that refers to the computed (temporary)
+#' table in the database. See [dplyr::compute()].
 #' @export
 compute.tbl_validation <- function(x, name, ...){
   x$query <- 

@@ -11,6 +11,8 @@
 #' @importFrom stats aggregate
 #' @importFrom dplyr tbl_vars coalesce transmute summarize
 #' @example ./example/aggregate.R
+#' @return A [dbplyr::tbl_dbi()] object that represents the aggregation query 
+#' (to be executed) on the database.
 #' @export
 aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
   by = match.arg(by)

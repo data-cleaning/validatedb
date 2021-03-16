@@ -13,6 +13,10 @@
 
 \item{...}{not used}
 }
+\value{
+A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that represents the aggregation query
+(to be executed) on the database.
+}
 \description{
 Create either statistics by rule or record.
 }

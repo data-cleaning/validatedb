@@ -3,15 +3,23 @@
 #' Retrieve the result of a validation/confrontation.
 #' 
 #' Since the validation is done on a database, there are multiple options
-#' for storing the result of the validation.
+#' for storing the result of the validation. The results show per record whether
+#' they are valid according to the validation rules supplied.
 #' 
 #' - Use `compute` (see [confront.tbl_sql()]) to store the result in the database
 #' - Use `sparse` to only calculate "fails" and "missings"
 #' 
-#' Default type "tbl" is that the everything is "lazy", so the query and/or storage has to
+#' Default type "tbl" is that everything is "lazy", so the query and/or storage has to
 #' be done explicitly by the user. 
 #' The other types execute the query and retrieve the result into R. When this
 #' creates memory problems, the `tbl` option is to be preferred.
+#' 
+#' Results for `type`:
+#' 
+#' * `tbl`: a [dbplyr::tbl_dbi] object, pointing to the database
+#' * `matrix`: a R matrix, similar to [validate::values()].
+#' * `list`: a R matrix, similar to [validate::values()].
+#' * `data.frame`: the result of `tbl` stored in a `data.frame`.
 #' @param x object of type `tbl_validation`
 #' @param simplify only use when `type` = "list" see `validate::values`
 #' @param type whether to return a list/matrix or to return a query on the database.
@@ -20,6 +28,7 @@
 #' @export
 #' @family validation
 #' @example ./example/confront.R
+#' @return depending on `type` the result is different, see details
 setMethod("values", signature = c("tbl_validation"), function( x
                                                              #, simplify = TRUE
                                                              , simplify = type == "matrix"

@@ -6,9 +6,18 @@
 #' rows. Note that the result of this function is a (lazy) query object that 
 #' still needs to be executed in the database, e.g. with [dplyr::collect()], [dplyr::collapse()] or
 #' [dplyr::compute()].
+#' 
+#' The return value of the function is a list with:
+#' 
+#' * `$query`: A [dbplyr::tbl_dbi()] object that refers to the confrontation query.
+#' * `$errors`: The validation rules that are not working on the database
+#' * `$working`: A `logical` with which expression are working on the database.
+#' * `$exprs`: All validation expressions.
+#' 
 #' @inherit confront.tbl_sql
 #' @param union_all if `FALSE` each rule is a separate query.
 #' @param check_rules if `TRUE` it is checked which rules 'work' on the db.
+#' @return A object with the necessary information: see details
 #' @family confront
 confront_tbl_sparse <- function( tbl
                                , x
@@ -17,7 +26,7 @@ confront_tbl_sparse <- function( tbl
                                # , ...
                                , check_rules = TRUE){
   exprs <- x$exprs( replace_in = FALSE
-                  , vectorize = FALSE
+                  , vectorize  = FALSE
                   , expand_assigments = TRUE
                   )
   nexprs <- length(exprs)

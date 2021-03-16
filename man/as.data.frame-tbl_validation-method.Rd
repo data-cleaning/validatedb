@@ -15,6 +15,9 @@
 
 \item{...}{ignored}
 }
+\value{
+\code{data.frame}, result of the query on the database.
+}
 \description{
 Retrieve validation results as a data.frame
 }

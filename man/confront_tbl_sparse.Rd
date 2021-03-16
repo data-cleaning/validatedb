@@ -17,6 +17,9 @@ confront_tbl_sparse(tbl, x, key = NULL, union_all = TRUE, check_rules = TRUE)
 
 \item{check_rules}{if \code{TRUE} it is checked which rules 'work' on the db.}
 }
+\value{
+A object with the necessary information: see details
+}
 \description{
 Create a sparse confrontation query. Only errors and missing are stored.
 This can be useful alternative to \code{\link[=confront_tbl]{confront_tbl()}} which stores all results
@@ -26,11 +29,13 @@ still needs to be executed in the database, e.g. with \code{\link[dplyr:compute]
 \code{\link[dplyr:compute]{dplyr::compute()}}.
 }
 \details{
-\code{validatedb} builds upon \code{dplyr} and \code{dbplyr}, so it works on all databases
-that have a dbplyr compatible database driver (DBI / odbc).
-\code{validatedb} translates \code{validator} rules into \code{dplyr} commands resulting in
-a lazy query object. The result of a validation can be stored in the database
-using \code{compute} or retrieved into R with \code{values}.
+The return value of the function is a list with:
+\itemize{
+\item \verb{$query}: A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that refers to the confrontation query.
+\item \verb{$errors}: The validation rules that are not working on the database
+\item \verb{$working}: A \code{logical} with which expression are working on the database.
+\item \verb{$exprs}: All validation expressions.
+}
 }
 \examples{
 # create a table in a database

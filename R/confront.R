@@ -20,6 +20,7 @@ setOldClass("tbl_sql")
 #' @param compute `logical` if `TRUE` the check stores a temporary table in the database.
 #' @param ... passed through to [compute()], if `compute` is `TRUE`
 #' @example ./example/confront.R
+#' @return a [tbl_validation()] object, containing the confrontation query and processing information.
 #' @family validation
 #' @export
 confront.tbl_sql <- function( tbl

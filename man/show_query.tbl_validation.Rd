@@ -11,6 +11,9 @@
 
 \item{...}{passed through.}
 }
+\value{
+Same result as \link[dplyr:explain]{dplyr::show_query}, i.e. the SQL text of the query.
+}
 \description{
 Shows the generated sql code for the validation of the tbl.
 }

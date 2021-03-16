@@ -13,6 +13,10 @@
 
 \item{...}{passed through to \code{compute} on \code{x$query}}
 }
+\value{
+A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that refers to the computed (temporary)
+table in the database. See \code{\link[dplyr:compute]{dplyr::compute()}}.
+}
 \description{
 Stores the result of the validation in the db using
 the \code{\link[dplyr:compute]{dplyr::compute()}} of the db back-end.

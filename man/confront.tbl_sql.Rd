@@ -26,6 +26,9 @@ confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 
 \item{dat}{an object of class `tbl_sql``.}
 }
+\value{
+a \code{\link[=tbl_validation]{tbl_validation()}} object, containing the confrontation query and processing information.
+}
 \description{
 Confront \code{tbl_sql} objects with \code{\link[=validator]{validator()}} rules, making it
 possible to execute \code{validator()} rules on database tables. Validation results

@@ -9,6 +9,16 @@ Note, this returns also a value for rules that do not work on db!}
 \usage{
 is_record_based(tbl, x, n = 5)
 }
+\arguments{
+\item{tbl}{A \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} object.}
+
+\item{x}{A \code{\link[validate:validator]{validate::validator()}} object with validation rules.}
+
+\item{n}{\code{integer} number of records to be used for checking.}
+}
+\value{
+\code{logical} whether a validation rule is record based or not.
+}
 \description{
 determine the dimensional structure of \code{values} so that it conforms to
 \code{validate}. Only used for values \code{simplify}.

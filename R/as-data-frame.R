@@ -10,6 +10,7 @@
 #' @param optional ignored
 #' @param ... ignored
 #' @example ./example/as-data-frame.R
+#' @return `data.frame`, result of the query on the database.
 #' @export
 setMethod("as.data.frame"
          , signature = c("tbl_validation")

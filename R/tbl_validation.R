@@ -1,9 +1,22 @@
-#' Validation object
+#' Validation object for `tbl` object
 #' 
-#' Validation information
+#' Validation information for a database table `tbl`. 
+#' 
+#' The `tbl_validation` object contains all information needed for the confrontation
+#' of validation rules with the data in the database table. It contains:
+#' 
+#' * `$query`: a [dbplyr::tbl_dbi] object with the query to be executed on the database
+#' * `$tbl`: the [dbplyr::tbl_dbi] pointing to the table in the database
+#' * `$key`: Whether there is a key column, and if so, what it is.
+#' * `$record_based`: `logical` with which rules are record based.
+#' * `$exprs`: list of validation rule expressions
+#' * `$working`: `logical`, which of the rules work on the database. (whether the database supports this expression)
+#' * `$errors`: list of validation rules that did not execute on the database.
+#' * `$sparse`: If `TRUE` the query is stored as a sparse validation object.
 #' @importFrom methods new
 #' @family validation
 #' @family tbl_validation
+#' @return `tbl_validation` object. See details.
 #' @export
 tbl_validation <- 
   setRefClass( "tbl_validation"

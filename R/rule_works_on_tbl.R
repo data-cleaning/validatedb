@@ -2,6 +2,7 @@
 #' 
 #' @param tbl a `tbl` object with columns used in `x`
 #' @param x a [validate::validator()] object
+#' @return `logical` encoding which validation rules "work" on the database.
 #' @importFrom utils head
 rule_works_on_tbl <- function(tbl, x){
   res <- confront_tbl_sparse(head(tbl), x, union_all = FALSE, check_rules = FALSE)

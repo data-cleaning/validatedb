@@ -13,6 +13,19 @@ confront_tbl(tbl, x, key = NULL)
 
 \item{key}{\code{character} with key column name.}
 }
+\value{
+a list with needed information, see details.
+}
 \description{
 create a table with per record if it abides to the rule.
+}
+\details{
+The return value of the function is a list with:
+\itemize{
+\item \verb{$query}: A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that refers to the confrontation query.
+\item \verb{$errors}: The validation rules that are not working on the database
+\item \verb{$working}: A \code{logical} with which expression are working on the database.
+\item \verb{$exprs}: All validation expressions.
+\item \verb{$nexprs}: Number of working expression.
+}
 }

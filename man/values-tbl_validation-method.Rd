@@ -20,21 +20,33 @@
 
 \item{...}{not used}
 }
+\value{
+depending on \code{type} the result is different, see details
+}
 \description{
 Retrieve the result of a validation/confrontation.
 }
 \details{
 Since the validation is done on a database, there are multiple options
-for storing the result of the validation.
+for storing the result of the validation. The results show per record whether
+they are valid according to the validation rules supplied.
 \itemize{
 \item Use \code{compute} (see \code{\link[=confront.tbl_sql]{confront.tbl_sql()}}) to store the result in the database
 \item Use \code{sparse} to only calculate "fails" and "missings"
 }
 
-Default type "tbl" is that the everything is "lazy", so the query and/or storage has to
+Default type "tbl" is that everything is "lazy", so the query and/or storage has to
 be done explicitly by the user.
 The other types execute the query and retrieve the result into R. When this
 creates memory problems, the \code{tbl} option is to be preferred.
+
+Results for \code{type}:
+\itemize{
+\item \code{tbl}: a \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} object, pointing to the database
+\item \code{matrix}: a R matrix, similar to \code{\link[validate:values]{validate::values()}}.
+\item \code{list}: a R matrix, similar to \code{\link[validate:values]{validate::values()}}.
+\item \code{data.frame}: the result of \code{tbl} stored in a \code{data.frame}.
+}
 }
 \examples{
 # create a table in a database

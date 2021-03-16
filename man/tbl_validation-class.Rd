@@ -4,9 +4,26 @@
 \name{tbl_validation-class}
 \alias{tbl_validation-class}
 \alias{tbl_validation}
-\title{Validation object}
+\title{Validation object for \code{tbl} object}
+\value{
+\code{tbl_validation} object. See details.
+}
 \description{
-Validation information
+Validation information for a database table \code{tbl}.
+}
+\details{
+The \code{tbl_validation} object contains all information needed for the confrontation
+of validation rules with the data in the database table. It contains:
+\itemize{
+\item \verb{$query}: a \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} object with the query to be executed on the database
+\item \verb{$tbl}: the \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} pointing to the table in the database
+\item \verb{$key}: Whether there is a key column, and if so, what it is.
+\item \verb{$record_based}: \code{logical} with which rules are record based.
+\item \verb{$exprs}: list of validation rule expressions
+\item \verb{$working}: \code{logical}, which of the rules work on the database. (whether the database supports this expression)
+\item \verb{$errors}: list of validation rules that did not execute on the database.
+\item \verb{$sparse}: If \code{TRUE} the query is stored as a sparse validation object.
+}
 }
 
 \seealso{

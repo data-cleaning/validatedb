@@ -11,6 +11,9 @@ rule_works_on_tbl(tbl, x)
 
 \item{x}{a \code{\link[validate:validator]{validate::validator()}} object}
 }
+\value{
+\code{logical} encoding which validation rules "work" on the database.
+}
 \description{
 tests for each rule if it can be executed on the database
 }
