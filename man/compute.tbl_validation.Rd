@@ -2,12 +2,12 @@
 % Please edit documentation in R/compute.R
 \name{compute.tbl_validation}
 \alias{compute.tbl_validation}
-\title{Store the result of the validation in the db}
+\title{Store the validation result in the db}
 \usage{
 \method{compute}{tbl_validation}(x, name, ...)
 }
 \arguments{
-\item{x}{\code{tbl_validation} object}
+\item{x}{\code{\link[=tbl_validation]{tbl_validation()}}, result of a \code{confront()} of \code{tbl} with a rule set.}
 
 \item{name}{optional, when omitted, a random name is used.}
 
@@ -18,7 +18,7 @@ A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that refers to the 
 table in the database. See \code{\link[dplyr:compute]{dplyr::compute()}}.
 }
 \description{
-Stores the result of the validation in the db using
+Stores the validation result in the db using
 the \code{\link[dplyr:compute]{dplyr::compute()}} of the db back-end.
 This method changes the \code{tbl_validation} object!
 Note that for most back-ends the default setting is

@@ -1,5 +1,6 @@
 #' tests for each rule if it can be executed on the database
 #' 
+#' tests for each rule if it can be executed on the database
 #' @param tbl a `tbl` object with columns used in `x`
 #' @param x a [validate::validator()] object
 #' @return `logical` encoding which validation rules "work" on the database.

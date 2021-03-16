@@ -5,7 +5,7 @@
 #' 
 #' Retrieve validation results as a data.frame
 #' @include tbl_validation.R
-#' @param x result of a `confront()` of `tbl` with a rule set.
+#' @param x [tbl_validation()], result of a `confront()` of `tbl` with a rule set.
 #' @param row.names ignored
 #' @param optional ignored
 #' @param ... ignored

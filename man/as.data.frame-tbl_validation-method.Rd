@@ -7,7 +7,7 @@
 \S4method{as.data.frame}{tbl_validation}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
-\item{x}{result of a \code{confront()} of \code{tbl} with a rule set.}
+\item{x}{\code{\link[=tbl_validation]{tbl_validation()}}, result of a \code{confront()} of \code{tbl} with a rule set.}
 
 \item{row.names}{ignored}
 

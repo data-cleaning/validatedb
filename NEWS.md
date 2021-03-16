@@ -1,3 +1,3 @@
-# validatedb 0.0.0.9000
+# validatedb 0.1.3
 
-* Added a `NEWS.md` file to track changes to the package.
+* First release

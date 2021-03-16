@@ -3,14 +3,14 @@
 \name{confront.tbl_sql}
 \alias{confront.tbl_sql}
 \alias{confront,ANY,validator,ANY-method}
-\title{Confront \code{tbl_sql} with \code{validator} rules.}
+\title{Validate data in database \code{tbl} with \code{validator} rules.}
 \usage{
 confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 
 \S4method{confront}{ANY,validator,ANY}(dat, x, ref, key = NULL, sparse = FALSE, ...)
 }
 \arguments{
-\item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
+\item{tbl}{\code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} table in a database, retrieved with \code{\link[=tbl]{tbl()}}}
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
@@ -30,7 +30,7 @@ confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 a \code{\link[=tbl_validation]{tbl_validation()}} object, containing the confrontation query and processing information.
 }
 \description{
-Confront \code{tbl_sql} objects with \code{\link[=validator]{validator()}} rules, making it
+Confront \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} objects with \code{\link[validate:validator]{validate::validator()}} rules, making it
 possible to execute \code{validator()} rules on database tables. Validation results
 can be stored in the db or retrieved into R.
 }

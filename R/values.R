@@ -18,9 +18,9 @@
 #' 
 #' * `tbl`: a [dbplyr::tbl_dbi] object, pointing to the database
 #' * `matrix`: a R matrix, similar to [validate::values()].
-#' * `list`: a R matrix, similar to [validate::values()].
+#' * `list`: a R list, similar to [validate::values()].
 #' * `data.frame`: the result of `tbl` stored in a `data.frame`.
-#' @param x object of type `tbl_validation`
+#' @param x [tbl_validation()], result of a `confront()` of `tbl` with a rule set.
 #' @param simplify only use when `type` = "list" see `validate::values`
 #' @param type whether to return a list/matrix or to return a query on the database.
 #' @param ... not used

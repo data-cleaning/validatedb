@@ -1,8 +1,8 @@
 setOldClass("tbl_sql")
 
-#' Confront `tbl_sql` with `validator` rules.
+#' Validate data in database `tbl` with `validator` rules.
 #' 
-#' Confront `tbl_sql` objects with [validator()] rules, making it 
+#' Confront [dbplyr::tbl_dbi()] objects with [validate::validator()] rules, making it 
 #' possible to execute `validator()` rules on database tables. Validation results
 #' can be stored in the db or retrieved into R.
 #' 
@@ -12,7 +12,7 @@ setOldClass("tbl_sql")
 #' a lazy query object. The result of a validation can be stored in the database
 #' using `compute` or retrieved into R with `values`.
 #' 
-#' @param tbl tbl_sql object, table in a database, retrieved with [dplyr::tbl()]
+#' @param tbl [dbplyr::tbl_dbi()] table in a database, retrieved with [tbl()]
 #' @param x [validate::validator()] object with validation rules.
 #' @param ref reference object (not working)
 #' @param key `character` with key column name.

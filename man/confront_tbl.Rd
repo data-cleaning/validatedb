@@ -7,7 +7,7 @@
 confront_tbl(tbl, x, key = NULL)
 }
 \arguments{
-\item{tbl}{tbl_sql object, table in a database, retrieved with \code{\link[dplyr:tbl]{dplyr::tbl()}}}
+\item{tbl}{\code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} table in a database, retrieved with \code{\link[=tbl]{tbl()}}}
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 

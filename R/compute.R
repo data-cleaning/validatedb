@@ -2,14 +2,14 @@
 #' @export
 dplyr::compute
 
-#' Store the result of the validation in the db
+#' Store the validation result in the db
 #' 
-#' Stores the result of the validation in the db using
+#' Stores the validation result in the db using
 #' the [dplyr::compute()] of the db back-end.
 #' This method changes the `tbl_validation` object!
 #' Note that for most back-ends the default setting is 
 #' a temporary table with a random name.
-#' @param x `tbl_validation` object
+#' @param x [tbl_validation()], result of a `confront()` of `tbl` with a rule set.
 #' @param name optional, when omitted, a random name is used.
 #' @param ... passed through to `compute` on `x$query`
 #' @family tbl_validation

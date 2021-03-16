@@ -9,7 +9,7 @@
 \code{tbl_validation} object. See details.
 }
 \description{
-Validation information for a database table \code{tbl}.
+Validation information for a database \code{tbl}, result of a \code{\link[=confront.tbl_sql]{confront.tbl_sql()}}.
 }
 \details{
 The \code{tbl_validation} object contains all information needed for the confrontation

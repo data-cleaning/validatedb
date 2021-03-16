@@ -12,7 +12,7 @@
 )
 }
 \arguments{
-\item{x}{object of type \code{tbl_validation}}
+\item{x}{\code{\link[=tbl_validation]{tbl_validation()}}, result of a \code{confront()} of \code{tbl} with a rule set.}
 
 \item{simplify}{only use when \code{type} = "list" see \code{validate::values}}
 
@@ -44,7 +44,7 @@ Results for \code{type}:
 \itemize{
 \item \code{tbl}: a \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} object, pointing to the database
 \item \code{matrix}: a R matrix, similar to \code{\link[validate:values]{validate::values()}}.
-\item \code{list}: a R matrix, similar to \code{\link[validate:values]{validate::values()}}.
+\item \code{list}: a R list, similar to \code{\link[validate:values]{validate::values()}}.
 \item \code{data.frame}: the result of \code{tbl} stored in a \code{data.frame}.
 }
 }

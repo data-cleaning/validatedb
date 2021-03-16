@@ -2,12 +2,12 @@
 % Please edit documentation in R/aggregate.R
 \name{aggregate.tbl_validation}
 \alias{aggregate.tbl_validation}
-\title{Aggregate a validation}
+\title{Count the number of invalid rules or records.}
 \usage{
 \method{aggregate}{tbl_validation}(x, by = c("rule", "record", "id"), ...)
 }
 \arguments{
-\item{x}{\code{tbl_validation} object}
+\item{x}{\code{\link[=tbl_validation]{tbl_validation()}} object}
 
 \item{by}{either by "rule" or by "record"}
 
@@ -18,10 +18,10 @@ A \code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} object that represents the
 (to be executed) on the database.
 }
 \description{
-Create either statistics by rule or record.
+See the number of valid and invalid checks either by rule or by record.
 }
 \details{
-The result of a \code{\link[=confront]{confront()}} on a db  \code{tbl} results in a lazy query. That
+The result of a \code{\link[=confront]{confront()}} on a db  \code{tbl} results in a lazy squery. That
 is it builds a query without executing it. To store the result in the database
 use \code{\link[=compute]{compute()}} or \code{\link[=values]{values()}}.
 }

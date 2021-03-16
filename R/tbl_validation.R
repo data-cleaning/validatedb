@@ -1,6 +1,6 @@
 #' Validation object for `tbl` object
 #' 
-#' Validation information for a database table `tbl`. 
+#' Validation information for a database `tbl`, result of a [confront.tbl_sql()].
 #' 
 #' The `tbl_validation` object contains all information needed for the confrontation
 #' of validation rules with the data in the database table. It contains:
