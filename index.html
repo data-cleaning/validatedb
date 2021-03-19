@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3.9000</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create a table in a database</span>
 <span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RSQLite/man/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span>, <span class="va">income</span><span class="op">)</span></code></pre></div>
 <p>We retrieve a reference/handle to the table in the DB with <code>dplyr</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -234,6 +234,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=validatedb">https://​cloud.r-project.org/​package=validatedb</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/data-cleaning/validatedb/">https://​github.com/​data-cleaning/​validatedb/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/data-cleaning/validatedb/issues">https://​github.com/​data-cleaning/​validatedb/​issues</a>
