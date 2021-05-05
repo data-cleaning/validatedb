@@ -18,8 +18,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build status](https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/data-cleaning/validatedb/actions)
-<!-- [![Codecov test -->
-<!-- coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master) -->
+[![Codecov test
+coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
+[![Mentioned in Awesome Official Statistics ](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 <!-- badges: end -->
 
 `validatedb` executes validation checks written with R package `validate` on a 

@@ -9,8 +9,10 @@
 status](https://www.r-pkg.org/badges/version/validatedb)](https://CRAN.R-project.org/package=validatedb)
 [![R build
 status](https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg)](https://github.com/data-cleaning/validatedb/actions)
-<!-- [![Codecov test -->
-<!-- coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master) -->
+[![Codecov test
+coverage](https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg)](https://codecov.io/gh/data-cleaning/validatedb?branch=master)
+[![Mentioned in Awesome Official
+Statistics](https://awesome.re/mentioned-badge.svg)](http://www.awesomeofficialstatistics.org)
 <!-- badges: end -->
 
 `validatedb` executes validation checks written with R package
@@ -49,7 +51,7 @@ We retrieve a reference/handle to the table in the DB with `dplyr`
 tbl_income <- tbl(con, "income")
 print(tbl_income)
 #> # Source:   table<income> [?? x 2]
-#> # Database: sqlite 3.34.1 []
+#> # Database: sqlite 3.35.5 []
 #>     age salary
 #>   <dbl>  <dbl>
 #> 1    12   1000
@@ -105,7 +107,7 @@ But often this seems more handy:
 ``` r
 values(cf, type = "tbl")
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.34.1 []
+#> # Database: sqlite 3.35.5 []
 #>   is_adult has_income mean_age
 #>      <int>      <int>    <int>
 #> 1        0          1        0
@@ -129,7 +131,7 @@ con <- dbplyr::src_memdb()
 tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
 print(tbl_income)
 #> # Source:   table<income> [?? x 3]
-#> # Database: sqlite 3.34.1 [:memory:]
+#> # Database: sqlite 3.35.5 [:memory:]
 #>      id   age salary
 #>   <int> <dbl>  <dbl>
 #> 1     1    12   1000
@@ -145,14 +147,14 @@ rules <- validator( is_adult   = age >= 18
 cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
 #> # Source:   lazy query [?? x 4]
-#> # Database: sqlite 3.34.1 [:memory:]
+#> # Database: sqlite 3.35.5 [:memory:]
 #>   rule       npass nfail   nNA
 #>   <chr>      <int> <int> <int>
 #> 1 is_adult       1     1     0
 #> 2 has_income     1     0     1
 aggregate(cf, by = "record")
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.34.1 [:memory:]
+#> # Database: sqlite 3.35.5 [:memory:]
 #>      id nfails   nNA
 #>   <int>  <dbl> <dbl>
 #> 1     1      1     0
@@ -181,7 +183,7 @@ show_query(cf_sparse)
 #> WHERE (COALESCE(`fail`, 1))
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.34.1 [:memory:]
+#> # Database: sqlite 3.35.5 [:memory:]
 #>      id rule        fail
 #>   <int> <chr>      <int>
 #> 1     1 is_adult       1
