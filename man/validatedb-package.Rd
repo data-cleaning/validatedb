@@ -8,7 +8,7 @@
 \description{
 Check whether records in a database table are valid using 
    validation rules in R syntax specified with R package 'validate'. 
-   R validation checks are automatically translated in SQL using 'dbplyr'.
+   R validation checks are automatically translated to SQL using 'dbplyr'.
 }
 \seealso{
 Useful links:
