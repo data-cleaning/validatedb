@@ -12,11 +12,8 @@
 #' @example ./example/as-data-frame.R
 #' @return `data.frame`, result of the query on the database.
 #' @export
-setMethod("as.data.frame"
-         , signature = c("tbl_validation")
-         , function( x
-                   , row.names = NULL
-                   , optional = FALSE, ...){
-                  as.data.frame(x$query)
-           }
-         )
+as.data.frame.tbl_validation <- function( x
+                                        , row.names = NULL
+                                        , optional = FALSE, ...){
+  values(x, type="data.frame")
+}

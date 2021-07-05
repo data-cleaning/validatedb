@@ -6,11 +6,7 @@ Authors@R: c(
            family = "de Jonge",
            role = c("aut", "cre"),
            email = "edwindjonge@gmail.com",
-           comment = c(ORCID="0000-0002-6580-4718")),
-    person(given = "Mark",
-           family = "van der Loo",
-           role = c("aut")
-           )
+           comment = c(ORCID="0000-0002-6580-4718"))
     )
 Description: Check whether records in a database table are valid using 
    validation rules in R syntax specified with R package 'validate'. 
