@@ -7,6 +7,7 @@ describe("summary", {
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
     cf <- confront(tbl_d, rules)
     s <- summary(cf)
+    skip_on_cran()
     expect_known_value(s, "summary1.rds")
   })
   
@@ -39,6 +40,7 @@ describe("summary", {
     cf <- confront(tbl_d, rules, sparse=TRUE)
     s <- summary(cf)
     # same as not sparse one
+    skip_on_cran()
     expect_known_value(s, "summary1.rds")
   })
   
@@ -59,6 +61,7 @@ describe("summary", {
     res <- summary(cf)
     expect_true(is.data.frame(res))
     expect_equal(res$error, c(FALSE, FALSE, FALSE, TRUE, TRUE))
+    skip_on_cran()
     expect_known_value(res, "summary2.rds")
   })
   
