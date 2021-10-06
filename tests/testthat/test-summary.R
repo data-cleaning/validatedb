@@ -1,3 +1,5 @@
+vv <- packageVersion("validate")
+
 describe("summary", {
   it("works on a simple case", {
     rules <- validator(x > 1, y < x, x == 0)
@@ -8,7 +10,11 @@ describe("summary", {
     cf <- confront(tbl_d, rules)
     s <- summary(cf)
     skip_on_cran()
-    expect_known_value(s, "summary1.rds")
+    if (vv < "1.1.0"){
+      expect_known_value(s, "summary1old.rds")
+    } else {
+      expect_known_value(s, "summary1.rds")
+    }
   })
   
   it("works with failing rules",{
@@ -28,7 +34,11 @@ describe("summary", {
     res <- summary(cf)
     expect_true(is.data.frame(res))
     expect_equal(res$error, c(FALSE, FALSE, FALSE, TRUE, TRUE))
-    expect_known_value(res, "summary2.rds")
+    if (vv < "1.1.0"){
+      expect_known_value(res, "summary2old.rds")
+    } else {
+      expect_known_value(res, "summary2.rds")
+    }
   })
   
   it("works on a sparse confrontation", {
