@@ -81,7 +81,7 @@ describe("summary", {
     } else {
       expect_known_value(res, "summary2.rds")
     }
-  })
+})
   
   
 })

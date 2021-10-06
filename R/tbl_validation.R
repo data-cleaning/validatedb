@@ -37,6 +37,7 @@ tbl_validation <-
         cat(sprintf("Call:\n    ")); print(.self$._call); cat('\n')
         cat(sprintf('Confrontations: %d\n', length(.self$exprs)))
         cat(sprintf('Tbl           : %s (%s)\n', tblname(tbl), dbname(tbl)))
+        
         #cat(sprintf('Database      : "%s"\n', dbname(tbl)))
         if (length(key)){
                 cat('Key column    : ',key,'\n', sep="")
@@ -50,10 +51,11 @@ tbl_validation <-
 
 
 tblname <- function(tbl){
-  id <- unclass(tbl)$ops$x
+  id <- dbplyr::remote_name(tbl)
   as.character(id)
 }
 
 dbname <- function(tbl){
-  unclass(tbl)$src$con@dbname
+  con <- dbplyr::remote_con(tbl)
+  con@dbname
 }
