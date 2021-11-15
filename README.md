@@ -40,7 +40,7 @@ First we setup a table in a database (for demo purpose)
 
 ``` r
 # create a table in a database
-income <- data.frame(age=c(12,35), salary = c(1000,NA))
+income <- data.frame(id=1:2, age=c(12,35), salary = c(1000,NA))
 con <- DBI::dbConnect(RSQLite::SQLite())
 DBI::dbWriteTable(con, "income", income)
 ```
@@ -50,12 +50,12 @@ We retrieve a reference/handle to the table in the DB with `dplyr`
 ``` r
 tbl_income <- tbl(con, "income")
 print(tbl_income)
-#> # Source:   table<income> [?? x 2]
+#> # Source:   table<income> [?? x 3]
 #> # Database: sqlite 3.35.5 []
-#>     age salary
-#>   <dbl>  <dbl>
-#> 1    12   1000
-#> 2    35     NA
+#>      id   age salary
+#>   <int> <dbl>  <dbl>
+#> 1     1    12   1000
+#> 2     2    35     NA
 ```
 
 Let’s define a rule set and confront the table with it:
@@ -67,7 +67,7 @@ rules <- validator( is_adult   = age >= 18
                   )
 
 # and confront!
-cf <- confront(tbl_income, rules)
+cf <- confront(tbl_income, rules, key = "id")
 
 print(cf)
 #> Object of class 'tbl_validation'
@@ -76,6 +76,7 @@ print(cf)
 #> 
 #> Confrontations: 3
 #> Tbl           : income ()
+#> Key column    : id
 #> Sparse        : FALSE
 #> Fails         : [??] (see `values`, `summary`)
 #> Errors        : 0
@@ -106,12 +107,12 @@ But often this seems more handy:
 
 ``` r
 values(cf, type = "tbl")
-#> # Source:   lazy query [?? x 3]
+#> # Source:   lazy query [?? x 4]
 #> # Database: sqlite 3.35.5 []
-#>   is_adult has_income mean_age
-#>      <int>      <int>    <int>
-#> 1        0          1        0
-#> 2        1         NA        0
+#>      id is_adult has_income mean_age
+#>   <int>    <int>      <int>    <int>
+#> 1     1        0          1        0
+#> 2     2        1         NA        0
 ```
 
 We can see the sql code by using `show_query`:
@@ -119,7 +120,7 @@ We can see the sql code by using `show_query`:
 ``` r
 show_query(cf)
 #> <SQL>
-#> SELECT (`age` - 18.0) >= -1e-08 AS `is_adult`, `salary` > 0.0 AS `has_income`, AVG(`age`) OVER () > 24.0 AS `mean_age`
+#> SELECT `id`, CASE WHEN ((`age` - 18.0) >= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) >= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` > 0.0) THEN (1) WHEN NOT(`salary` > 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () > 24.0) THEN (1) WHEN NOT(AVG(`age`) OVER () > 24.0) THEN (0) END AS `mean_age`
 #> FROM `income`
 ```
 
@@ -173,14 +174,14 @@ cf_sparse <- confront(tbl_income, rules, key="id", sparse=TRUE )
 show_query(cf_sparse)
 #> <SQL>
 #> SELECT *
-#> FROM (SELECT `id`, 'is_adult' AS `rule`, NOT((`age` - 18.0) >= -1e-08) AS `fail`
+#> FROM (SELECT `id`, 'is_adult' AS `rule`, CASE WHEN ((`age` - 18.0) >= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) >= -1e-08) THEN (0) END = 0.0 AS `fail`
 #> FROM `income`)
-#> WHERE (COALESCE(`fail`, 1))
+#> WHERE (COALESCE(`fail`, 1) = 1)
 #> UNION ALL
 #> SELECT *
-#> FROM (SELECT `id`, 'has_income' AS `rule`, NOT(`salary` > 0.0) AS `fail`
+#> FROM (SELECT `id`, 'has_income' AS `rule`, CASE WHEN (`salary` > 0.0) THEN (1) WHEN NOT(`salary` > 0.0) THEN (0) END = 0.0 AS `fail`
 #> FROM `income`)
-#> WHERE (COALESCE(`fail`, 1))
+#> WHERE (COALESCE(`fail`, 1) = 1)
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]
 #> # Database: sqlite 3.35.5 [:memory:]

@@ -1,6 +1,6 @@
 Package: validatedb
 Title: Validate Data in a Database using 'validate' 
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(
     person(given = "Edwin",
            family = "de Jonge",
@@ -14,7 +14,7 @@ Description: Check whether records in a database table are valid using
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Depends: validate
 Imports: 
     dplyr,
@@ -41,3 +41,4 @@ Collate:
     'tbl.R'
     'validatedb-package.R'
     'values.R'
+    'wrap_expression.R'

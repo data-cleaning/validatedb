@@ -45,7 +45,7 @@ library(validatedb)
 First we setup a table in a database (for demo purpose)
 ```{r}
 # create a table in a database
-income <- data.frame(age=c(12,35), salary = c(1000,NA))
+income <- data.frame(id=1:2, age=c(12,35), salary = c(1000,NA))
 con <- DBI::dbConnect(RSQLite::SQLite())
 DBI::dbWriteTable(con, "income", income)
 ```
@@ -65,7 +65,7 @@ rules <- validator( is_adult   = age >= 18
                   )
 
 # and confront!
-cf <- confront(tbl_income, rules)
+cf <- confront(tbl_income, rules, key = "id")
 
 print(cf)
 

@@ -46,24 +46,30 @@ confront_tbl_sparse <- function( tbl
     exprs <- exprs[working]
   }
   
-  key_expr <- list(row = quote(row_number()))
-  if (is.character(key)){
-    if (!key[1] %in% dplyr::tbl_vars(tbl)){
-      stop("key='",key[1],"' is not recognized as a column", call. = FALSE)
-    }
-    key_expr <- list(as.symbol(key[1]))
-  }
+  colnms <- dplyr::tbl_vars(tbl)
   
+  key_expr <- list()
+  if (is.character(key)){
+    key_in_table <- key %in% colnms
+    if (!all(key_in_table)){
+      key_nf <- paste0("'", key[!key_in_table], "'", collapse = ", ")
+      stop("key(s) ", key_nf," not recognized as a column", call. = FALSE)
+    }
+    key_expr <- lapply(key, as.symbol)
+  } else {
+    #warning("Use the 'key' argument to indicate the columns that identify a row.")
+  }
 
-  qry_e <- lapply(names(exprs), function(rule_name){
-    e <- exprs[[rule_name]]
+  cw_exprs <- wrap_expression(exprs)
+  qry_e <- lapply(names(cw_exprs), function(rule_name){
+    e <- cw_exprs[[rule_name]]
     bquote({
       d <- dplyr::transmute( tbl
                            , ..(key_expr)
                            , rule = .(rule_name)
-                           , fail = !.(e)
+                           , fail = .(e) == 0
                            )
-      dplyr::filter(d, dplyr::coalesce(fail, TRUE))
+      dplyr::filter(d, dplyr::coalesce(fail, 1L) == 1L)
     }, splice=TRUE)
   })
   qry <- lapply(qry_e, eval.parent, n=1)

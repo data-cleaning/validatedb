@@ -55,7 +55,8 @@ aggregate_by_record <- function(x, ...){
   rules <- tbl_vars(x$query)
   
   if (length(x$key)){
-    rules <- rules[-1]
+    key_idx <- seq_along(x$key)
+    rules <- rules[-key_idx]
   }
   
   vars <- lapply(rules, as.symbol)
@@ -73,7 +74,7 @@ aggregate_by_record <- function(x, ...){
   nas <- Reduce(add, is_na)
   key_expr <- list()
   if (length(x$key)){
-    key_expr <- list(as.symbol(x$key))
+    key_expr <- lapply(x$key, as.symbol)
   }
   qry_e <- bquote( dplyr::transmute(x$query
                                    , ..(key_expr)

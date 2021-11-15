@@ -3,9 +3,9 @@ describe("Confront", {
     rules <- validator(x > 1, y < x, x == 0)
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(x = 1, y = 2)
+    d <- data.frame(id = 1, x = 1, y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules)
+    cf <- confront(tbl_d, rules, key = "id")
     #expect_true(is(cf, "validation"))
     expect_true(is(cf, "tbl_validation"))
   })
@@ -14,9 +14,9 @@ describe("Confront", {
     rules <- validator(x > 1, y < x, y == 2)
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(x = c(2, NA), y = 2:1)
+    d <- data.frame(id = 1:2, x = c(2, NA), y = 2:1)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules)
+    cf <- confront(tbl_d, rules, key = "id")
     res <- values(cf, type = "list", simplify=FALSE)
     expect_equal(res, list( V1 = c(TRUE, NA)
                           , V2 = c(FALSE, NA)
@@ -31,9 +31,9 @@ describe("Confront", {
     
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(a = c("A1", "A3", NA), b = c("B3", NA, "B2"))
+    d <- data.frame(id = 1:3, a = c("A1", "A3", NA), b = c("B3", NA, "B2"))
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules)
+    cf <- confront(tbl_d, rules, key = "id")
     res <- values(cf, type = "list", simplify=FALSE)
     expect_equal(res, list( V1 = c(TRUE, FALSE,NA)
                           , V2 = c(FALSE, NA, TRUE)
@@ -51,9 +51,9 @@ describe("Confront", {
     
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(a = c("A1", "A3", NA), b = c("B3", NA, "B2"), x = c(NA, 1,-1))
+    d <- data.frame(id=1:3, a = c("A1", "A3", NA), b = c("B3", NA, "B2"), x = c(NA, 1,-1))
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules)
+    cf <- confront(tbl_d, rules, key = "id")
     res <- values(cf, type = "list", simplify=FALSE)
     expect_equal(res, list( V1 = c(TRUE, FALSE,NA)
                           , V2 = c(FALSE, NA, TRUE)
@@ -79,5 +79,44 @@ describe("Confront", {
     ))
     expect_equal(length(cf$errors), 2)
   })
+  
+  it("handles multiple key columns", {
+    rules <- validator(x > 1, y < x, x == 0)
+    con <- dbplyr::src_memdb()
+    
+    d <- data.frame(id1 = 1, id2 = 1, x = 1, y = 2)
+    tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
+    cf <- confront(tbl_d, rules, key = c("id1", "id2"))
+    df <- as.data.frame(cf)
+    expect_equal(names(df)[1:2], c("id1", "id2"))
+    
+    cf <- confront(tbl_d, rules, key = c("id1", "id2"), sparse=TRUE)
+    df <- as.data.frame(cf)
+    expect_equal(names(df)[1:2], c("id1", "id2"))
+  })
+
+  it("warns when missing a key column", {
+    rules <- validator(x > 1, y < x, x == 0)
+    con <- dbplyr::src_memdb()
+    
+    d <- data.frame(x = 1, y = 2)
+    tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
+    expect_warning({
+      cf <- confront(tbl_d, rules)
+    })
+    df <- as.data.frame(cf)
+  })
+  
+  it("stops when missing a specified key column", {
+    rules <- validator(x > 1, y < x, x == 0)
+    con <- dbplyr::src_memdb()
+    
+    d <- data.frame(x = 1, y = 2)
+    tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
+    expect_error({
+      cf <- confront(tbl_d, rules, key=c("test", "test2"))
+    })
+  })
+  
   
 })

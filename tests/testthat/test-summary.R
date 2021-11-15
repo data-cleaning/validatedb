@@ -5,9 +5,9 @@ describe("summary", {
     rules <- validator(x > 1, y < x, x == 0)
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(x = c(NA,0,3), y = 2)
+    d <- data.frame(id=1:3, x = c(NA,0,3), y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules)
+    cf <- confront(tbl_d, rules, key = "id")
     s <- summary(cf)
     skip_on_cran()
     if (vv < "1.1.0"){
@@ -29,7 +29,7 @@ describe("summary", {
     )
     con <- dbplyr::src_memdb()
     tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
-    expect_warning(cf <- confront(tbl_income, rules))
+    expect_warning(cf <- confront(tbl_income, rules, key = "id"))
 
     res <- summary(cf)
     expect_true(is.data.frame(res))
@@ -45,9 +45,9 @@ describe("summary", {
     rules <- validator(x > 1, y < x, x == 0)
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(x = c(NA,0,3), y = 2)
+    d <- data.frame(id = 1:3, x = c(NA,0,3), y = 2)
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    cf <- confront(tbl_d, rules, sparse=TRUE)
+    cf <- confront(tbl_d, rules, sparse=TRUE, key = "id")
     s <- summary(cf)
     # same as not sparse one
     skip_on_cran()

@@ -54,8 +54,9 @@ setMethod("values", signature = c("tbl_validation"), function( x
       return(df)
     }
     # turn into logical
-    is_num <- sapply(df, is.numeric)
-    df[is_num] <- lapply(df[is_num], function(x){x > 0})
+    idx <- !logical(ncol(df))
+    idx[seq_along(x$key)] <- FALSE
+    df[idx] <- lapply(df[idx], function(x){x > 0})
     return(df)
   }
   
@@ -75,7 +76,8 @@ setMethod("values", signature = c("tbl_validation"), function( x
   
   # first column is row_number, should also remove key column
   if (length(x$key)){
-    val_df <- val_df[-1]
+    key_cols <- seq_along(x$key)
+    val_df <- val_df[-key_cols]
   }
   # to cope with non working rules / missing variables...
   record_based <- x$record_based[names(val_df)]
