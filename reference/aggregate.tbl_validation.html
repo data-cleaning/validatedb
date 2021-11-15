@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
       </span>
     </div>
 
@@ -146,69 +146,74 @@
 (to be executed) on the database.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The result of a <code>confront()</code> on a db  <code>tbl</code> results in a lazy squery. That
+    <p>The result of a <code><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront()</a></code> on a db  <code>tbl</code> results in a lazy squery. That
 is it builds a query without executing it. To store the result in the database
-use <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code> or <code>values()</code>.</p>
+use <code><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute()</a></code> or <code><a href='https://rdrr.io/pkg/validate/man/values.html'>values()</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>income</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, age<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>,<span class='fl'>35</span><span class='op'>)</span>, salary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>dbplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dbplyr.tidyverse.org/reference/memdb_frame.html'>src_memdb</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>tbl_income</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/copy_to.html'>copy_to</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>income</span>, overwrite<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>tbl_income</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># Source:   table&lt;income&gt; [?? x 3]</span>
-#&gt; <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span>
-#&gt;      id   age salary
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>     1    12   <span style='text-decoration: underline;'>1</span>000
-#&gt; <span style='color: #BCBCBC;'>2</span>     2    35     <span style='color: #BB0000;'>NA</span></div><div class='input'>
-<span class='co'># Let's define a rule set and confront the table with it:</span>
-<span class='va'>rules</span> <span class='op'>&lt;-</span> <span class='fu'>validator</span><span class='op'>(</span> is_adult   <span class='op'>=</span> <span class='va'>age</span> <span class='op'>&gt;=</span> <span class='fl'>18</span>
-                    , has_income <span class='op'>=</span> <span class='va'>salary</span> <span class='op'>&gt;</span> <span class='fl'>0</span>
-<span class='op'>)</span>
-
-<span class='co'># and confront!</span>
-<span class='co'># in general with a db table it is handy to use a key</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"rule"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># Source:   lazy query [?? x 4]</span>
-#&gt; <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span>
-#&gt;   rule       npass nfail   nNA
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> is_adult       1     1     0
-#&gt; <span style='color: #BCBCBC;'>2</span> has_income     1     0     1</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"record"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># Source:   lazy query [?? x 3]</span>
-#&gt; <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span>
-#&gt;      id nfails   nNA
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>     1      1     0
-#&gt; <span style='color: #BCBCBC;'>2</span>     2      0     1</div><div class='input'>
-<span class='co'># to tweak performance of the db query the following options are available</span>
-<span class='co'># 1) store validation result in db</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, compute <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='co'># or identical</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span>
-<span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span>
-
-<span class='co'># 2) Store the validation sparsely</span>
-<span class='va'>cf_sparse</span> <span class='op'>&lt;-</span> <span class='fu'>confront</span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span> <span class='op'>)</span>
-
-<span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='va'>cf_sparse</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;SQL&gt;
-#&gt; SELECT *
-#&gt; FROM (SELECT `id`, 'is_adult' AS `rule`, NOT((`age` - 18.0) &gt;= -1e-08) AS `fail`
-#&gt; FROM `income`)
-#&gt; WHERE (COALESCE(`fail`, 1))
-#&gt; UNION ALL
-#&gt; SELECT *
-#&gt; FROM (SELECT `id`, 'has_income' AS `rule`, NOT(`salary` &gt; 0.0) AS `fail`
-#&gt; FROM `income`)
-#&gt; WHERE (COALESCE(`fail`, 1))</div><div class='input'><span class='fu'>values</span><span class='op'>(</span><span class='va'>cf_sparse</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># Source:   lazy query [?? x 3]</span>
-#&gt; <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span>
-#&gt;      id rule        fail
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span>     1 is_adult       1
-#&gt; <span style='color: #BCBCBC;'>2</span>     2 has_income    <span style='color: #BB0000;'>NA</span></div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>income</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>, age<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>,<span class='fl'>35</span><span class='op'>)</span>, salary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1000</span>,<span class='cn'>NA</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'>dbplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dbplyr.tidyverse.org/reference/memdb_frame.html'>src_memdb</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>tbl_income</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/copy_to.html'>copy_to</a></span><span class='op'>(</span><span class='va'>con</span>, <span class='va'>income</span>, overwrite<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>tbl_income</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   table&lt;income&gt; [?? x 3]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id   age salary</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     1    12   <span style='text-decoration: underline;'>1</span>000</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>     2    35     <span style='color: #BB0000;'>NA</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Let's define a rule set and confront the table with it:</span></span>
+<span class='r-in'><span class='va'>rules</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/validator.html'>validator</a></span><span class='op'>(</span> is_adult   <span class='op'>=</span> <span class='va'>age</span> <span class='op'>&gt;=</span> <span class='fl'>18</span></span>
+<span class='r-in'>                    , has_income <span class='op'>=</span> <span class='va'>salary</span> <span class='op'>&gt;</span> <span class='fl'>0</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># and confront!</span></span>
+<span class='r-in'><span class='co'># in general with a db table it is handy to use a key</span></span>
+<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"rule"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 4]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   rule       npass nfail   nNA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> is_adult       1     1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> has_income     1     0     1</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/aggregate.html'>aggregate</a></span><span class='op'>(</span><span class='va'>cf</span>, by <span class='op'>=</span> <span class='st'>"record"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 3]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id nfails   nNA</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     1      1     0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>     2      0     1</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># to tweak performance of the db query the following options are available</span></span>
+<span class='r-in'><span class='co'># 1) store validation result in db</span></span>
+<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, compute <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># or identical</span></span>
+<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/compute.html'>compute</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 2) Store the validation sparsely</span></span>
+<span class='r-in'><span class='va'>cf_sparse</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key<span class='op'>=</span><span class='st'>"id"</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span> <span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='va'>cf_sparse</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;SQL&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, 'is_adult' AS `rule`, CASE WHEN (`age` - 18.0 &gt;= -1e-08) THEN (1) WHEN NOT(`age` - 18.0 &gt;= -1e-08) THEN (0) END = 0.0 AS `fail`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (COALESCE(`fail`, 1) = 1)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT *</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, 'has_income' AS `rule`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END = 0.0 AS `fail`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (COALESCE(`fail`, 1) = 1)</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span><span class='va'>cf_sparse</span>, type<span class='op'>=</span><span class='st'>"tbl"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 3]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id rule        fail</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     1 is_adult       1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>     2 has_income    <span style='color: #BB0000;'>NA</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
