@@ -67,7 +67,7 @@ confront_tbl_sparse <- function( tbl
       d <- dplyr::transmute( tbl
                            , ..(key_expr)
                            , rule = .(rule_name)
-                           , fail = .(e) == 0
+                           , fail = 1 - .(e) 
                            )
       dplyr::filter(d, dplyr::coalesce(fail, 1L) == 1L)
     }, splice=TRUE)

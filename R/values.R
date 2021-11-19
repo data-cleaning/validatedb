@@ -22,6 +22,7 @@
 #' * `data.frame`: the result of `tbl` stored in a `data.frame`.
 #' @param x [tbl_validation()], result of a `confront()` of `tbl` with a rule set.
 #' @param simplify only use when `type` = "list" see `validate::values`
+#' @param drop not used at the moment
 #' @param type whether to return a list/matrix or to return a query on the database.
 #' @param ... not used
 #' @importFrom validate values
@@ -32,6 +33,7 @@
 setMethod("values", signature = c("tbl_validation"), function( x
                                                              #, simplify = TRUE
                                                              , simplify = type == "matrix"
+                                                             , drop = FALSE
                                                              , type = c("tbl", "matrix", "list","data.frame")
                                                              , ...
                                                              ){

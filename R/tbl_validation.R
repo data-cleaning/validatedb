@@ -14,6 +14,7 @@
 #' * `$errors`: list of validation rules that did not execute on the database.
 #' * `$sparse`: If `TRUE` the query is stored as a sparse validation object.
 #' @importFrom methods new
+#' @importFrom DBI dbGetInfo
 #' @family validation
 #' @family tbl_validation
 #' @return `tbl_validation` object. See details.
@@ -57,5 +58,10 @@ tblname <- function(tbl){
 
 dbname <- function(tbl){
   con <- dbplyr::remote_con(tbl)
-  con@dbname
+  info <- DBI::dbGetInfo(con)
+  if (!is.na(info$username)){
+    paste0(info$username,"@",info$dbname)
+  } else {
+    info$dbname
+  }
 }

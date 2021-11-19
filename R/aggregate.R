@@ -42,8 +42,9 @@ aggregate_by_rule <- function(x, ...){
     bquote(summarize( qry
                     , rule = .(as.character(v))
                     , npass = sum(.(v), na.rm=T)
-                    , nfail = sum(.(v) == 0, na.rm=T)
-                    , nNA   = sum(is.na(.(v)), na.rm = T)
+                    , nfail = sum(1 - .(v), na.rm=T)
+                    # TODO make this flexible for db's that support boolean expressions
+                    , nNA   = sum(ifelse(is.na(.(v)), 1L, 0L), na.rm = T)
                     )
           )
   })
@@ -63,13 +64,13 @@ aggregate_by_record <- function(x, ...){
   add <- function(e1,e2){bquote(.(e1) + .(e2))}
   
   is_fail <- lapply(vars, function(v){
-    bquote(coalesce(.(v) == 0, 0))
+    bquote(coalesce(1L - .(v), 0L))
   })
   
   fails <- Reduce(add, is_fail)
   
   is_na <- lapply(vars, function(v){
-    bquote(coalesce(.(v) %% 1, 1))
+    bquote(coalesce(.(v) %% 1L, 1L))
   })
   nas <- Reduce(add, is_na)
   key_expr <- list()

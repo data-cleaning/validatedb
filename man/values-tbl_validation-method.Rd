@@ -7,6 +7,7 @@
 \S4method{values}{tbl_validation}(
   x,
   simplify = type == "matrix",
+  drop = FALSE,
   type = c("tbl", "matrix", "list", "data.frame"),
   ...
 )
@@ -15,6 +16,8 @@
 \item{x}{\code{\link[=tbl_validation]{tbl_validation()}}, result of a \code{confront()} of \code{tbl} with a rule set.}
 
 \item{simplify}{only use when \code{type} = "list" see \code{validate::values}}
+
+\item{drop}{not used at the moment}
 
 \item{type}{whether to return a list/matrix or to return a query on the database.}
 
@@ -62,7 +65,7 @@ rules <- validator( is_adult   = age >= 18
                   )
 
 # and confront!
-cf <- confront(tbl_income, rules)
+cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 summary(cf)
 

@@ -13,3 +13,4 @@
 ^codecov\.yml$
 ^inst/user2021$
 ^useR2021$
+.Renviron

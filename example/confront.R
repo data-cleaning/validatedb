@@ -11,7 +11,7 @@ rules <- validator( is_adult   = age >= 18
                   )
 
 # and confront!
-cf <- confront(tbl_income, rules)
+cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 summary(cf)
 
