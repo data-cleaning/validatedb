@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
       </span>
     </div>
 
@@ -124,6 +124,7 @@
 <span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span>
   <span class='va'>x</span>,
   simplify <span class='op'>=</span> <span class='va'>type</span> <span class='op'>==</span> <span class='st'>"matrix"</span>,
+  drop <span class='op'>=</span> <span class='cn'>FALSE</span>,
   type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"tbl"</span>, <span class='st'>"matrix"</span>, <span class='st'>"list"</span>, <span class='st'>"data.frame"</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -138,6 +139,10 @@
     <tr>
       <th>simplify</th>
       <td><p>only use when <code>type</code> = "list" see <code><a href='https://rdrr.io/pkg/validate/man/values.html'>validate::values</a></code></p></td>
+    </tr>
+    <tr>
+      <th>drop</th>
+      <td><p>not used at the moment</p></td>
     </tr>
     <tr>
       <th>type</th>
@@ -198,8 +203,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-in'>                  <span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># and confront!</span></span>
-<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span><span class='op'>)</span></span>
-<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Use the 'key' argument to indicate the columns that identify a row.</span>
+<span class='r-in'><span class='va'>cf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>tbl_income</span>, <span class='va'>rules</span>, key <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Object of class 'tbl_validation'</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Call:</span>
@@ -207,6 +211,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confrontations: 3</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Tbl           : income (:memory:)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Key column    : id</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Sparse        : FALSE</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Fails         : [??] (see `values`, `summary`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Errors        : 0</span>
@@ -231,23 +236,23 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># But often this seems more handy:</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span><span class='va'>cf</span>, type <span class='op'>=</span> <span class='st'>"tbl"</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 3]</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 4]</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   is_adult has_income mean_age</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>        0          1        1</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span>        1         <span style='color: #BB0000;'>NA</span>        1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   id    is_adult has_income mean_age</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> a            0          1        1</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> b            1         <span style='color: #BB0000;'>NA</span>        1</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># We can see the sql code by using `show_query`:</span></span>
 <span class='r-in'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;SQL&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT CASE WHEN (`age` - 18.0 &gt;= -1e-08) THEN (1) WHEN NOT(`age` - 18.0 &gt;= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () &gt; 20.0) THEN (1) WHEN NOT(AVG(`age`) OVER () &gt; 20.0) THEN (0) END AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, CASE WHEN (`age` - 18.0 &gt;= -1e-08) THEN (1) WHEN NOT(`age` - 18.0 &gt;= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () &gt; 20.0) THEN (1) WHEN NOT(AVG(`age`) OVER () &gt; 20.0) THEN (0) END AS `mean_age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># identical</span></span>
 <span class='r-in'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span><span class='va'>cf</span>, type <span class='op'>=</span> <span class='st'>"tbl"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;SQL&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT CASE WHEN (`age` - 18.0 &gt;= -1e-08) THEN (1) WHEN NOT(`age` - 18.0 &gt;= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () &gt; 20.0) THEN (1) WHEN NOT(AVG(`age`) OVER () &gt; 20.0) THEN (0) END AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, CASE WHEN (`age` - 18.0 &gt;= -1e-08) THEN (1) WHEN NOT(`age` - 18.0 &gt;= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () &gt; 20.0) THEN (1) WHEN NOT(AVG(`age`) OVER () &gt; 20.0) THEN (0) END AS `mean_age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># adding a key often is handy in a database</span></span>
@@ -277,7 +282,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Source:   lazy query [?? x 2]</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># Database: sqlite 3.36.0 [:memory:]</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   rule        fail</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> is_adult       1</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> has_income    <span style='color: #BB0000;'>NA</span></span>
 </pre>
