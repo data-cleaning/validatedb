@@ -6,10 +6,11 @@
 #' @param tbl A [dbplyr::tbl_dbi] object.
 #' @param x A [validate::validator()] object with validation rules.
 #' @param n `integer` number of records to be used for checking.
+#' @param key `character` names of columns that identify a record
 #' @return `logical` whether a validation rule is record based or not.
-is_record_based <- function(tbl, x, n = 5){
+is_record_based <- function(tbl, x, n = 5, key = NULL){
   dat <- dplyr::collect(head(tbl, n = n))
-  cf <- confront(dat, x)
+  cf <- confront(dat, x, key = key)
   vls <- values(cf, simplify = FALSE, drop = FALSE)
   # check if length of value equals n
   sapply(vls, length) == nrow(dat)

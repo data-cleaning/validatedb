@@ -25,16 +25,18 @@ confront_tbl_sparse <- function( tbl
                                , union_all = TRUE
                                # , ...
                                , check_rules = TRUE){
+  
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize  = FALSE
                   , expand_assigments = TRUE
                   )
+  
   nexprs <- length(exprs)
   exprs_all <- exprs
   working <- NA
   nw = list()
   if (check_rules){
-    working <- rule_works_on_tbl(tbl, x)
+    working <- rule_works_on_tbl(tbl, x, key = key)
     nw <- exprs[!working]
     if (any(!working)){
       # should this be in the error object?
@@ -57,25 +59,44 @@ confront_tbl_sparse <- function( tbl
     }
     key_expr <- lapply(key, as.symbol)
   } else {
-    #warning("Use the 'key' argument to indicate the columns that identify a row.")
+    warning("Use the 'key' argument to indicate the columns that identify a row.")
   }
 
-  cw_exprs <- wrap_expression(exprs)
+  #cw_exprs <- wrap_expression(exprs)
+  cw_exprs <- as.expression(exprs)
   qry_e <- lapply(names(cw_exprs), function(rule_name){
-    e <- cw_exprs[[rule_name]]
+    
+    e <- cw_exprs[[rule_name]][]
+    # replace validate functions with sql construct
+    # l <- rewrite(tbl, e, n = 1)
+    # tbl <- l$tbl
+    # e <- l$e
+    
     bquote({
       d <- dplyr::transmute( tbl
                            , ..(key_expr)
                            , rule = .(rule_name)
-                           , fail = 1 - .(e) 
+                           , fail = 1L - .(e)
                            )
-      dplyr::filter(d, dplyr::coalesce(fail, 1L) == 1L)
+      d <- dplyr::filter(d, coalesce(fail, 1L) == 1L)
+      d
+      # d_na <- dplyr::transmute( tbl
+      #                         , ..(key_expr)
+      #                         , rule = .(rule_name)
+      #                         , fail = NA
+      #                         )
+      # d_na <- dplyr::filter(d_na, is.na(.(e)))
+      # dplyr::union_all(d, d_na)
     }, splice=TRUE)
   })
+
   qry <- lapply(qry_e, eval.parent, n=1)
+  browser()
+  
   if (isTRUE(union_all)){
     qry <- Reduce(dplyr::union_all, qry)
   }
+  
   list( query   = qry
       , errors  = nw
       , exprs   = exprs_all

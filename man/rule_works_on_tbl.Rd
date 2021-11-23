@@ -4,12 +4,14 @@
 \alias{rule_works_on_tbl}
 \title{tests for each rule if it can be executed on the database}
 \usage{
-rule_works_on_tbl(tbl, x)
+rule_works_on_tbl(tbl, x, key = NULL)
 }
 \arguments{
 \item{tbl}{a \code{tbl} object with columns used in \code{x}}
 
 \item{x}{a \code{\link[validate:validator]{validate::validator()}} object}
+
+\item{key}{\code{character} names of columns that identify a record}
 }
 \value{
 \code{logical} encoding which validation rules "work" on the database.

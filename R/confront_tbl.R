@@ -17,7 +17,7 @@ confront_tbl <- function(tbl, x, key = NULL
                         # , ...
                         ){
   
-  working <- rule_works_on_tbl(tbl, x)
+  working <- rule_works_on_tbl(tbl, x, key = key)
   exprs <- x$exprs( replace_in = FALSE
                   , vectorize=FALSE
                   , expand_assignments = TRUE

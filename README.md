@@ -190,3 +190,16 @@ values(cf_sparse, type="tbl")
 #> 1     1 is_adult       1
 #> 2     2 has_income    NA
 ```
+
+## TODO
+
+Some newly added `validate` utility functions are (still) missing from
+`validatedb`.
+
+-   [ ] `is_complete`, `all_complete`
+-   [ ] `is_unique`, `all_unique`
+-   [ ] `exists_any`, `exists_one`
+-   [ ] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by`
+-   [ ] `contains_exactly`
+-   [ ] `is_linear_sequence`
+-   [ ] `hierachy`

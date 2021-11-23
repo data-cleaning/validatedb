@@ -5,9 +5,9 @@
 \title{determine the dimensional structure of \code{values} so that it conforms to
 \code{validate}. Only used for values \code{simplify}.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db!}
+Note, this returns also a value for rules that do not work on the db!}
 \usage{
-is_record_based(tbl, x, n = 5)
+is_record_based(tbl, x, n = 5, key = NULL)
 }
 \arguments{
 \item{tbl}{A \link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi} object.}
@@ -15,6 +15,8 @@ is_record_based(tbl, x, n = 5)
 \item{x}{A \code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
 \item{n}{\code{integer} number of records to be used for checking.}
+
+\item{key}{\code{character} names of columns that identify a record}
 }
 \value{
 \code{logical} whether a validation rule is record based or not.
@@ -23,6 +25,6 @@ is_record_based(tbl, x, n = 5)
 determine the dimensional structure of \code{values} so that it conforms to
 \code{validate}. Only used for values \code{simplify}.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db!
+Note, this returns also a value for rules that do not work on the db!
 }
 \keyword{internal}
