@@ -62,8 +62,8 @@ describe("rewrite", {
     tab <- as.data.frame(l$tbl)
     expect_equal(names(tab), c("age", "name", ".n2"))
     expect_equal(nrow(tab), 3)
-    expect_true(all(tab$.n2 == 11))
-    expect_equal(l$e, quote(.n2 > 10))
+    expect_equal(tab$.n2, c(1L, 1L, 0L))
+    expect_equal(l$e, quote(.n2 >= 1L))
     expect_equal(l$n, 3L)
     
     

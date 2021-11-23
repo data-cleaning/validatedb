@@ -1,4 +1,4 @@
-rewrite_do_by <- function(tbl, e, n = 1, fun = NULL, has_window=FALSE){
+rewrite_do_by <- function(tbl, e, n = 1, fun = NULL){
   .name <- paste0(".n", n)
   
   db <- e[[1]]
@@ -16,18 +16,10 @@ rewrite_do_by <- function(tbl, e, n = 1, fun = NULL, has_window=FALSE){
   funcall <- bquote(.(fun)(.(x), ..(arg)), splice = TRUE)
   funcall <- setNames(list(funcall), .name)
   
-  if (has_window){
-    tbl_q <- bquote({
+  tbl_q <- bquote({
       d <- group_by(tbl, ..(by))
       mutate(d, ..(funcall))
     },splice = TRUE)
-  } else {
-    tbl_q <- bquote({
-      d <- group_by(tbl, ..(by))
-      d <- summarize(d, ..(funcall))
-      left_join(tbl, d, by = .(sapply(by, deparse)))
-    },splice = TRUE)
-  }
   e <- as.symbol(.name)
   list(tbl = eval(tbl_q), e = e, n = n + 1L)
 }

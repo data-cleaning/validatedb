@@ -91,7 +91,7 @@ confront_tbl_sparse <- function( tbl
   })
 
   qry <- lapply(qry_e, eval.parent, n=1)
-  browser()
+  #browser()
   
   if (isTRUE(union_all)){
     qry <- Reduce(dplyr::union_all, qry)

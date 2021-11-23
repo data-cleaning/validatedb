@@ -3,7 +3,7 @@
 # using these new columns
 # may depend on the support of window functions
 
-rewrite <- function(tbl, e, n = 1L, has_window = FALSE){
+rewrite <- function(tbl, e, n = 1L, has_window = TRUE){
   if (is.call(e)){
     # first parse the arguments to support nested validate functions
     arg <- seq_along(e)[-1]
@@ -19,13 +19,13 @@ rewrite <- function(tbl, e, n = 1L, has_window = FALSE){
     }
     return(
       switch( deparse(e[[1]])
-            , is_unique = rewrite_is_unique(tbl, e, n, has_window = has_window)
-            , all_unique = rewrite_all_unique(tbl, e, n, has_window = has_window)
-            , exists_any = rewrite_exists_any(tbl, e, n, has_window = has_window)
-            , exists_one = rewrite_exists_one(tbl, e, n, has_window = has_window)
-            , do_by   = rewrite_do_by(tbl, e, n, has_window = has_window)
-            , mean_by = rewrite_do_by(tbl, e, n, quote(mean), has_window = has_window)
-            , max_by  = rewrite_do_by(tbl, e, n, quote(max), has_window = has_window)
+            , is_unique = rewrite_is_unique(tbl, e, n)
+            , all_unique = rewrite_all_unique(tbl, e, n)
+            , exists_any = rewrite_exists_any(tbl, e, n)
+            , exists_one = rewrite_exists_one(tbl, e, n)
+            , do_by   = rewrite_do_by(tbl, e, n)
+            , mean_by = rewrite_do_by(tbl, e, n, quote(mean))
+            , max_by  = rewrite_do_by(tbl, e, n, quote(max))
             , list(tbl= tbl, e = e , n = n)
             )
     )
