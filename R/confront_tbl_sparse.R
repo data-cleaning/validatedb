@@ -21,7 +21,7 @@
 #' @family confront
 confront_tbl_sparse <- function( tbl
                                , x
-                               , key = NULL
+                               , key
                                , union_all = TRUE
                                # , ...
                                , check_rules = TRUE){
@@ -59,7 +59,7 @@ confront_tbl_sparse <- function( tbl
     }
     key_expr <- lapply(key, as.symbol)
   } else {
-    warning("Use the 'key' argument to indicate the columns that identify a row.")
+    stop("Use the 'key' argument to indicate the columns that identify a row.")
   }
   
   #cw_exprs <- wrap_expression(exprs)

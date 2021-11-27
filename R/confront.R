@@ -15,7 +15,7 @@ setOldClass("tbl_sql")
 #' @param tbl [dbplyr::tbl_dbi()] table in a database, retrieved with [tbl()]
 #' @param x [validate::validator()] object with validation rules.
 #' @param ref reference object (not working)
-#' @param key `character` with key column name.
+#' @param key `character` with key column name, must be specified
 #' @param sparse `logical` should only fails be stored in the db?
 #' @param compute `logical` if `TRUE` the check stores a temporary table in the database.
 #' @param ... passed through to [compute()], if `compute` is `TRUE`
@@ -26,16 +26,12 @@ setOldClass("tbl_sql")
 confront.tbl_sql <- function( tbl
                             , x
                             , ref
-                            , key = NULL
+                            , key
                             , sparse = FALSE
                             , compute = FALSE
                             , ...
                             ){
-  res <- if (sparse){
-    confront_tbl_sparse(tbl = tbl, x = x, key = key)
-  } else {
-    confront_tbl(tbl = tbl, x = x, key = key)
-  }
+  res <- confront_tbl_sparse(tbl = tbl, x = x, key = key)
   
   # store the result in the DB
   if (isTRUE(compute)){
@@ -53,6 +49,7 @@ confront.tbl_sql <- function( tbl
                 , working = res$working
                 , errors  = res$errors
                 , sparse  = sparse
+                , subqueries = res$queries
                 )
 }
 

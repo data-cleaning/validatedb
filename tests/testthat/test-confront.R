@@ -68,9 +68,9 @@ describe("Confront", {
     rules <- validator(f(x) > 0, x > 0, y < 0)
     con <- dbplyr::src_memdb()
     
-    d <- data.frame(x=c(NA, 1, -1))
+    d <- data.frame(id = letters[1:3], x=c(NA, 1, -1))
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    expect_warning(cf <- confront(tbl_d, rules))
+    expect_warning(cf <- confront(tbl_d, rules, key = "id"))
     res <- values(cf, type = "list", simplify=FALSE)
     expect_equal(res, list(
        V1 = NULL,
@@ -95,16 +95,13 @@ describe("Confront", {
     expect_equal(names(df)[1:2], c("id1", "id2"))
   })
 
-  it("warns when missing a key column", {
+  it("stops when missing a key column", {
     rules <- validator(x > 1, y < x, x == 0)
-    con <- dbplyr::src_memdb()
-    
-    d <- data.frame(x = 1, y = 2)
-    tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
-    expect_warning({
+    tbl_d <- dbplyr::memdb_frame(id = letters[1], x = 1, y = 2)
+    d <- as.data.frame(tbl_d)
+    expect_error({
       cf <- confront(tbl_d, rules)
     })
-    df <- as.data.frame(cf)
   })
   
   it("stops when missing a specified key column", {

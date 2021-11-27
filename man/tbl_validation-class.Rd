@@ -22,7 +22,8 @@ of validation rules with the data in the database table. It contains:
 \item \verb{$exprs}: list of validation rule expressions
 \item \verb{$working}: \code{logical}, which of the rules work on the database. (whether the database supports this expression)
 \item \verb{$errors}: list of validation rules that did not execute on the database.
-\item \verb{$sparse}: If \code{TRUE} the query is stored as a sparse validation object.
+\item \verb{$sparse}: If \code{TRUE} the query default presented as a sparse validation object.
+\item \verb{$subqueries}: list of sparse queries for each of the rules.
 }
 }
 

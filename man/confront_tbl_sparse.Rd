@@ -4,14 +4,14 @@
 \alias{confront_tbl_sparse}
 \title{Create a sparse confrontation query}
 \usage{
-confront_tbl_sparse(tbl, x, key = NULL, union_all = TRUE, check_rules = TRUE)
+confront_tbl_sparse(tbl, x, key, union_all = TRUE, check_rules = TRUE)
 }
 \arguments{
 \item{tbl}{\code{\link[dbplyr:tbl.src_dbi]{dbplyr::tbl_dbi()}} table in a database, retrieved with \code{\link[=tbl]{tbl()}}}
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{\code{character} with key column name.}
+\item{key}{\code{character} with key column name, must be specified}
 
 \item{union_all}{if \code{FALSE} each rule is a separate query.}
 

@@ -5,7 +5,7 @@
 \alias{confront,ANY,validator,ANY-method}
 \title{Validate data in database \code{tbl} with \code{validator} rules.}
 \usage{
-confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
+confront.tbl_sql(tbl, x, ref, key, sparse = FALSE, compute = FALSE, ...)
 
 \S4method{confront}{ANY,validator,ANY}(dat, x, ref, key = NULL, sparse = FALSE, ...)
 }
@@ -16,7 +16,7 @@ confront.tbl_sql(tbl, x, ref, key = NULL, sparse = FALSE, compute = FALSE, ...)
 
 \item{ref}{reference object (not working)}
 
-\item{key}{\code{character} with key column name.}
+\item{key}{\code{character} with key column name, must be specified}
 
 \item{sparse}{\code{logical} should only fails be stored in the db?}
 

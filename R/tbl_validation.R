@@ -12,7 +12,8 @@
 #' * `$exprs`: list of validation rule expressions
 #' * `$working`: `logical`, which of the rules work on the database. (whether the database supports this expression)
 #' * `$errors`: list of validation rules that did not execute on the database.
-#' * `$sparse`: If `TRUE` the query is stored as a sparse validation object.
+#' * `$sparse`: If `TRUE` the query default presented as a sparse validation object.
+#' * `$subqueries`: list of sparse queries for each of the rules. 
 #' @importFrom methods new
 #' @importFrom DBI dbGetInfo
 #' @family validation
@@ -30,6 +31,7 @@ tbl_validation <-
                               , working = "logical"
                               , errors = "list"
                               , sparse = "logical"
+                              , subqueries = "ANY"
                               )
 #               , contains="validation"
                , methods = list(
@@ -49,7 +51,6 @@ tbl_validation <-
       }
     )
   )
-
 
 tblname <- function(tbl){
   id <- dbplyr::remote_name(tbl)

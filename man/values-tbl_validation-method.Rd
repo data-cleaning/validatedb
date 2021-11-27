@@ -9,6 +9,7 @@
   simplify = type == "matrix",
   drop = FALSE,
   type = c("tbl", "matrix", "list", "data.frame"),
+  sparse = x$sparse,
   ...
 )
 }
@@ -20,6 +21,9 @@
 \item{drop}{not used at the moment}
 
 \item{type}{whether to return a list/matrix or to return a query on the database.}
+
+\item{sparse}{whether to show the results as a sparse query (only fails and \code{NA})
+or all results for each record.}
 
 \item{...}{not used}
 }

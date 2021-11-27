@@ -11,7 +11,7 @@ confront_tbl(tbl, x, key = NULL)
 
 \item{x}{\code{\link[validate:validator]{validate::validator()}} object with validation rules.}
 
-\item{key}{\code{character} with key column name.}
+\item{key}{\code{character} with key column name, must be specified}
 }
 \value{
 a list with needed information, see details.

@@ -16,6 +16,7 @@
 #' @export
 aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
   by = match.arg(by)
+  key <- lapply(x$key, as.symbol)
   if (x$sparse){
     # trick to pass CRAN checks
     rule <- NULL
@@ -23,7 +24,7 @@ aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
     
     qry = switch( by,
                   rule = dplyr::count(x$query, rule, fail),
-                  dplyr::count(x$query, row, fail)
+                  dplyr::count(x$query, !!!key, fail)
                 )
     return(qry)
   }
@@ -37,7 +38,7 @@ aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
 aggregate_by_rule <- function(x, ...){
   rules <- names(x$exprs)[x$working]
   rules <- lapply(rules, as.symbol)
-  qry <- compute(x$query)
+  qry <- compute(unsparse(x))
   qr_e <- lapply(rules, function(v){
     bquote(summarize( qry
                     , rule = .(as.character(v))
@@ -52,8 +53,9 @@ aggregate_by_rule <- function(x, ...){
   Reduce(dplyr::union_all, qr)
 }
   
-aggregate_by_record <- function(x, ...){ 
-  rules <- tbl_vars(x$query)
+aggregate_by_record <- function(x, ...){
+  qry <- unsparse(x)
+  rules <- tbl_vars(qry)
   
   if (length(x$key)){
     key_idx <- seq_along(x$key)
@@ -77,12 +79,6 @@ aggregate_by_record <- function(x, ...){
   if (length(x$key)){
     key_expr <- lapply(x$key, as.symbol)
   }
-  qry_e <- bquote( dplyr::transmute(x$query
-                                   , ..(key_expr)
-                                   , nfails = .(fails)
-                                   , nNA = .(nas))
-                  , splice = TRUE
-                  )
-  qry <- eval(qry_e)
+  qry <- dplyr::transmute(qry, !!!key_expr, nfails = !!fails, nNA = !!nas)
   qry
 }

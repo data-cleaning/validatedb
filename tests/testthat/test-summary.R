@@ -70,7 +70,7 @@ describe("summary", {
     )
     con <- dbplyr::src_memdb()
     tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
-    expect_warning(cf <- confront(tbl_income, rules, sparse=TRUE))
+    expect_warning(cf <- confront(tbl_income, rules, key="id", sparse=TRUE))
     
     res <- summary(cf)
     expect_true(is.data.frame(res))

@@ -4,7 +4,6 @@
 #' create a table with per record if it abides to the rule.
 #' 
 #' The return value of the function is a list with:
-#' 
 #' * `$query`: A [dbplyr::tbl_dbi()] object that refers to the confrontation query.
 #' * `$errors`: The validation rules that are not working on the database
 #' * `$working`: A `logical` with which expression are working on the database.

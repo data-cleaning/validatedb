@@ -54,6 +54,29 @@ describe("rewrite", {
     expect_equal(l$e, quote(.n2 > 10))
     expect_equal(l$n, 3L)
   })
+
+  it("rewrites mean_by with list", {
+    e <- quote(mean_by(age, list(name), na.rm=TRUE) > 10)
+    l <- rewrite(tbl, e, n = 2L)
+    
+    tab <- as.data.frame(l$tbl)
+    expect_equal(names(tab), c("age", "name", ".n2"))
+    expect_equal(nrow(tab), 3)
+    expect_true(all(tab$.n2 == 11))
+    expect_equal(l$e, quote(.n2 > 10))
+    expect_equal(l$n, 3L)
+    
+    ## two items
+    e <- quote(mean_by(age, list(name,age), na.rm=TRUE) > 10)
+    l <- rewrite(tbl, e, n = 2L)
+    
+    tab <- as.data.frame(l$tbl)
+    expect_equal(names(tab), c("age", "name", ".n2"))
+    expect_equal(nrow(tab), 3)
+    expect_true(all(tab$.n2 == df$age))
+    expect_equal(l$e, quote(.n2 > 10))
+    expect_equal(l$n, 3L)
+  })
   
   it("rewrites exists_any",{
     e <- quote(exists_any(age > 11, by=name))

@@ -4,12 +4,14 @@
 \alias{show_query.tbl_validation}
 \title{Show generated sql code}
 \usage{
-\method{show_query}{tbl_validation}(x, ...)
+\method{show_query}{tbl_validation}(x, ..., sparse = x$sparse)
 }
 \arguments{
 \item{x}{\code{\link[=tbl_validation]{tbl_validation()}} object, result of a \code{\link[=confront.tbl_sql]{confront.tbl_sql()}}.}
 
 \item{...}{passed through.}
+
+\item{sparse}{\code{logical} if \code{FALSE} the query will be a dense query.}
 }
 \value{
 Same result as \link[dplyr:explain]{dplyr::show_query}, i.e. the SQL text of the query.

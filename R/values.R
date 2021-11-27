@@ -24,6 +24,8 @@
 #' @param simplify only use when `type` = "list" see `validate::values`
 #' @param drop not used at the moment
 #' @param type whether to return a list/matrix or to return a query on the database.
+#' @param sparse whether to show the results as a sparse query (only fails and `NA`)
+#' or all results for each record.
 #' @param ... not used
 #' @importFrom validate values
 #' @export
@@ -31,10 +33,10 @@
 #' @example ./example/confront.R
 #' @return depending on `type` the result is different, see details
 setMethod("values", signature = c("tbl_validation"), function( x
-                                                             #, simplify = TRUE
                                                              , simplify = type == "matrix"
                                                              , drop = FALSE
                                                              , type = c("tbl", "matrix", "list","data.frame")
+                                                             , sparse = x$sparse
                                                              , ...
                                                              ){
   if (missing(type)){
@@ -45,14 +47,20 @@ setMethod("values", signature = c("tbl_validation"), function( x
      )
   }
   type = match.arg(type)
+  qry <- if (isTRUE(sparse)){
+    x$query
+  } else {
+    unsparse(x)
+  }
   
   if (type == "tbl"){
-    return(x$query)
+    return(qry)
   }
   
   if (type == "data.frame"){
-    df <- as.data.frame(x$query)
-    if (x$sparse){
+    df <- as.data.frame(qry)
+    if (sparse){
+      df$fail <- as.logical(df$fail)
       return(df)
     }
     # turn into logical
@@ -66,15 +74,15 @@ setMethod("values", signature = c("tbl_validation"), function( x
     simplify <- TRUE
   }
 
-  if (x$sparse){
+  if (sparse){
     stop("type='",type,"' for sparse validation not implemented: it seems\n"
         ,"not wise to expand a sparse validation result into a full validation result."
         , "Either use `type` with `tbl` or `data.frame`, method `aggregate`, or \n"
-        , "do a dense confrontation."
+        , "set `sparse` to false."
         )
   }
   
-  val_df <- dplyr::collect(x$query)
+  val_df <- dplyr::collect(qry)
   
   # first column is row_number, should also remove key column
   if (length(x$key)){
