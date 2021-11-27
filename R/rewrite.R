@@ -21,11 +21,15 @@ rewrite <- function(tbl, e, n = 1L, has_window = TRUE){
       switch( deparse(e[[1]])
             , is_unique = rewrite_is_unique(tbl, e, n)
             , all_unique = rewrite_all_unique(tbl, e, n)
+            , is_complete = rewrite_is_complete(tbl, e, n)
+            , all_complete = rewrite_all_complete(tbl, e, n)
             , exists_any = rewrite_exists_any(tbl, e, n)
             , exists_one = rewrite_exists_one(tbl, e, n)
             , do_by   = rewrite_do_by(tbl, e, n)
             , mean_by = rewrite_do_by(tbl, e, n, quote(mean))
+            , sum_by  = rewrite_do_by(tbl, e, n, quote(sum))
             , max_by  = rewrite_do_by(tbl, e, n, quote(max))
+            , min_by  = rewrite_do_by(tbl, e, n, quote(min))
             , list(tbl= tbl, e = e , n = n)
             )
     )
@@ -41,6 +45,25 @@ parse_by <- function(e, n = 2){
   }
   by <- as.list(by)
   by
+}
+
+negate <- function(e){
+  if (!is.call(e)){
+    return(bquote(!.(e)))
+  }
+  op <- deparse(e[[1]])
+  l <- e[[2]]
+  r <- if (length(e) >= 3) e[[3]]
+  switch( op
+        , "!" = l
+        , ">" = bquote(.(l) <= .(r))
+        , ">=" = bquote(.(l) < .(r))
+        , "<" = bquote(.(l) >= .(r))
+        , "<=" = bquote(.(l) > .(r))
+        , "!=" = bquote(.(l) == .(r))
+        , "==" = bquote(.(l) != .(r))
+        , bquote(!.(e))
+        )
 }
 
 `%||%` <- function(x,y){

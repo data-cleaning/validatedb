@@ -9,7 +9,7 @@
 rule_works_on_tbl <- function(tbl, x, key = NULL){
   res <- confront_tbl_sparse(head(tbl), x, key = key, union_all = FALSE, check_rules = FALSE)
   # TODO extract information on the error...
-  sapply(res$query, function(qry){
+  sapply(res$queries, function(qry){
     works <- FALSE
     try({
       dplyr::collect(head(qry))
