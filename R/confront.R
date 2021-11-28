@@ -50,6 +50,7 @@ confront.tbl_sql <- function( tbl
                 , errors  = res$errors
                 , sparse  = sparse
                 , subqueries = res$queries
+                , rules   = x
                 )
 }
 

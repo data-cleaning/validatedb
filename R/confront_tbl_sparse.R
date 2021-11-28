@@ -62,45 +62,32 @@ confront_tbl_sparse <- function( tbl
     stop("Use the 'key' argument to indicate the columns that identify a row.")
   }
   
-  #cw_exprs <- wrap_expression(exprs)
   cw_exprs <- as.expression(exprs)
   qrys <- lapply(names(cw_exprs), function(rule_name){
-    #browser()
     e <- cw_exprs[[rule_name]]
+    
     # replace validate functions with sql construct
     l <- rewrite(tbl, e, n = 1)
     e_tbl <- l$tbl
     e <- l$e
     
     e_fail <- negate(e)
-    
-    qr <- bquote({
-      d_fail <- dplyr::filter( e_tbl, .(e_fail))
-      d_fail <- dplyr::transmute( d_fail
-                                , ..(key_expr)
-                                , rule = .(rule_name)
-                                , fail = TRUE
-                                )
-      
-      d_na <- dplyr::filter( e_tbl, is.na(.(e_fail)))
-      d_na <- dplyr::transmute( d_na
-                              , ..(key_expr)
-                              , rule = .(rule_name)
-                              , fail = NA
+    d_fail <- dplyr::filter( e_tbl, !!e_fail)
+    d_fail <- dplyr::transmute( d_fail
+                              , !!!key_expr
+                              , rule = !!rule_name
+                              , fail = TRUE
                               )
-      
-      dplyr::union_all(d_fail, d_na)
-      # d_na <- dplyr::transmute( tbl
-      #                         , ..(key_expr)
-      #                         , rule = .(rule_name)
-      #                         , fail = NA
-      #                         )
-      # d_na <- dplyr::filter(d_na, is.na(.(e)))
-      # dplyr::union_all(d, d_na)
-    }, splice=TRUE)
-    eval(qr)
+
+    d_na <- dplyr::filter( e_tbl, is.na(!!e_fail))
+    d_na <- dplyr::transmute( d_na
+                            , !!!key_expr
+                            , rule = !!rule_name
+                            , fail = NA
+                            )
+    dplyr::union_all(d_fail, d_na)
   })
-  
+  names(qrys) <- names(exprs)
   qry <- Reduce(dplyr::union_all, qrys)
   
   list( query   = qry
@@ -111,9 +98,3 @@ confront_tbl_sparse <- function( tbl
       )
 }
 
-
-# x <- validator(z := 4, x > 1, y > 1, y  < z, z2 := y+x, m = unknown_f(x) > 1)
-# d <- data.frame(x = 1:2, y = c(2,NA))
-
-# con <- src_memdb()
-# tbl_d <- copy_to(con, d, overwrite=TRUE)

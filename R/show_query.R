@@ -11,7 +11,7 @@ show_query.tbl_validation <- function(x, ..., sparse=x$sparse){
   qry <- if (isTRUE(sparse)){
     x$query
   } else {
-    unsparse(x$query)
+    unsparse(x)
   }
   dplyr::show_query(qry, ...)
 }

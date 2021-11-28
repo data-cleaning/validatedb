@@ -12,7 +12,7 @@ rewrite_do_by <- function(tbl, e, n = 1, fun = NULL){
     arg <- as.list(e[-(1:4)])
   } else {
     arg <- if (length(e) >= 4L) e[[4]] else TRUE
-    arg <- setNames(as.list(arg), "na.rm")
+    arg <- stats::setNames(as.list(arg), "na.rm")
   }
 
   funcall <- bquote(.(fun)(.(x), ..(arg)), splice = TRUE)

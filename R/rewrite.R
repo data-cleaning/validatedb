@@ -2,6 +2,7 @@
 # assumption: extend table with extra columns and provide an rewritten expression
 # using these new columns
 # may depend on the support of window functions
+`:=` = `=`
 
 rewrite <- function(tbl, e, n = 1L, has_window = TRUE){
   if (is.call(e)){

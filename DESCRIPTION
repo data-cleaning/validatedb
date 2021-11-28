@@ -36,6 +36,7 @@ Collate:
     'confront_tbl.R'
     'confront_tbl_sparse.R'
     'do_by.R'
+    'dump_sql.R'
     'exists_any.R'
     'is_complete.R'
     'is_record_based.R'

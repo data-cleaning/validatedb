@@ -32,6 +32,7 @@ tbl_validation <-
                               , errors = "list"
                               , sparse = "logical"
                               , subqueries = "ANY"
+                              , rules    = "ANY"
                               )
 #               , contains="validation"
                , methods = list(

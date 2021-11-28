@@ -8,7 +8,7 @@ describe("rule_works_on_tbl", {
     tbl_d <- dbplyr::memdb_frame(id=letters[1], x = 1, y = 2)
     
     res <- rule_works_on_tbl(tbl_d, rules, key = "id")
-    expect_equal(res, c(TRUE, TRUE, TRUE))
+    expect_equal(res, c(V1=TRUE, V2=TRUE, V3=TRUE))
   })
   
   it ("fails on function not on db",{
@@ -20,6 +20,6 @@ describe("rule_works_on_tbl", {
     tbl_d <- dplyr::copy_to(con, d, overwrite=TRUE)
     
     res <- rule_works_on_tbl(tbl_d, rules, key = "id")
-    expect_equal(res, c(TRUE, FALSE))
+    expect_equal(res, c(V1=TRUE, V2=FALSE))
   })
 })

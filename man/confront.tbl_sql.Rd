@@ -54,7 +54,7 @@ rules <- validator( is_adult   = age >= 18
                   , mean_age   = mean(age,na.rm=TRUE) > 20
                   )
 
-# and confront!
+# and confront! (we have to use a key, because a db...)
 cf <- confront(tbl_income, rules, key = "id")
 print(cf)
 summary(cf)
@@ -72,14 +72,11 @@ show_query(cf)
 # identical
 show_query(values(cf, type = "tbl"))
 
-# adding a key often is handy in a database
-cf <- confront(tbl_income, rules, key = "id")
-print(cf)
-values(cf, type="tbl")
+# sparse results in db (that the default)
+values(cf, type="tbl", sparse=TRUE)
 
-# sparse results in db
-cf_sparse <- confront(tbl_income, rules, sparse=TRUE)
-values(cf_sparse, type="tbl")
+# or if you like data.frames
+values(cf, type="data.frame", sparse=TRUE)
 }
 \seealso{
 Other validation: 
