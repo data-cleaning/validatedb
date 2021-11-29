@@ -130,10 +130,14 @@
 <span class="co">#&gt; Errors        : 0</span>
 
 <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validate-summary.html">summary</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
-<span class="co">#&gt;         name items npass nfail nNA warning error                   expression</span>
-<span class="co">#&gt; 1   is_adult     2     1     1   0   FALSE FALSE         (age - 18) &gt;= -1e-08</span>
-<span class="co">#&gt; 2 has_income     2     1     0   1   FALSE FALSE                   salary &gt; 0</span>
-<span class="co">#&gt; 3   mean_age     1     0     1   0   FALSE FALSE mean(age, na.rm = TRUE) &gt; 24</span></code></pre></div>
+<span class="co">#&gt;                  name items npass nfail nNA warning error</span>
+<span class="co">#&gt; is_adult     is_adult     2     1     1   0   FALSE FALSE</span>
+<span class="co">#&gt; has_income has_income     2     1     0   1   FALSE FALSE</span>
+<span class="co">#&gt; mean_age     mean_age     1     0     1   0   FALSE FALSE</span>
+<span class="co">#&gt;                              expression</span>
+<span class="co">#&gt; is_adult             age - 18 &gt;= -1e-08</span>
+<span class="co">#&gt; has_income                   salary &gt; 0</span>
+<span class="co">#&gt; mean_age   mean(age, na.rm = TRUE) &gt; 24</span></code></pre></div>
 <p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="matrix"</code> or <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
@@ -154,16 +158,121 @@
 <span class="co">#&gt;   &lt;int&gt;    &lt;int&gt;      &lt;int&gt;    &lt;int&gt;</span>
 <span class="co">#&gt; 1     1        0          1        0</span>
 <span class="co">#&gt; 2     2        1         NA        0</span></code></pre></div>
-<p>We can see the sql code by using <code>show_query</code>:</p>
+<p>or</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
+<span class="co">#&gt; # Database: sqlite 3.35.5 []</span>
+<span class="co">#&gt;      id rule        fail</span>
+<span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;      &lt;int&gt;</span>
+<span class="co">#&gt; 1     1 is_adult       1</span>
+<span class="co">#&gt; 2     2 has_income    NA</span>
+<span class="co">#&gt; 3     1 mean_age       1</span>
+<span class="co">#&gt; 4     2 mean_age       1</span></code></pre></div>
+<p>We can see the sql code by using <code>show_query</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
-<span class="co">#&gt; SELECT `id`, CASE WHEN ((`age` - 18.0) &gt;= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) &gt;= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () &gt; 24.0) THEN (1) WHEN NOT(AVG(`age`) OVER () &gt; 24.0) THEN (0) END AS `mean_age`</span>
-<span class="co">#&gt; FROM `income`</span></code></pre></div>
+<span class="co">#&gt; SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`</span>
+<span class="co">#&gt; FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`</span>
+<span class="co">#&gt; FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`</span>
+<span class="co">#&gt; FROM (SELECT `id`</span>
+<span class="co">#&gt; FROM `income`) AS `LHS`</span>
+<span class="co">#&gt; LEFT JOIN (SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (`age` - 18.0 &lt; -1e-08)</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (((`age` - 18.0 &lt; -1e-08) IS NULL))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (`salary` &lt;= 0.0)</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (((`salary` &lt;= 0.0) IS NULL))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (`q01` &lt;= 24.0))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (((`q01` &lt;= 24.0) IS NULL)))) AS `RHS`</span>
+<span class="co">#&gt; ON (`LHS`.`id` = `RHS`.`id`)</span>
+<span class="co">#&gt; ))</span>
+<span class="co">#&gt; GROUP BY `id`</span></code></pre></div>
+<p>Or write the sql to a file for documentation (and inspiration)</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/dump_sql.html">dump_sql</a></span><span class="op">(</span><span class="va">cf</span>, <span class="st">"validation.sql"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">------------------------------------------------------------</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">-- Do not edit, automatically generated with R package validatedb.</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">-- validatedb: 0.3.0.9000</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">-- validate: 1.1.0</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">-- R version 4.1.2 (2021-11-01)</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">-- Database: '', Table: 'income'</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">-- Date: 2021-11-29</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">------------------------------------------------------------</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">--  is_adult:  </span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">--  validation rule:  age &gt;= 18</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="kw">SELECT</span> `id`, <span class="st">'is_adult'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="kw">FROM</span> `income`</span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="kw">WHERE</span> (`age` <span class="op">-</span> <span class="fl">18.0</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e-08</span>)</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="kw">SELECT</span> `id`, <span class="st">'is_adult'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="kw">FROM</span> `income`</span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="kw">WHERE</span> (((`age` <span class="op">-</span> <span class="fl">18.0</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e-08</span>) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
+<span id="cb11-21"><a href="#cb11-21"></a></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co">--  has_income:  </span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">--  validation rule:  salary &gt; 0</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="kw">FROM</span> `income`</span>
+<span id="cb11-32"><a href="#cb11-32"></a><span class="kw">WHERE</span> (`salary` <span class="op">&lt;=</span> <span class="fl">0.0</span>)</span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-34"><a href="#cb11-34"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-35"><a href="#cb11-35"></a><span class="kw">FROM</span> `income`</span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="kw">WHERE</span> (((`salary` <span class="op">&lt;=</span> <span class="fl">0.0</span>) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
+<span id="cb11-37"><a href="#cb11-37"></a></span>
+<span id="cb11-38"><a href="#cb11-38"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-39"><a href="#cb11-39"></a></span>
+<span id="cb11-40"><a href="#cb11-40"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-41"><a href="#cb11-41"></a></span>
+<span id="cb11-42"><a href="#cb11-42"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-43"><a href="#cb11-43"></a><span class="co">--  mean_age:  </span></span>
+<span id="cb11-44"><a href="#cb11-44"></a><span class="co">--  validation rule:  mean(age, na.rm = TRUE) &gt; 24</span></span>
+<span id="cb11-45"><a href="#cb11-45"></a></span>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-47"><a href="#cb11-47"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`</span>
+<span id="cb11-48"><a href="#cb11-48"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`, <span class="fu">AVG</span>(`age`) <span class="kw">OVER</span> () <span class="kw">AS</span> `q01`</span>
+<span id="cb11-49"><a href="#cb11-49"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-50"><a href="#cb11-50"></a><span class="kw">WHERE</span> (`q01` <span class="op">&lt;=</span> <span class="fl">24.0</span>))</span>
+<span id="cb11-51"><a href="#cb11-51"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-52"><a href="#cb11-52"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-53"><a href="#cb11-53"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`</span>
+<span id="cb11-54"><a href="#cb11-54"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`, <span class="fu">AVG</span>(`age`) <span class="kw">OVER</span> () <span class="kw">AS</span> `q01`</span>
+<span id="cb11-55"><a href="#cb11-55"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-56"><a href="#cb11-56"></a><span class="kw">WHERE</span> (((`q01` <span class="op">&lt;=</span> <span class="fl">24.0</span>) <span class="kw">IS</span> <span class="kw">NULL</span>)))</span>
+<span id="cb11-57"><a href="#cb11-57"></a></span>
+<span id="cb11-58"><a href="#cb11-58"></a><span class="co">--------------------------------------</span></span></code></pre></div>
 <div id="aggregate-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#aggregate-example" class="anchor"></a>Aggregate example</h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
 <span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/memdb_frame.html">src_memdb</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">income</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
@@ -184,17 +293,17 @@
 <span class="co"># in general with a db table it is handy to use a key</span>
 <span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"rule"</span><span class="op">)</span>
-<span class="co">#&gt; # Source:   lazy query [?? x 4]</span>
+<span class="co">#&gt; # Source:   lazy query [?? x 7]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
-<span class="co">#&gt;   rule       npass nfail   nNA</span>
-<span class="co">#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt;</span>
-<span class="co">#&gt; 1 is_adult       1     1     0</span>
-<span class="co">#&gt; 2 has_income     1     0     1</span>
+<span class="co">#&gt;   rule       npass nfail   nNA rel.pass rel.fail rel.NA</span>
+<span class="co">#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;       &lt;dbl&gt;  &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 is_adult       1     1     0 NA            0.5    0  </span>
+<span class="co">#&gt; 2 has_income     1     0     1 NA            0      0.5</span>
 <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"record"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
 <span class="co">#&gt;      id nfails   nNA</span>
-<span class="co">#&gt;   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;   &lt;int&gt;  &lt;int&gt; &lt;int&gt;</span>
 <span class="co">#&gt; 1     1      1     0</span>
 <span class="co">#&gt; 2     2      0     1</span>
 
@@ -210,15 +319,21 @@
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf_sparse</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
-<span class="co">#&gt; SELECT *</span>
-<span class="co">#&gt; FROM (SELECT `id`, 'is_adult' AS `rule`, CASE WHEN ((`age` - 18.0) &gt;= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) &gt;= -1e-08) THEN (0) END = 0.0 AS `fail`</span>
-<span class="co">#&gt; FROM `income`)</span>
-<span class="co">#&gt; WHERE (COALESCE(`fail`, 1) = 1)</span>
+<span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (`age` - 18.0 &lt; -1e-08)</span>
 <span class="co">#&gt; UNION ALL</span>
-<span class="co">#&gt; SELECT *</span>
-<span class="co">#&gt; FROM (SELECT `id`, 'has_income' AS `rule`, CASE WHEN (`salary` &gt; 0.0) THEN (1) WHEN NOT(`salary` &gt; 0.0) THEN (0) END = 0.0 AS `fail`</span>
-<span class="co">#&gt; FROM `income`)</span>
-<span class="co">#&gt; WHERE (COALESCE(`fail`, 1) = 1)</span>
+<span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (((`age` - 18.0 &lt; -1e-08) IS NULL))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (`salary` &lt;= 0.0)</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; WHERE (((`salary` &lt;= 0.0) IS NULL))</span>
 <span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf_sparse</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
@@ -231,20 +346,22 @@
 <div id="todo" class="section level2">
 <h2 class="hasAnchor">
 <a href="#todo" class="anchor"></a>TODO</h2>
-<p>Some newly added <code>validate</code> utility functions are (still) missing from <code>validatedb</code>.</p>
 <ul>
 <li>
-<input type="checkbox" disabled><code>is_complete</code>, <code>all_complete</code>
+<input type="checkbox" disabled checked><code>is_complete</code>, <code>all_complete</code>
 </li>
 <li>
-<input type="checkbox" disabled><code>is_unique</code>, <code>all_unique</code>
+<input type="checkbox" disabled checked><code>is_unique</code>, <code>all_unique</code>
 </li>
 <li>
-<input type="checkbox" disabled><code>exists_any</code>, <code>exists_one</code>
+<input type="checkbox" disabled checked><code>exists_any</code>, <code>exists_one</code>
 </li>
 <li>
-<input type="checkbox" disabled><code>do_by</code>, <code>sum_by</code>, <code>mean_by</code>, <code>min_by</code>, <code>max_by</code>
+<input type="checkbox" disabled checked><code>do_by</code>, <code>sum_by</code>, <code>mean_by</code>, <code>min_by</code>, <code>max_by</code>
 </li>
+</ul>
+<p>Some newly added <code>validate</code> utility functions are (still) missing from <code>validatedb</code>.</p>
+<ul>
 <li>
 <input type="checkbox" disabled><code>contains_exactly</code>
 </li>
