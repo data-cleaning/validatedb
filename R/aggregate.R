@@ -25,6 +25,14 @@ aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
 }
 
 aggregate_by_rule <- function(x, ...){
+  # CRAN checks
+  fail <- NULL
+  rule <- NULL
+  n <- NULL
+  nfail <- NULL
+  nNA <- NULL
+  npass <- NULL
+  
   rules <- names(x$exprs)[x$working]
   
   N <- dplyr::collect(dplyr::count(x$tbl))$n
