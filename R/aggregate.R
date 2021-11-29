@@ -38,8 +38,11 @@ aggregate_by_rule <- function(x, ...){
   N <- dplyr::collect(dplyr::count(x$tbl))$n
   
   a <- dplyr::count(x$query, rule, fail)
-  fails <- a |> dplyr::filter(fail == 1) |> transmute(rule, nfail=n)
-  nas <- a |> dplyr::filter(is.na(fail)) |> transmute(rule, nNA = n)
+  fails <- dplyr::filter(a, fail == 1)
+  fails <- transmute(fails, rule, nfail=n)
+  
+  nas <- dplyr::filter(a, is.na(fail))
+  nas <- transmute(nas, rule, nNA = n)
   
   r <- dplyr::auto_copy(x$tbl, data.frame(rule = rules), copy =TRUE)
   r <- dplyr::left_join(r, fails, by = "rule")
