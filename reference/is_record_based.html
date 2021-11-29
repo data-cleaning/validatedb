@@ -9,7 +9,7 @@
 <title>determine the dimensional structure of values so that it conforms to
 validate. Only used for values simplify.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db! — is_record_based • validatedb</title>
+Note, this returns also a value for rules that do not work on the db! — is_record_based • validatedb</title>
 
 
 <!-- jquery -->
@@ -45,11 +45,11 @@ Note, this returns also a value for rules that do not work on db! — is_record_
 <meta property="og:title" content="determine the dimensional structure of values so that it conforms to
 validate. Only used for values simplify.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db! — is_record_based" />
+Note, this returns also a value for rules that do not work on the db! — is_record_based" />
 <meta property="og:description" content="determine the dimensional structure of values so that it conforms to
 validate. Only used for values simplify.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db!" />
+Note, this returns also a value for rules that do not work on the db!" />
 
 
 
@@ -81,7 +81,7 @@ Note, this returns also a value for rules that do not work on db!" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@ Note, this returns also a value for rules that do not work on db!" />
     <h1>determine the dimensional structure of <code>values</code> so that it conforms to
 <code>validate</code>. Only used for values <code>simplify</code>.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db!</h1>
+Note, this returns also a value for rules that do not work on the db!</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/is_record_based.R'><code>R/is_record_based.R</code></a></small>
     <div class="hidden name"><code>is_record_based.Rd</code></div>
     </div>
@@ -132,10 +132,10 @@ Note, this returns also a value for rules that do not work on db!</h1>
     <p>determine the dimensional structure of <code>values</code> so that it conforms to
 <code>validate</code>. Only used for values <code>simplify</code>.
 Works heuristically: get a subset out of db and executes validate::confront on it.
-Note, this returns also a value for rules that do not work on db!</p>
+Note, this returns also a value for rules that do not work on the db!</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_record_based</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>is_record_based</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, n <span class='op'>=</span> <span class='fl'>5</span>, key <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,6 +151,10 @@ Note, this returns also a value for rules that do not work on db!</p>
     <tr>
       <th>n</th>
       <td><p><code>integer</code> number of records to be used for checking.</p></td>
+    </tr>
+    <tr>
+      <th>key</th>
+      <td><p><code>character</code> names of columns that identify a record</p></td>
     </tr>
     </table>
 
