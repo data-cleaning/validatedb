@@ -17,18 +17,7 @@
 aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
   by = match.arg(by)
   key <- lapply(x$key, as.symbol)
-  if (x$sparse){
-    # trick to pass CRAN checks
-    rule <- NULL
-    fail <- NULL
-    
-    qry = switch( by,
-                  rule = dplyr::count(x$query, rule, fail),
-                  dplyr::count(x$query, !!!key, fail)
-                )
-    return(qry)
-  }
-  
+
   switch( by,
           rule   = aggregate_by_rule(x, ...),
           aggregate_by_record(x, ...)
@@ -37,20 +26,30 @@ aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
 
 aggregate_by_rule <- function(x, ...){
   rules <- names(x$exprs)[x$working]
-  rules <- lapply(rules, as.symbol)
-  qry <- compute(unsparse(x))
-  qr_e <- lapply(rules, function(v){
-    bquote(summarize( qry
-                    , rule = .(as.character(v))
-                    , npass = sum(.(v), na.rm=T)
-                    , nfail = sum(1 - .(v), na.rm=T)
-                    # TODO make this flexible for db's that support boolean expressions
-                    , nNA   = sum(ifelse(is.na(.(v)), 1L, 0L), na.rm = T)
-                    )
-          )
-  })
-  qr <- lapply(qr_e, eval.parent, n=1)
-  Reduce(dplyr::union_all, qr)
+  
+  N <- dplyr::collect(dplyr::count(x$tbl))$n
+  
+  a <- dplyr::count(x$query, rule, fail)
+  fails <- a |> dplyr::filter(fail == 1) |> transmute(rule, nfail=n)
+  nas <- a |> dplyr::filter(is.na(fail)) |> transmute(rule, nNA = n)
+  
+  r <- dplyr::auto_copy(x$tbl, data.frame(rule = rules), copy =TRUE)
+  r <- dplyr::left_join(r, fails, by = "rule")
+  r <- dplyr::left_join(r, nas, by = "rule")
+  r <- dplyr::mutate( r
+                      , nfail = coalesce(nfail, 0L)
+                      , nNA = coalesce(nNA, 0L)
+  )
+  r <- dplyr::transmute(r
+                       , rule
+                       , npass = !!N - nfail - nNA
+                       , nfail
+                       , nNA
+                       , rel.pass = as.numeric(npass)/!!N
+                       , rel.fail = as.numeric(nfail)/!!N
+                       , rel.NA = as.numeric(nNA)/!!N
+  )
+  r
 }
   
 aggregate_by_record <- function(x, ...){
