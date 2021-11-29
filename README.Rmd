@@ -85,10 +85,28 @@ But often this seems more handy:
 values(cf, type = "tbl")
 ```
 
+or 
+
+```{r}
+values(cf, type = "tbl", sparse=TRUE)
+```
+
 We can see the sql code by using `show_query`:
 
 ```{r}
 show_query(cf)
+```
+
+Or write the sql to a file for documentation (and inspiration)
+
+```{r, eval = FALSE}
+dump_sql(cf, "validation.sql")
+```
+
+```sql
+```{r, echo = FALSE, results="asis"}
+dump_sql(cf)
+```
 ```
 
 
@@ -98,15 +116,16 @@ show_query(cf)
 
 ```
 
-
 ## TODO
+
+
+- [x] `is_complete`, `all_complete`
+- [x] `is_unique`, `all_unique`
+- [x] `exists_any`, `exists_one`
+- [x] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by` 
 
 Some newly added `validate` utility functions are (still) missing from `validatedb`.
 
-- [ ] `is_complete`, `all_complete`
-- [ ] `is_unique`, `all_unique`
-- [ ] `exists_any`, `exists_one`
-- [ ] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by` 
 - [ ] `contains_exactly`
 - [ ] `is_linear_sequence`
 - [ ] `hierachy`

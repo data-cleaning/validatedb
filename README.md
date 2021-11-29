@@ -82,10 +82,14 @@ print(cf)
 #> Errors        : 0
 
 summary(cf)
-#>         name items npass nfail nNA warning error                   expression
-#> 1   is_adult     2     1     1   0   FALSE FALSE         (age - 18) >= -1e-08
-#> 2 has_income     2     1     0   1   FALSE FALSE                   salary > 0
-#> 3   mean_age     1     0     1   0   FALSE FALSE mean(age, na.rm = TRUE) > 24
+#>                  name items npass nfail nNA warning error
+#> is_adult     is_adult     2     1     1   0   FALSE FALSE
+#> has_income has_income     2     1     0   1   FALSE FALSE
+#> mean_age     mean_age     1     0     1   0   FALSE FALSE
+#>                              expression
+#> is_adult             age - 18 >= -1e-08
+#> has_income                   salary > 0
+#> mean_age   mean(age, na.rm = TRUE) > 24
 ```
 
 Values (i.e. validations on the table) can be retrieved like in
@@ -115,13 +119,127 @@ values(cf, type = "tbl")
 #> 2     2        1         NA        0
 ```
 
+or
+
+``` r
+values(cf, type = "tbl", sparse=TRUE)
+#> # Source:   lazy query [?? x 3]
+#> # Database: sqlite 3.35.5 []
+#>      id rule        fail
+#>   <int> <chr>      <int>
+#> 1     1 is_adult       1
+#> 2     2 has_income    NA
+#> 3     1 mean_age       1
+#> 4     2 mean_age       1
+```
+
 We can see the sql code by using `show_query`:
 
 ``` r
 show_query(cf)
 #> <SQL>
-#> SELECT `id`, CASE WHEN ((`age` - 18.0) >= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) >= -1e-08) THEN (0) END AS `is_adult`, CASE WHEN (`salary` > 0.0) THEN (1) WHEN NOT(`salary` > 0.0) THEN (0) END AS `has_income`, CASE WHEN (AVG(`age`) OVER () > 24.0) THEN (1) WHEN NOT(AVG(`age`) OVER () > 24.0) THEN (0) END AS `mean_age`
+#> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`
+#> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`
+#> FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`
+#> FROM (SELECT `id`
+#> FROM `income`) AS `LHS`
+#> LEFT JOIN (SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
 #> FROM `income`
+#> WHERE (`age` - 18.0 < -1e-08)
+#> UNION ALL
+#> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
+#> FROM `income`
+#> WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+#> UNION ALL
+#> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
+#> FROM `income`
+#> WHERE (`salary` <= 0.0)
+#> UNION ALL
+#> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
+#> FROM `income`
+#> WHERE (((`salary` <= 0.0) IS NULL))
+#> UNION ALL
+#> SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`
+#> FROM (SELECT `id`, `age`, `salary`
+#> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
+#> FROM `income`)
+#> WHERE (`q01` <= 24.0))
+#> UNION ALL
+#> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
+#> FROM (SELECT `id`, `age`, `salary`
+#> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
+#> FROM `income`)
+#> WHERE (((`q01` <= 24.0) IS NULL)))) AS `RHS`
+#> ON (`LHS`.`id` = `RHS`.`id`)
+#> ))
+#> GROUP BY `id`
+```
+
+Or write the sql to a file for documentation (and inspiration)
+
+``` r
+dump_sql(cf, "validation.sql")
+```
+
+``` sql
+------------------------------------------------------------
+-- Do not edit, automatically generated with R package validatedb.
+-- validatedb: 0.3.0.9000
+-- validate: 1.1.0
+-- R version 4.1.2 (2021-11-01)
+-- Database: '', Table: 'income'
+-- Date: 2021-11-29
+------------------------------------------------------------
+
+--------------------------------------
+--  is_adult:  
+--  validation rule:  age >= 18
+
+SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
+FROM `income`
+WHERE (`age` - 18.0 < -1e-08)
+UNION ALL
+SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
+FROM `income`
+WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+
+--------------------------------------
+
+UNION ALL
+
+--------------------------------------
+--  has_income:  
+--  validation rule:  salary > 0
+
+SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
+FROM `income`
+WHERE (`salary` <= 0.0)
+UNION ALL
+SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
+FROM `income`
+WHERE (((`salary` <= 0.0) IS NULL))
+
+--------------------------------------
+
+UNION ALL
+
+--------------------------------------
+--  mean_age:  
+--  validation rule:  mean(age, na.rm = TRUE) > 24
+
+SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`
+FROM (SELECT `id`, `age`, `salary`
+FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
+FROM `income`)
+WHERE (`q01` <= 24.0))
+UNION ALL
+SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
+FROM (SELECT `id`, `age`, `salary`
+FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
+FROM `income`)
+WHERE (((`q01` <= 24.0) IS NULL)))
+
+--------------------------------------
 ```
 
 ### Aggregate example
@@ -147,17 +265,17 @@ rules <- validator( is_adult   = age >= 18
 # in general with a db table it is handy to use a key
 cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
-#> # Source:   lazy query [?? x 4]
+#> # Source:   lazy query [?? x 7]
 #> # Database: sqlite 3.35.5 [:memory:]
-#>   rule       npass nfail   nNA
-#>   <chr>      <int> <int> <int>
-#> 1 is_adult       1     1     0
-#> 2 has_income     1     0     1
+#>   rule       npass nfail   nNA rel.pass rel.fail rel.NA
+#>   <chr>      <int> <int> <int> <lgl>       <dbl>  <dbl>
+#> 1 is_adult       1     1     0 NA            0.5    0  
+#> 2 has_income     1     0     1 NA            0      0.5
 aggregate(cf, by = "record")
 #> # Source:   lazy query [?? x 3]
 #> # Database: sqlite 3.35.5 [:memory:]
 #>      id nfails   nNA
-#>   <int>  <dbl> <dbl>
+#>   <int>  <int> <int>
 #> 1     1      1     0
 #> 2     2      0     1
 
@@ -173,15 +291,21 @@ cf_sparse <- confront(tbl_income, rules, key="id", sparse=TRUE )
 
 show_query(cf_sparse)
 #> <SQL>
-#> SELECT *
-#> FROM (SELECT `id`, 'is_adult' AS `rule`, CASE WHEN ((`age` - 18.0) >= -1e-08) THEN (1) WHEN NOT((`age` - 18.0) >= -1e-08) THEN (0) END = 0.0 AS `fail`
-#> FROM `income`)
-#> WHERE (COALESCE(`fail`, 1) = 1)
+#> SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
+#> FROM `income`
+#> WHERE (`age` - 18.0 < -1e-08)
 #> UNION ALL
-#> SELECT *
-#> FROM (SELECT `id`, 'has_income' AS `rule`, CASE WHEN (`salary` > 0.0) THEN (1) WHEN NOT(`salary` > 0.0) THEN (0) END = 0.0 AS `fail`
-#> FROM `income`)
-#> WHERE (COALESCE(`fail`, 1) = 1)
+#> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
+#> FROM `income`
+#> WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+#> UNION ALL
+#> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
+#> FROM `income`
+#> WHERE (`salary` <= 0.0)
+#> UNION ALL
+#> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
+#> FROM `income`
+#> WHERE (((`salary` <= 0.0) IS NULL))
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]
 #> # Database: sqlite 3.35.5 [:memory:]
@@ -193,13 +317,14 @@ values(cf_sparse, type="tbl")
 
 ## TODO
 
+-   [x] `is_complete`, `all_complete`
+-   [x] `is_unique`, `all_unique`
+-   [x] `exists_any`, `exists_one`
+-   [x] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by`
+
 Some newly added `validate` utility functions are (still) missing from
 `validatedb`.
 
--   [ ] `is_complete`, `all_complete`
--   [ ] `is_unique`, `all_unique`
--   [ ] `exists_any`, `exists_one`
--   [ ] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by`
 -   [ ] `contains_exactly`
 -   [ ] `is_linear_sequence`
 -   [ ] `hierachy`
