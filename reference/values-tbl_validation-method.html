@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9001</span>
       </span>
     </div>
 
@@ -267,7 +267,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age` - 18.0 &lt; -1e-08) IS NULL))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
@@ -275,7 +275,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`salary` &lt;= 0.0) IS NULL))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`salary`) IS NULL))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`</span>
@@ -284,10 +284,8 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (`q01` &lt;= 20.0))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`q01` &lt;= 20.0) IS NULL)))) AS `RHS`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
@@ -306,7 +304,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age` - 18.0 &lt; -1e-08) IS NULL))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
@@ -314,7 +312,7 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`salary` &lt;= 0.0) IS NULL))</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`salary`) IS NULL))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`</span>
@@ -323,10 +321,8 @@ creates memory problems, the <code>tbl</code> option is to be preferred.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (`q01` &lt;= 20.0))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> UNION ALL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`q01` &lt;= 20.0) IS NULL)))) AS `RHS`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
