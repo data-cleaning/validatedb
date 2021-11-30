@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9002</span>
       </span>
     </div>
 
@@ -179,29 +179,35 @@
 <span class="co">#&gt; FROM (SELECT `id`</span>
 <span class="co">#&gt; FROM `income`) AS `LHS`</span>
 <span class="co">#&gt; LEFT JOIN (SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (`age` - 18.0 &lt; -1e-08)</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`age`) IS NULL))</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (`salary` &lt;= 0.0)</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`salary`) IS NULL))</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`</span>
-<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`</span>
-<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`</span>
-<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, AVG(`age`) OVER () AS `q01`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`))</span>
 <span class="co">#&gt; WHERE (`q01` &lt;= 24.0))</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class="co">#&gt; ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class="co">#&gt; ))</span>
@@ -211,7 +217,7 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/dump_sql.html">dump_sql</a></span><span class="op">(</span><span class="va">cf</span>, <span class="st">"validation.sql"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">------------------------------------------------------------</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co">-- Do not edit, automatically generated with R package validatedb.</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">-- validatedb: 0.3.0.9000</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">-- validatedb: 0.3.0.9001</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="co">-- validate: 1.1.0</span></span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="co">-- R version 4.1.2 (2021-11-01)</span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="co">-- Database: '', Table: 'income'</span></span>
@@ -223,48 +229,54 @@
 <span id="cb11-12"><a href="#cb11-12"></a><span class="co">--  validation rule:  age &gt;= 18</span></span>
 <span id="cb11-13"><a href="#cb11-13"></a></span>
 <span id="cb11-14"><a href="#cb11-14"></a><span class="kw">SELECT</span> `id`, <span class="st">'is_adult'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-15"><a href="#cb11-15"></a><span class="kw">FROM</span> `income`</span>
-<span id="cb11-16"><a href="#cb11-16"></a><span class="kw">WHERE</span> (`age` <span class="op">-</span> <span class="fl">18.0</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e-08</span>)</span>
-<span id="cb11-17"><a href="#cb11-17"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
-<span id="cb11-18"><a href="#cb11-18"></a><span class="kw">SELECT</span> `id`, <span class="st">'is_adult'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-19"><a href="#cb11-19"></a><span class="kw">FROM</span> `income`</span>
-<span id="cb11-20"><a href="#cb11-20"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
-<span id="cb11-21"><a href="#cb11-21"></a></span>
-<span id="cb11-22"><a href="#cb11-22"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="kw">WHERE</span> (`age` <span class="op">-</span> <span class="fl">18.0</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1e-08</span>)</span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="kw">SELECT</span> `id`, <span class="st">'is_adult'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
 <span id="cb11-23"><a href="#cb11-23"></a></span>
-<span id="cb11-24"><a href="#cb11-24"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">--------------------------------------</span></span>
 <span id="cb11-25"><a href="#cb11-25"></a></span>
-<span id="cb11-26"><a href="#cb11-26"></a><span class="co">--------------------------------------</span></span>
-<span id="cb11-27"><a href="#cb11-27"></a><span class="co">--  has_income:  </span></span>
-<span id="cb11-28"><a href="#cb11-28"></a><span class="co">--  validation rule:  salary &gt; 0</span></span>
-<span id="cb11-29"><a href="#cb11-29"></a></span>
-<span id="cb11-30"><a href="#cb11-30"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-31"><a href="#cb11-31"></a><span class="kw">FROM</span> `income`</span>
-<span id="cb11-32"><a href="#cb11-32"></a><span class="kw">WHERE</span> (`salary` <span class="op">&lt;=</span> <span class="fl">0.0</span>)</span>
-<span id="cb11-33"><a href="#cb11-33"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
-<span id="cb11-34"><a href="#cb11-34"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-35"><a href="#cb11-35"></a><span class="kw">FROM</span> `income`</span>
-<span id="cb11-36"><a href="#cb11-36"></a><span class="kw">WHERE</span> (((`salary`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
-<span id="cb11-37"><a href="#cb11-37"></a></span>
-<span id="cb11-38"><a href="#cb11-38"></a><span class="co">--------------------------------------</span></span>
-<span id="cb11-39"><a href="#cb11-39"></a></span>
-<span id="cb11-40"><a href="#cb11-40"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co">--  has_income:  </span></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="co">--  validation rule:  salary &gt; 0</span></span>
+<span id="cb11-31"><a href="#cb11-31"></a></span>
+<span id="cb11-32"><a href="#cb11-32"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `salary`</span>
+<span id="cb11-34"><a href="#cb11-34"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-35"><a href="#cb11-35"></a><span class="kw">WHERE</span> (`salary` <span class="op">&lt;=</span> <span class="fl">0.0</span>)</span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-37"><a href="#cb11-37"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_income'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-38"><a href="#cb11-38"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `salary`</span>
+<span id="cb11-39"><a href="#cb11-39"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-40"><a href="#cb11-40"></a><span class="kw">WHERE</span> (((`salary`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
 <span id="cb11-41"><a href="#cb11-41"></a></span>
 <span id="cb11-42"><a href="#cb11-42"></a><span class="co">--------------------------------------</span></span>
-<span id="cb11-43"><a href="#cb11-43"></a><span class="co">--  mean_age:  </span></span>
-<span id="cb11-44"><a href="#cb11-44"></a><span class="co">--  validation rule:  mean(age, na.rm = TRUE) &gt; 24</span></span>
+<span id="cb11-43"><a href="#cb11-43"></a></span>
+<span id="cb11-44"><a href="#cb11-44"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
 <span id="cb11-45"><a href="#cb11-45"></a></span>
-<span id="cb11-46"><a href="#cb11-46"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-47"><a href="#cb11-47"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`</span>
-<span id="cb11-48"><a href="#cb11-48"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`, <span class="fu">AVG</span>(`age`) <span class="kw">OVER</span> () <span class="kw">AS</span> `q01`</span>
-<span id="cb11-49"><a href="#cb11-49"></a><span class="kw">FROM</span> `income`)</span>
-<span id="cb11-50"><a href="#cb11-50"></a><span class="kw">WHERE</span> (`q01` <span class="op">&lt;=</span> <span class="fl">24.0</span>))</span>
-<span id="cb11-51"><a href="#cb11-51"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
-<span id="cb11-52"><a href="#cb11-52"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
-<span id="cb11-53"><a href="#cb11-53"></a><span class="kw">FROM</span> `income`</span>
-<span id="cb11-54"><a href="#cb11-54"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
-<span id="cb11-55"><a href="#cb11-55"></a></span>
-<span id="cb11-56"><a href="#cb11-56"></a><span class="co">--------------------------------------</span></span></code></pre></div>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-47"><a href="#cb11-47"></a><span class="co">--  mean_age:  </span></span>
+<span id="cb11-48"><a href="#cb11-48"></a><span class="co">--  validation rule:  mean(age, na.rm = TRUE) &gt; 24</span></span>
+<span id="cb11-49"><a href="#cb11-49"></a></span>
+<span id="cb11-50"><a href="#cb11-50"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-51"><a href="#cb11-51"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
+<span id="cb11-52"><a href="#cb11-52"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, <span class="fu">AVG</span>(`age`) <span class="kw">OVER</span> () <span class="kw">AS</span> `q01`</span>
+<span id="cb11-53"><a href="#cb11-53"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
+<span id="cb11-54"><a href="#cb11-54"></a><span class="kw">FROM</span> `income`))</span>
+<span id="cb11-55"><a href="#cb11-55"></a><span class="kw">WHERE</span> (`q01` <span class="op">&lt;=</span> <span class="fl">24.0</span>))</span>
+<span id="cb11-56"><a href="#cb11-56"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-57"><a href="#cb11-57"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-58"><a href="#cb11-58"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
+<span id="cb11-59"><a href="#cb11-59"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-60"><a href="#cb11-60"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
+<span id="cb11-61"><a href="#cb11-61"></a></span>
+<span id="cb11-62"><a href="#cb11-62"></a><span class="co">--------------------------------------</span></span></code></pre></div>
 <div id="aggregate-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#aggregate-example" class="anchor"></a>Aggregate example</h3>
@@ -316,19 +328,23 @@
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf_sparse</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (`age` - 18.0 &lt; -1e-08)</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`age`) IS NULL))</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (`salary` &lt;= 0.0)</span>
 <span class="co">#&gt; UNION ALL</span>
 <span class="co">#&gt; SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`</span>
-<span class="co">#&gt; FROM `income`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`salary`) IS NULL))</span>
 <span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf_sparse</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
