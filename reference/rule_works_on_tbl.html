@@ -120,7 +120,7 @@
     <p>tests for each rule if it can be executed on the database</p>
     </div>
 
-    <pre class="usage"><span class='fu'>rule_works_on_tbl</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>rule_works_on_tbl</span><span class='op'>(</span><span class='va'>tbl</span>, <span class='va'>x</span>, key <span class='op'>=</span> <span class='cn'>NULL</span>, show_errors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -136,6 +136,10 @@
     <tr>
       <th>key</th>
       <td><p><code>character</code> names of columns that identify a record</p></td>
+    </tr>
+    <tr>
+      <th>show_errors</th>
+      <td><p>if <code>TRUE</code> errors on the database are printed.</p></td>
     </tr>
     </table>
 
