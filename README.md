@@ -149,7 +149,7 @@ show_query(cf)
 #> UNION ALL
 #> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
 #> FROM `income`
-#> WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+#> WHERE (((`age`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
 #> FROM `income`
@@ -157,7 +157,7 @@ show_query(cf)
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
 #> FROM `income`
-#> WHERE (((`salary` <= 0.0) IS NULL))
+#> WHERE (((`salary`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`
 #> FROM (SELECT `id`, `age`, `salary`
@@ -166,10 +166,8 @@ show_query(cf)
 #> WHERE (`q01` <= 24.0))
 #> UNION ALL
 #> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
-#> FROM (SELECT `id`, `age`, `salary`
-#> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
-#> FROM `income`)
-#> WHERE (((`q01` <= 24.0) IS NULL)))) AS `RHS`
+#> FROM `income`
+#> WHERE (((`age`) IS NULL))) AS `RHS`
 #> ON (`LHS`.`id` = `RHS`.`id`)
 #> ))
 #> GROUP BY `id`
@@ -188,7 +186,7 @@ dump_sql(cf, "validation.sql")
 -- validate: 1.1.0
 -- R version 4.1.2 (2021-11-01)
 -- Database: '', Table: 'income'
--- Date: 2021-11-29
+-- Date: 2021-11-30
 ------------------------------------------------------------
 
 --------------------------------------
@@ -201,7 +199,7 @@ WHERE (`age` - 18.0 < -1e-08)
 UNION ALL
 SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
 FROM `income`
-WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+WHERE (((`age`) IS NULL))
 
 --------------------------------------
 
@@ -217,7 +215,7 @@ WHERE (`salary` <= 0.0)
 UNION ALL
 SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
 FROM `income`
-WHERE (((`salary` <= 0.0) IS NULL))
+WHERE (((`salary`) IS NULL))
 
 --------------------------------------
 
@@ -234,10 +232,8 @@ FROM `income`)
 WHERE (`q01` <= 24.0))
 UNION ALL
 SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
-FROM (SELECT `id`, `age`, `salary`
-FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
-FROM `income`)
-WHERE (((`q01` <= 24.0) IS NULL)))
+FROM `income`
+WHERE (((`age`) IS NULL))
 
 --------------------------------------
 ```
@@ -297,7 +293,7 @@ show_query(cf_sparse)
 #> UNION ALL
 #> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
 #> FROM `income`
-#> WHERE (((`age` - 18.0 < -1e-08) IS NULL))
+#> WHERE (((`age`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
 #> FROM `income`
@@ -305,7 +301,7 @@ show_query(cf_sparse)
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
 #> FROM `income`
-#> WHERE (((`salary` <= 0.0) IS NULL))
+#> WHERE (((`salary`) IS NULL))
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]
 #> # Database: sqlite 3.35.5 [:memory:]

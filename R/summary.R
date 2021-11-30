@@ -9,7 +9,7 @@ summary.tbl_validation <- function(object, ...){
                    , nNA   = 0 #ifelse(cf$working, 0, NA)
                    , warning = FALSE
                    , error   = !cf$working
-                   , expression = as.character(cf$exprs)
+                   , expression = as.character(unname(cf$exprs))
   )
   s$items[cf$working] <- df$npass + df$nfail + df$nNA
   s$npass[cf$working] <- df$npass

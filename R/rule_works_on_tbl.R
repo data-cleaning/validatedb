@@ -4,9 +4,10 @@
 #' @param tbl a `tbl` object with columns used in `x`
 #' @param x a [validate::validator()] object
 #' @param key `character` names of columns that identify a record
+#' @param show_errors if `TRUE` errors on the database are printed.
 #' @return `logical` encoding which validation rules "work" on the database.
 #' @importFrom utils head
-rule_works_on_tbl <- function(tbl, x, key = NULL){
+rule_works_on_tbl <- function(tbl, x, key = NULL, show_errors = FALSE){
   res <- confront_tbl_sparse(head(tbl), x, key = key, union_all = FALSE, check_rules = FALSE)
   # TODO extract information on the error...
   sapply(res$queries, function(qry){
@@ -14,7 +15,7 @@ rule_works_on_tbl <- function(tbl, x, key = NULL){
     try({
       dplyr::collect(head(qry))
       works <- TRUE
-    }, silent = TRUE)
+    }, silent = !show_errors)
     works
   })
 }

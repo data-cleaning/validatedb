@@ -79,7 +79,11 @@ confront_tbl_sparse <- function( tbl
                               , fail = TRUE
                               )
 
-    d_na <- dplyr::filter( e_tbl, is.na(!!e_fail))
+    # sql server does not allow boolean expressions, bummer!!!
+    #d_na <- dplyr::filter( e_tbl, is.na(!!e_fail))
+    
+    e_fail_is_null <- expr_is_null(e_fail)
+    d_na <- dplyr::filter( e_tbl, !!e_fail_is_null)
     d_na <- dplyr::transmute( d_na
                             , !!!key_expr
                             , rule = !!rule_name
@@ -96,5 +100,48 @@ confront_tbl_sparse <- function( tbl
       , exprs   = exprs_all
       , working = working
       )
+}
+
+expr_is_null <- function(e){
+  if (!is.call(e)){
+    return(bquote(is.na(.(e))))
+  }
+  
+  op <- deparse(e[[1]])
+  
+  if (op == "is.na"){
+    return(bquote(e))
+  }
+  
+  if (length(e) == 2){
+    if (op %in% c("-", "+")){
+      
+      return(expr_is_null(e[[2]]))
+    }
+  }
+  
+  if (op %in% c(">", ">=", "<=", "<", "==", "!=")){
+    l <- e[[2]]
+    r <- e[[3]]
+    if (is_number(l)){
+      return(expr_is_null(r))
+    }
+    if (is_number(r)){
+      return(expr_is_null(l))
+    }
+    return(substitute(l | r, list(l = expr_is_null(l), r = expr_is_null(r))))
+  }
+  
+  # last resort
+  vs <- lapply(all.vars(e), function(v) bquote(is.na(.(as.symbol(v)))))
+  vs <- Reduce(function(v1, v2){bquote(.(v1) | .(v2))}, vs)
+  vs
+}
+
+is_number <- function(e){
+  if (is.call(e) && length(e) == 2){
+    return(is.numeric(e[[2]]))
+  }
+  is.numeric(e)
 }
 
