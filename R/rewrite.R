@@ -4,7 +4,7 @@
 # may depend on the support of window functions
 `:=` = `=`
 
-rewrite <- function(tbl, e, n = 1L, has_window = TRUE){
+rewrite <- function(tbl, e, n = 1L, sel_vars= NULL){
   if (is.call(e)){
     # first parse the arguments to support nested validate functions
     arg <- seq_along(e)[-1]
@@ -13,7 +13,7 @@ rewrite <- function(tbl, e, n = 1L, has_window = TRUE){
       if (!is.call(e_a)){
         next
       }
-      l <- rewrite(tbl, e_a, n)
+      l <- rewrite(tbl, e_a, n, sel_vars = sel_vars)
       tbl <- l$tbl
       n <- l$n
       e[[a]] <-l$e 

@@ -4,7 +4,7 @@
 \alias{aggregate.tbl_validation}
 \title{Count the number of invalid rules or records.}
 \usage{
-\method{aggregate}{tbl_validation}(x, by = c("rule", "record", "id"), ...)
+\method{aggregate}{tbl_validation}(x, by = c("rule", "record", "key"), ...)
 }
 \arguments{
 \item{x}{\code{\link[=tbl_validation]{tbl_validation()}} object}

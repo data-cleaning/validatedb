@@ -10,11 +10,19 @@
 rule_works_on_tbl <- function(tbl, x, key = NULL, show_errors = FALSE){
   res <- confront_tbl_sparse(head(tbl), x, key = key, union_all = FALSE, check_rules = FALSE)
   # TODO extract information on the error...
-  sapply(res$queries, function(qry){
+  sapply(names(res$queries), function(n){
+    qry <- res$queries[[n]]
     works <- FALSE
     try({
+      if (show_errors) {
+        message("\nTesting rule: '", n, ": ",deparse(res$expr[[n]]),"'...")
+        detect_integer(res$expr[[n]])
+      }
       dplyr::collect(head(qry))
       works <- TRUE
+      if (show_errors) {
+        message("...works!")
+      }
     }, silent = !show_errors)
     works
   })

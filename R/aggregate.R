@@ -14,7 +14,7 @@
 #' @return A [dbplyr::tbl_dbi()] object that represents the aggregation query 
 #' (to be executed) on the database.
 #' @export
-aggregate.tbl_validation <- function(x, by = c("rule", "record", "id"), ...){
+aggregate.tbl_validation <- function(x, by = c("rule", "record", "key"), ...){
   by = match.arg(by)
   key <- lapply(x$key, as.symbol)
 

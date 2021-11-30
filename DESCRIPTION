@@ -1,6 +1,6 @@
 Package: validatedb
 Title: Validate Data in a Database using 'validate' 
-Version: 0.3.0.9001
+Version: 0.3.0.9002
 Authors@R: c(
     person(given = "Edwin",
            family = "de Jonge",
@@ -31,6 +31,7 @@ Collate:
     'aggregate.R'
     'tbl_validation.R'
     'as-data-frame.R'
+    'check_rules.R'
     'compute.R'
     'confront.R'
     'confront_tbl.R'

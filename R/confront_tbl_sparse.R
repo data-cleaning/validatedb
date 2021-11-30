@@ -1,7 +1,7 @@
 #' Create a sparse confrontation query
 #' 
 #' Create a sparse confrontation query. Only errors and missing are stored.
-#' This can be useful alternative to [confront_tbl()] which stores all results
+#' This stores all results
 #' of a `tbl` validation in a table with `length(rules)` columns and `nrow(tbl)`
 #' rows. Note that the result of this function is a (lazy) query object that 
 #' still needs to be executed in the database, e.g. with [dplyr::collect()], [dplyr::collapse()] or
@@ -42,7 +42,8 @@ confront_tbl_sparse <- function( tbl
       # should this be in the error object?
       warning("Detected rules that do not work on this table/db.\n",
               "Ignoring:\n",
-              paste0("\t", names(nw),": ", nw, collapse="\n")
+              paste0("\t", names(nw),": ", nw, collapse="\n"),
+              "\nUse function `check_rules` to inspect the non-working rules."
       )
     }
     exprs <- exprs[working]
@@ -63,10 +64,14 @@ confront_tbl_sparse <- function( tbl
   }
   
   cw_exprs <- as.expression(exprs)
+  clmnnames <- tbl_vars(tbl)
   qrys <- lapply(names(cw_exprs), function(rule_name){
     e <- cw_exprs[[rule_name]]
     
     # replace validate functions with sql construct
+    sel_vars <- intersect(clmnnames, c(all.vars(e), key))
+    sel_vars <- lapply(sel_vars, as.symbol)
+    tbl <- dplyr::select(tbl, !!!sel_vars)
     l <- rewrite(tbl, e, n = 1)
     e_tbl <- l$tbl
     e <- l$e

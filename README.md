@@ -144,29 +144,35 @@ show_query(cf)
 #> FROM (SELECT `id`
 #> FROM `income`) AS `LHS`
 #> LEFT JOIN (SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`)
 #> WHERE (`age` - 18.0 < -1e-08)
 #> UNION ALL
 #> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`)
 #> WHERE (((`age`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `salary`
+#> FROM `income`)
 #> WHERE (`salary` <= 0.0)
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `salary`
+#> FROM `income`)
 #> WHERE (((`salary`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`
-#> FROM (SELECT `id`, `age`, `salary`
-#> FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
-#> FROM `income`)
+#> FROM (SELECT `id`, `age`
+#> FROM (SELECT `id`, `age`, AVG(`age`) OVER () AS `q01`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`))
 #> WHERE (`q01` <= 24.0))
 #> UNION ALL
 #> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`)
 #> WHERE (((`age`) IS NULL))) AS `RHS`
 #> ON (`LHS`.`id` = `RHS`.`id`)
 #> ))
@@ -182,7 +188,7 @@ dump_sql(cf, "validation.sql")
 ``` sql
 ------------------------------------------------------------
 -- Do not edit, automatically generated with R package validatedb.
--- validatedb: 0.3.0.9000
+-- validatedb: 0.3.0.9001
 -- validate: 1.1.0
 -- R version 4.1.2 (2021-11-01)
 -- Database: '', Table: 'income'
@@ -194,11 +200,13 @@ dump_sql(cf, "validation.sql")
 --  validation rule:  age >= 18
 
 SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
-FROM `income`
+FROM (SELECT `id`, `age`
+FROM `income`)
 WHERE (`age` - 18.0 < -1e-08)
 UNION ALL
 SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
-FROM `income`
+FROM (SELECT `id`, `age`
+FROM `income`)
 WHERE (((`age`) IS NULL))
 
 --------------------------------------
@@ -210,11 +218,13 @@ UNION ALL
 --  validation rule:  salary > 0
 
 SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
-FROM `income`
+FROM (SELECT `id`, `salary`
+FROM `income`)
 WHERE (`salary` <= 0.0)
 UNION ALL
 SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
-FROM `income`
+FROM (SELECT `id`, `salary`
+FROM `income`)
 WHERE (((`salary`) IS NULL))
 
 --------------------------------------
@@ -226,13 +236,15 @@ UNION ALL
 --  validation rule:  mean(age, na.rm = TRUE) > 24
 
 SELECT `id`, 'mean_age' AS `rule`, 1 AS `fail`
-FROM (SELECT `id`, `age`, `salary`
-FROM (SELECT `id`, `age`, `salary`, AVG(`age`) OVER () AS `q01`
-FROM `income`)
+FROM (SELECT `id`, `age`
+FROM (SELECT `id`, `age`, AVG(`age`) OVER () AS `q01`
+FROM (SELECT `id`, `age`
+FROM `income`))
 WHERE (`q01` <= 24.0))
 UNION ALL
 SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
-FROM `income`
+FROM (SELECT `id`, `age`
+FROM `income`)
 WHERE (((`age`) IS NULL))
 
 --------------------------------------
@@ -288,19 +300,23 @@ cf_sparse <- confront(tbl_income, rules, key="id", sparse=TRUE )
 show_query(cf_sparse)
 #> <SQL>
 #> SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`)
 #> WHERE (`age` - 18.0 < -1e-08)
 #> UNION ALL
 #> SELECT `id`, 'is_adult' AS `rule`, NULL AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `age`
+#> FROM `income`)
 #> WHERE (((`age`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, 1 AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `salary`
+#> FROM `income`)
 #> WHERE (`salary` <= 0.0)
 #> UNION ALL
 #> SELECT `id`, 'has_income' AS `rule`, NULL AS `fail`
-#> FROM `income`
+#> FROM (SELECT `id`, `salary`
+#> FROM `income`)
 #> WHERE (((`salary`) IS NULL))
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]

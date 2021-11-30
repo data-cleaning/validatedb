@@ -22,7 +22,7 @@ A object with the necessary information: see details
 }
 \description{
 Create a sparse confrontation query. Only errors and missing are stored.
-This can be useful alternative to \code{\link[=confront_tbl]{confront_tbl()}} which stores all results
+This stores all results
 of a \code{tbl} validation in a table with \code{length(rules)} columns and \code{nrow(tbl)}
 rows. Note that the result of this function is a (lazy) query object that
 still needs to be executed in the database, e.g. with \code{\link[dplyr:compute]{dplyr::collect()}}, \code{\link[dplyr:compute]{dplyr::collapse()}} or
