@@ -177,17 +177,12 @@ show_query(cf)
 #> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
 #> FROM (SELECT `id`, `age`
 #> FROM `income`)
-#> WHERE (((`age`) IS NULL) OR ((1) IS NULL))
+#> WHERE (((`age`) IS NULL))
 #> UNION ALL
 #> SELECT `id`, 'has_values' AS `rule`, 1 AS `fail`
 #> FROM (SELECT `id`, `age`, `salary`
 #> FROM `income`)
-#> WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))
-#> UNION ALL
-#> SELECT `id`, 'has_values' AS `rule`, NULL AS `fail`
-#> FROM (SELECT `id`, `age`, `salary`
-#> FROM `income`)
-#> WHERE (1 = 0 OR 1 = 0)) AS `RHS`
+#> WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))) AS `RHS`
 #> ON (`LHS`.`id` = `RHS`.`id`)
 #> ))
 #> GROUP BY `id`
@@ -202,7 +197,7 @@ dump_sql(cf, "validation.sql")
 ``` sql
 ------------------------------------------------------------
 -- Do not edit, automatically generated with R package validatedb.
--- validatedb: 0.3.0.9002
+-- validatedb: 0.3.0.9004
 -- validate: 1.1.0
 -- R version 4.1.2 (2021-11-01)
 -- Database: '', Table: 'income'
@@ -259,7 +254,7 @@ UNION ALL
 SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
 FROM (SELECT `id`, `age`
 FROM `income`)
-WHERE (((`age`) IS NULL) OR ((1) IS NULL))
+WHERE (((`age`) IS NULL))
 
 --------------------------------------
 
@@ -273,11 +268,6 @@ SELECT `id`, 'has_values' AS `rule`, 1 AS `fail`
 FROM (SELECT `id`, `age`, `salary`
 FROM `income`)
 WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))
-UNION ALL
-SELECT `id`, 'has_values' AS `rule`, NULL AS `fail`
-FROM (SELECT `id`, `age`, `salary`
-FROM `income`)
-WHERE (1 = 0 OR 1 = 0)
 
 --------------------------------------
 ```

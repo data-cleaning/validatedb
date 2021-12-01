@@ -134,7 +134,6 @@ describe("Confront", {
     v_df <- values(cf_df)
     expect_equal(v, v_df)
     
-    cf |> show_query()
   })
   
 })

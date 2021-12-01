@@ -88,13 +88,17 @@ confront_tbl_sparse <- function( tbl
     #d_na <- dplyr::filter( e_tbl, is.na(!!e_fail))
     
     e_fail_is_null <- expr_is_null(e_fail)
-    d_na <- dplyr::filter( e_tbl, !!e_fail_is_null)
-    d_na <- dplyr::transmute( d_na
-                            , !!!key_expr
-                            , rule = !!rule_name
-                            , fail = NA
-                            )
-    dplyr::union_all(d_fail, d_na)
+    if (length(e_fail_is_null)){
+      d_na <- dplyr::filter( e_tbl, !!e_fail_is_null)
+      d_na <- dplyr::transmute( d_na
+                              , !!!key_expr
+                              , rule = !!rule_name
+                              , fail = NA
+                              )
+      dplyr::union_all(d_fail, d_na)
+    } else {
+      d_fail
+    }
   })
   names(qrys) <- names(exprs)
   qry <- Reduce(dplyr::union_all, qrys)
@@ -118,7 +122,8 @@ expr_is_null <- function(e){
   if (op == "is.na"){
     # return a FALSE, but has to be a comparison, since mssql does not understand
     # boolean expressions as a value.
-    return(bquote(TRUE == FALSE))
+    #return(bquote(1L == 0L))
+    return(NULL)
   }
   
   if (length(e) == 2){
@@ -138,7 +143,11 @@ expr_is_null <- function(e){
   }
   args <- as.list(e)[-1]
   args <- args[!sapply(args, is.numeric)]
+  args <- args[!sapply(args, is.logical)]
+
   args <- lapply(args, expr_is_null)
+  args <- args[!sapply(args, is.null)]
+  
   Reduce(function(l, r){bquote(.(l) | .(r))}, args)
   
   # # last resort
