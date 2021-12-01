@@ -1,4 +1,4 @@
-#' Check rules for on the database
+#' Check validation rules on the database
 #' 
 #' Checks whether validation rules are working on the database, and gives 
 #' hints on non working rules.
@@ -12,6 +12,18 @@
 #' - using variables that are not present in the table
 #' - using a different value type than the column in the database, e.g.using an integer 
 #' value, while the database column is of type "varchar".
+#' 
+#' - To debug your rules, a useful thing to do is first to test the rules on a 
+#' small sub set of the table
+#' - e.g. 
+#' 
+#' ```
+#' tbl |> 
+#'   head() |>          # debugging on db
+#'   as.data.frame() |> # debugging "rules", do they work on a data.frame
+#'   confront(rules, key = "id") |> 
+#'   summary()
+#' ````
 #' 
 #' But it can also be that some R functions are not available on the database, 
 #' in which case you have to reformulate the rule.

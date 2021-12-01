@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_rules.R
 \name{check_rules}
 \alias{check_rules}
-\title{Check rules for on the database}
+\title{Check validation rules on the database}
 \usage{
 check_rules(tbl, x, key = NULL)
 }
@@ -30,6 +30,14 @@ In some (easy to fix) cases, this may be due to:
 \item using variables that are not present in the table
 \item using a different value type than the column in the database, e.g.using an integer
 value, while the database column is of type "varchar".
+\item To debug your rules, a useful thing to do is first to test the rules on a
+small sub set of the table
+\item e.g.
+}\preformatted{tbl |> 
+  head() |>          # debugging on db
+  as.data.frame() |> # debugging "rules", do they work on a data.frame
+  confront(rules, key = "id") |> 
+  summary()
 }
 
 But it can also be that some R functions are not available on the database,
