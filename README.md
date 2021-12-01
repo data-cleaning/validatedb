@@ -64,6 +64,7 @@ Let’s define a rule set and confront the table with it:
 rules <- validator( is_adult   = age >= 18
                   , has_income = salary > 0
                   , mean_age   = mean(age,na.rm=TRUE) > 24
+                  , has_values = is_complete(age, salary)
                   )
 
 # and confront!
@@ -74,7 +75,7 @@ print(cf)
 #> Call:
 #>     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)
 #> 
-#> Confrontations: 3
+#> Confrontations: 4
 #> Tbl           : income ()
 #> Key column    : id
 #> Sparse        : FALSE
@@ -86,10 +87,12 @@ summary(cf)
 #> is_adult     is_adult     2     1     1   0   FALSE FALSE
 #> has_income has_income     2     1     0   1   FALSE FALSE
 #> mean_age     mean_age     1     0     1   0   FALSE FALSE
+#> has_values has_values     2     1     1   0   FALSE FALSE
 #>                              expression
 #> is_adult             age - 18 >= -1e-08
 #> has_income                   salary > 0
 #> mean_age   mean(age, na.rm = TRUE) > 24
+#> has_values     is_complete(age, salary)
 ```
 
 Values (i.e. validations on the table) can be retrieved like in
@@ -98,9 +101,9 @@ Values (i.e. validations on the table) can be retrieved like in
 ``` r
 values(cf, type = "matrix")
 #> [[1]]
-#>      is_adult has_income
-#> [1,]    FALSE       TRUE
-#> [2,]     TRUE         NA
+#>      is_adult has_income has_values
+#> [1,]    FALSE       TRUE       TRUE
+#> [2,]     TRUE         NA      FALSE
 #> 
 #> [[2]]
 #>      mean_age
@@ -111,12 +114,12 @@ But often this seems more handy:
 
 ``` r
 values(cf, type = "tbl")
-#> # Source:   lazy query [?? x 4]
+#> # Source:   lazy query [?? x 5]
 #> # Database: sqlite 3.35.5 []
-#>      id is_adult has_income mean_age
-#>   <int>    <int>      <int>    <int>
-#> 1     1        0          1        0
-#> 2     2        1         NA        0
+#>      id is_adult has_income mean_age has_values
+#>   <int>    <int>      <int>    <int>      <int>
+#> 1     1        0          1        0          1
+#> 2     2        1         NA        0          0
 ```
 
 or
@@ -131,6 +134,7 @@ values(cf, type = "tbl", sparse=TRUE)
 #> 2     2 has_income    NA
 #> 3     1 mean_age       1
 #> 4     2 mean_age       1
+#> 5     2 has_values     1
 ```
 
 We can see the sql code by using `show_query`:
@@ -138,8 +142,8 @@ We can see the sql code by using `show_query`:
 ``` r
 show_query(cf)
 #> <SQL>
-#> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`
-#> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`
+#> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`, NULLIF(MIN(`has_values`), -1) AS `has_values`
+#> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`, CASE `rule` WHEN ('has_values') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_values`
 #> FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`
 #> FROM (SELECT `id`
 #> FROM `income`) AS `LHS`
@@ -173,7 +177,17 @@ show_query(cf)
 #> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
 #> FROM (SELECT `id`, `age`
 #> FROM `income`)
-#> WHERE (((`age`) IS NULL))) AS `RHS`
+#> WHERE (((`age`) IS NULL) OR ((1) IS NULL))
+#> UNION ALL
+#> SELECT `id`, 'has_values' AS `rule`, 1 AS `fail`
+#> FROM (SELECT `id`, `age`, `salary`
+#> FROM `income`)
+#> WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))
+#> UNION ALL
+#> SELECT `id`, 'has_values' AS `rule`, NULL AS `fail`
+#> FROM (SELECT `id`, `age`, `salary`
+#> FROM `income`)
+#> WHERE (1 = 0 OR 1 = 0)) AS `RHS`
 #> ON (`LHS`.`id` = `RHS`.`id`)
 #> ))
 #> GROUP BY `id`
@@ -188,11 +202,11 @@ dump_sql(cf, "validation.sql")
 ``` sql
 ------------------------------------------------------------
 -- Do not edit, automatically generated with R package validatedb.
--- validatedb: 0.3.0.9001
+-- validatedb: 0.3.0.9002
 -- validate: 1.1.0
 -- R version 4.1.2 (2021-11-01)
 -- Database: '', Table: 'income'
--- Date: 2021-11-30
+-- Date: 2021-12-01
 ------------------------------------------------------------
 
 --------------------------------------
@@ -245,7 +259,25 @@ UNION ALL
 SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`
 FROM (SELECT `id`, `age`
 FROM `income`)
-WHERE (((`age`) IS NULL))
+WHERE (((`age`) IS NULL) OR ((1) IS NULL))
+
+--------------------------------------
+
+UNION ALL
+
+--------------------------------------
+--  has_values:  
+--  validation rule:  is_complete(age, salary)
+
+SELECT `id`, 'has_values' AS `rule`, 1 AS `fail`
+FROM (SELECT `id`, `age`, `salary`
+FROM `income`)
+WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))
+UNION ALL
+SELECT `id`, 'has_values' AS `rule`, NULL AS `fail`
+FROM (SELECT `id`, `age`, `salary`
+FROM `income`)
+WHERE (1 = 0 OR 1 = 0)
 
 --------------------------------------
 ```
@@ -327,12 +359,16 @@ values(cf_sparse, type="tbl")
 #> 2     2 has_income    NA
 ```
 
-## TODO
+## validate specific functions
+
+### Added:
 
 -   [x] `is_complete`, `all_complete`
 -   [x] `is_unique`, `all_unique`
 -   [x] `exists_any`, `exists_one`
 -   [x] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by`
+
+### Todo
 
 Some newly added `validate` utility functions are (still) missing from
 `validatedb`.

@@ -62,6 +62,7 @@ Let's define a rule set and confront the table with it:
 rules <- validator( is_adult   = age >= 18
                   , has_income = salary > 0
                   , mean_age   = mean(age,na.rm=TRUE) > 24
+                  , has_values = is_complete(age, salary)
                   )
 
 # and confront!
@@ -116,14 +117,17 @@ dump_sql(cf)
 
 ```
 
-## TODO
+## validate specific functions
 
+
+### Added:
 
 - [x] `is_complete`, `all_complete`
 - [x] `is_unique`, `all_unique`
 - [x] `exists_any`, `exists_one`
 - [x] `do_by`, `sum_by`, `mean_by`, `min_by`, `max_by` 
 
+### Todo
 Some newly added `validate` utility functions are (still) missing from `validatedb`.
 
 - [ ] `contains_exactly`

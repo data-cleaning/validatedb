@@ -108,6 +108,7 @@ confront_tbl_sparse <- function( tbl
 }
 
 expr_is_null <- function(e){
+  #browser()
   if (!is.call(e)){
     return(bquote(is.na(.(e))))
   }
@@ -115,14 +116,13 @@ expr_is_null <- function(e){
   op <- deparse(e[[1]])
   
   if (op == "is.na"){
-    return(bquote(e))
+    # return a FALSE, but has to be a comparison, since mssql does not understand
+    # boolean expressions as a value.
+    return(bquote(TRUE == FALSE))
   }
   
   if (length(e) == 2){
-    if (op %in% c("-", "+")){
-      
-      return(expr_is_null(e[[2]]))
-    }
+    return(expr_is_null(e[[2]]))
   }
   
   if (op %in% c(">", ">=", "<=", "<", "==", "!=")){
@@ -136,11 +136,15 @@ expr_is_null <- function(e){
     }
     return(substitute(l | r, list(l = expr_is_null(l), r = expr_is_null(r))))
   }
+  args <- as.list(e)[-1]
+  args <- args[!sapply(args, is.numeric)]
+  args <- lapply(args, expr_is_null)
+  Reduce(function(l, r){bquote(.(l) | .(r))}, args)
   
-  # last resort
-  vs <- lapply(all.vars(e), function(v) bquote(is.na(.(as.symbol(v)))))
-  vs <- Reduce(function(v1, v2){bquote(.(v1) | .(v2))}, vs)
-  vs
+  # # last resort
+  # vs <- lapply(all.vars(e), function(v) bquote(is.na(.(as.symbol(v)))))
+  # vs <- Reduce(function(v1, v2){bquote(.(v1) | .(v2))}, vs)
+  # vs
 }
 
 is_number <- function(e){

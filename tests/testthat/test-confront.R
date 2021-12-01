@@ -1,4 +1,7 @@
 describe("Confront", {
+  tbl <- dbplyr::memdb_frame(id = letters[1:2], x = 1:2)
+  df <- as.data.frame(tbl)
+  
   it("returns a validation object", {
     rules <- validator(x > 1, y < x, x == 0)
     con <- dbplyr::src_memdb()
@@ -115,5 +118,23 @@ describe("Confront", {
     })
   })
   
+  it("works with is.na",{
+    rules <- validator(r1 = !is.na(x))
+    tbl <- dbplyr::memdb_frame(id = letters[1:2], x = c(1,NA))
+    cf <- confront(tbl, rules, key = "id")
+    v <- values(cf, type="data.frame")
+    expect_equal(v$r1, c(TRUE, FALSE))
+  })
+  
+  it("works with a simple rule",{
+    rules <- validator(r1 = x + 1 > 0)
+    cf <- confront(tbl, rules, key = "id", sparse=TRUE)
+    cf_df <- confront(df, rules, key="id")
+    v <- values(cf, sparse=FALSE, type="matrix")
+    v_df <- values(cf_df)
+    expect_equal(v, v_df)
+    
+    cf |> show_query()
+  })
   
 })

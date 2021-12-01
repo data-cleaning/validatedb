@@ -5,10 +5,35 @@ describe("is_complete",{
                             )
   df <- as.data.frame(tbl)
 
-  it("works with is_complete", {
-    rules <- validator(r1 = is_complete(age, child), r2 = is_complete(id))
-    cf <- confront(tbl, rules, key = "id", sparse=TRUE)
+  it("works with is_complete single column", {
+    rules <- validator( r1  = is_complete(id))
+    cf <- confront(tbl, rules, key = "id")
     cf_df <- confront(df, rules, key = "id")
-    values(cf_df)
+    m <- values(cf, type="matrix")
+    m_df <- values(cf_df)
+    expect_equal(m,m_df)
   })
+  
+  it("works with is_complete", {
+    rules <- validator( r1  = is_complete(age, child)
+    )
+    cf <- confront(tbl, rules, key = "id")
+    cf_df <- confront(df, rules, key = "id")
+    m <- values(cf, type="matrix")
+    m_df <- values(cf_df)
+    expect_equal(m,m_df)
+  })
+  
+  it("works with is_complete", {
+    rules <- validator( r1  = is_complete(age, child)
+                      , r2 = is_complete(id)
+                      )
+    cf <- confront(tbl, rules, key = "id")
+    cf_df <- confront(df, rules, key = "id")
+    m <- values(cf, type="matrix")
+    m_df <- values(cf_df)
+    expect_equal(m,m_df)
+  })
+  
+  
 })
