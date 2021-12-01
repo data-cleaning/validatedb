@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9003</span>
       </span>
     </div>
 
@@ -112,6 +112,7 @@
 <code class="sourceCode R"><span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
                   , has_income <span class="op">=</span> <span class="va">salary</span> <span class="op">&gt;</span> <span class="fl">0</span>
                   , mean_age   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">age</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">24</span>
+                  , has_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/is_complete.html">is_complete</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">salary</span><span class="op">)</span>
                   <span class="op">)</span>
 
 <span class="co"># and confront!</span>
@@ -122,7 +123,7 @@
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Confrontations: 3</span>
+<span class="co">#&gt; Confrontations: 4</span>
 <span class="co">#&gt; Tbl           : income ()</span>
 <span class="co">#&gt; Key column    : id</span>
 <span class="co">#&gt; Sparse        : FALSE</span>
@@ -134,17 +135,19 @@
 <span class="co">#&gt; is_adult     is_adult     2     1     1   0   FALSE FALSE</span>
 <span class="co">#&gt; has_income has_income     2     1     0   1   FALSE FALSE</span>
 <span class="co">#&gt; mean_age     mean_age     1     0     1   0   FALSE FALSE</span>
+<span class="co">#&gt; has_values has_values     2     1     1   0   FALSE FALSE</span>
 <span class="co">#&gt;                              expression</span>
 <span class="co">#&gt; is_adult             age - 18 &gt;= -1e-08</span>
 <span class="co">#&gt; has_income                   salary &gt; 0</span>
-<span class="co">#&gt; mean_age   mean(age, na.rm = TRUE) &gt; 24</span></code></pre></div>
+<span class="co">#&gt; mean_age   mean(age, na.rm = TRUE) &gt; 24</span>
+<span class="co">#&gt; has_values     is_complete(age, salary)</span></code></pre></div>
 <p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="matrix"</code> or <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
-<span class="co">#&gt;      is_adult has_income</span>
-<span class="co">#&gt; [1,]    FALSE       TRUE</span>
-<span class="co">#&gt; [2,]     TRUE         NA</span>
+<span class="co">#&gt;      is_adult has_income has_values</span>
+<span class="co">#&gt; [1,]    FALSE       TRUE       TRUE</span>
+<span class="co">#&gt; [2,]     TRUE         NA      FALSE</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; [[2]]</span>
 <span class="co">#&gt;      mean_age</span>
@@ -152,12 +155,12 @@
 <p>But often this seems more handy:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
-<span class="co">#&gt; # Source:   lazy query [?? x 4]</span>
+<span class="co">#&gt; # Source:   lazy query [?? x 5]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 []</span>
-<span class="co">#&gt;      id is_adult has_income mean_age</span>
-<span class="co">#&gt;   &lt;int&gt;    &lt;int&gt;      &lt;int&gt;    &lt;int&gt;</span>
-<span class="co">#&gt; 1     1        0          1        0</span>
-<span class="co">#&gt; 2     2        1         NA        0</span></code></pre></div>
+<span class="co">#&gt;      id is_adult has_income mean_age has_values</span>
+<span class="co">#&gt;   &lt;int&gt;    &lt;int&gt;      &lt;int&gt;    &lt;int&gt;      &lt;int&gt;</span>
+<span class="co">#&gt; 1     1        0          1        0          1</span>
+<span class="co">#&gt; 2     2        1         NA        0          0</span></code></pre></div>
 <p>or</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
@@ -168,13 +171,14 @@
 <span class="co">#&gt; 1     1 is_adult       1</span>
 <span class="co">#&gt; 2     2 has_income    NA</span>
 <span class="co">#&gt; 3     1 mean_age       1</span>
-<span class="co">#&gt; 4     2 mean_age       1</span></code></pre></div>
+<span class="co">#&gt; 4     2 mean_age       1</span>
+<span class="co">#&gt; 5     2 has_values     1</span></code></pre></div>
 <p>We can see the sql code by using <code>show_query</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
-<span class="co">#&gt; SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`</span>
-<span class="co">#&gt; FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`</span>
+<span class="co">#&gt; SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`, NULLIF(MIN(`has_values`), -1) AS `has_values`</span>
+<span class="co">#&gt; FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`, CASE `rule` WHEN ('has_values') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_values`</span>
 <span class="co">#&gt; FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`</span>
 <span class="co">#&gt; FROM (SELECT `id`</span>
 <span class="co">#&gt; FROM `income`) AS `LHS`</span>
@@ -208,7 +212,17 @@
 <span class="co">#&gt; SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
 <span class="co">#&gt; FROM (SELECT `id`, `age`</span>
 <span class="co">#&gt; FROM `income`)</span>
-<span class="co">#&gt; WHERE (((`age`) IS NULL))) AS `RHS`</span>
+<span class="co">#&gt; WHERE (((`age`) IS NULL) OR ((1) IS NULL))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_values' AS `rule`, 1 AS `fail`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))</span>
+<span class="co">#&gt; UNION ALL</span>
+<span class="co">#&gt; SELECT `id`, 'has_values' AS `rule`, NULL AS `fail`</span>
+<span class="co">#&gt; FROM (SELECT `id`, `age`, `salary`</span>
+<span class="co">#&gt; FROM `income`)</span>
+<span class="co">#&gt; WHERE (1 = 0 OR 1 = 0)) AS `RHS`</span>
 <span class="co">#&gt; ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class="co">#&gt; ))</span>
 <span class="co">#&gt; GROUP BY `id`</span></code></pre></div>
@@ -217,11 +231,11 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/dump_sql.html">dump_sql</a></span><span class="op">(</span><span class="va">cf</span>, <span class="st">"validation.sql"</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1"></a><span class="co">------------------------------------------------------------</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="co">-- Do not edit, automatically generated with R package validatedb.</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a><span class="co">-- validatedb: 0.3.0.9001</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co">-- validatedb: 0.3.0.9002</span></span>
 <span id="cb11-4"><a href="#cb11-4"></a><span class="co">-- validate: 1.1.0</span></span>
 <span id="cb11-5"><a href="#cb11-5"></a><span class="co">-- R version 4.1.2 (2021-11-01)</span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="co">-- Database: '', Table: 'income'</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="co">-- Date: 2021-11-30</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">-- Date: 2021-12-01</span></span>
 <span id="cb11-8"><a href="#cb11-8"></a><span class="co">------------------------------------------------------------</span></span>
 <span id="cb11-9"><a href="#cb11-9"></a></span>
 <span id="cb11-10"><a href="#cb11-10"></a><span class="co">--------------------------------------</span></span>
@@ -274,9 +288,27 @@
 <span id="cb11-57"><a href="#cb11-57"></a><span class="kw">SELECT</span> `id`, <span class="st">'mean_age'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
 <span id="cb11-58"><a href="#cb11-58"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`</span>
 <span id="cb11-59"><a href="#cb11-59"></a><span class="kw">FROM</span> `income`)</span>
-<span id="cb11-60"><a href="#cb11-60"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
+<span id="cb11-60"><a href="#cb11-60"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>) <span class="kw">OR</span> ((<span class="dv">1</span>) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
 <span id="cb11-61"><a href="#cb11-61"></a></span>
-<span id="cb11-62"><a href="#cb11-62"></a><span class="co">--------------------------------------</span></span></code></pre></div>
+<span id="cb11-62"><a href="#cb11-62"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-63"><a href="#cb11-63"></a></span>
+<span id="cb11-64"><a href="#cb11-64"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-65"><a href="#cb11-65"></a></span>
+<span id="cb11-66"><a href="#cb11-66"></a><span class="co">--------------------------------------</span></span>
+<span id="cb11-67"><a href="#cb11-67"></a><span class="co">--  has_values:  </span></span>
+<span id="cb11-68"><a href="#cb11-68"></a><span class="co">--  validation rule:  is_complete(age, salary)</span></span>
+<span id="cb11-69"><a href="#cb11-69"></a></span>
+<span id="cb11-70"><a href="#cb11-70"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_values'</span> <span class="kw">AS</span> `rule`, <span class="dv">1</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-71"><a href="#cb11-71"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`</span>
+<span id="cb11-72"><a href="#cb11-72"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-73"><a href="#cb11-73"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>) <span class="kw">OR</span> ((`salary`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
+<span id="cb11-74"><a href="#cb11-74"></a><span class="kw">UNION</span> <span class="kw">ALL</span></span>
+<span id="cb11-75"><a href="#cb11-75"></a><span class="kw">SELECT</span> `id`, <span class="st">'has_values'</span> <span class="kw">AS</span> `rule`, <span class="kw">NULL</span> <span class="kw">AS</span> `fail`</span>
+<span id="cb11-76"><a href="#cb11-76"></a><span class="kw">FROM</span> (<span class="kw">SELECT</span> `id`, `age`, `salary`</span>
+<span id="cb11-77"><a href="#cb11-77"></a><span class="kw">FROM</span> `income`)</span>
+<span id="cb11-78"><a href="#cb11-78"></a><span class="kw">WHERE</span> (<span class="dv">1</span> <span class="op">=</span> <span class="dv">0</span> <span class="kw">OR</span> <span class="dv">1</span> <span class="op">=</span> <span class="dv">0</span>)</span>
+<span id="cb11-79"><a href="#cb11-79"></a></span>
+<span id="cb11-80"><a href="#cb11-80"></a><span class="co">--------------------------------------</span></span></code></pre></div>
 <div id="aggregate-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#aggregate-example" class="anchor"></a>Aggregate example</h3>
@@ -355,9 +387,12 @@
 <span class="co">#&gt; 2     2 has_income    NA</span></code></pre></div>
 </div>
 </div>
-<div id="todo" class="section level2">
+<div id="validate-specific-functions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#todo" class="anchor"></a>TODO</h2>
+<a href="#validate-specific-functions" class="anchor"></a>validate specific functions</h2>
+<div id="added" class="section level3">
+<h3 class="hasAnchor">
+<a href="#added" class="anchor"></a>Added:</h3>
 <ul>
 <li>
 <input type="checkbox" disabled checked><code>is_complete</code>, <code>all_complete</code>
@@ -372,6 +407,10 @@
 <input type="checkbox" disabled checked><code>do_by</code>, <code>sum_by</code>, <code>mean_by</code>, <code>min_by</code>, <code>max_by</code>
 </li>
 </ul>
+</div>
+<div id="todo" class="section level3">
+<h3 class="hasAnchor">
+<a href="#todo" class="anchor"></a>Todo</h3>
 <p>Some newly added <code>validate</code> utility functions are (still) missing from <code>validatedb</code>.</p>
 <ul>
 <li>
@@ -384,6 +423,7 @@
 <input type="checkbox" disabled><code>hierachy</code>
 </li>
 </ul>
+</div>
 </div>
 </div>
   </div>
