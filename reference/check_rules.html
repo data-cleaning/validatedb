@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Check rules for on the database — check_rules • validatedb</title>
+<title>Check validation rules on the database — check_rules • validatedb</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="Check rules for on the database — check_rules" />
+<meta property="og:title" content="Check validation rules on the database — check_rules" />
 <meta property="og:description" content="Checks whether validation rules are working on the database, and gives
 hints on non working rules." />
 
@@ -112,7 +112,7 @@ hints on non working rules." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Check rules for on the database</h1>
+    <h1>Check validation rules on the database</h1>
     <small class="dont-index">Source: <a href='https://github.com/data-cleaning/validatedb/blob/master/R/check_rules.R'><code>R/check_rules.R</code></a></small>
     <div class="hidden name"><code>check_rules.Rd</code></div>
     </div>
@@ -153,7 +153,15 @@ will not work. This function helps in finding out why rules are not working.</p>
 <li><p>using variables that are not present in the table</p></li>
 <li><p>using a different value type than the column in the database, e.g.using an integer
 value, while the database column is of type "varchar".</p></li>
-</ul>
+<li><p>To debug your rules, a useful thing to do is first to test the rules on a
+small sub set of the table</p></li>
+<li><p>e.g.</p></li>
+</ul><pre><span class='va'>tbl</span> |&gt; 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span> |&gt;          <span class='co'># debugging on db</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/validate/man/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='op'>)</span> |&gt; <span class='co'># debugging "rules", do they work on a data.frame</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/validate/man/confront.html'>confront</a></span><span class='op'>(</span><span class='va'>rules</span>, key <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span> |&gt; 
+  <span class='fu'><a href='https://rdrr.io/pkg/validate/man/validate-summary.html'>summary</a></span><span class='op'>(</span><span class='op'>)</span>
+</pre>
 
 <p>But it can also be that some R functions are not available on the database,
 in which case you have to reformulate the rule.</p>
