@@ -77,7 +77,7 @@ dplyr::compute()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9004</span>
       </span>
     </div>
 
@@ -277,7 +277,7 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL) OR ((1) IS NULL))) AS `RHS`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
@@ -320,7 +320,7 @@ still needs to be executed in the database, e.g. with <code><a href='https://dpl
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, 'mean_age' AS `rule`, NULL AS `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, `age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL) OR ((1) IS NULL))) AS `RHS`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
