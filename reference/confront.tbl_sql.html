@@ -74,7 +74,7 @@ can be stored in the db or retrieved into R." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9005</span>
       </span>
     </div>
 
@@ -249,8 +249,9 @@ using <code>compute</code> or retrieved into R with <code>values</code>.</p>
 <span class='r-in'><span class='co'># We can see the sql code by using `show_query`:</span></span>
 <span class='r-in'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='va'>cf</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;SQL&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, NULLIF(`is_adult`, -1) AS `is_adult`, NULLIF(`has_income`, -1) AS `has_income`, NULLIF(`mean_age`, -1) AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, MIN(`is_adult`) AS `is_adult`, MIN(`has_income`) AS `has_income`, MIN(`mean_age`) AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `mean_age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`) AS `LHS`</span>
@@ -287,13 +288,14 @@ using <code>compute</code> or retrieved into R with <code>values</code>.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`)</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># identical</span></span>
 <span class='r-in'><span class='fu'><a href='https://dplyr.tidyverse.org/reference/explain.html'>show_query</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span><span class='va'>cf</span>, type <span class='op'>=</span> <span class='st'>"tbl"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;SQL&gt;</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SELECT `id`, NULLIF(`is_adult`, -1) AS `is_adult`, NULLIF(`has_income`, -1) AS `has_income`, NULLIF(`mean_age`, -1) AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, MIN(`is_adult`) AS `is_adult`, MIN(`has_income`) AS `has_income`, MIN(`mean_age`) AS `mean_age`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(1 - `fail`, -1)) ELSE (1) END AS `mean_age`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM (SELECT `id`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> FROM `income`) AS `LHS`</span>
@@ -330,7 +332,7 @@ using <code>compute</code> or retrieved into R with <code>values</code>.</p>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> WHERE (((`age`) IS NULL))) AS `RHS`</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ON (`LHS`.`id` = `RHS`.`id`)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> ))</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> GROUP BY `id`)</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># sparse results in db (that the default)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/pkg/validate/man/values.html'>values</a></span><span class='op'>(</span><span class='va'>cf</span>, type<span class='op'>=</span><span class='st'>"tbl"</span>, sparse<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
