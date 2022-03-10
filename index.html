@@ -21,6 +21,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,18 +35,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">validatedb</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
@@ -54,7 +50,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/data-cleaning/validatedb/">
+  <a href="https://github.com/data-cleaning/validatedb/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -71,36 +67,36 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="validatedb" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#validatedb" class="anchor"></a>validatedb</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="validatedb">validatedb<a class="anchor" aria-label="anchor" href="#validatedb"></a>
+</h1></div>
 <!-- badges: start -->
 
 <p><code>validatedb</code> executes validation checks written with R package <code>validate</code> on a database. This allows for checking the validity of records in a database.</p>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>You can install a development version with</p>
 <!-- You can install the released version of validatedb from [CRAN](https://CRAN.R-project.org) with: -->
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"data-cleaning/validatedb"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"data-cleaning/validatedb"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h2>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-cleaning/validatedb">validatedb</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/data-cleaning/validatedb" class="external-link">validatedb</a></span><span class="op">)</span>
 <span class="co">#&gt; Loading required package: validate</span></code></pre></div>
 <p>First we setup a table in a database (for demo purpose)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># create a table in a database</span>
-<span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span>, <span class="va">income</span><span class="op">)</span></code></pre></div>
+<span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">RSQLite</span><span class="fu">::</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbWriteTable.html" class="external-link">dbWriteTable</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span>, <span class="va">income</span><span class="op">)</span></code></pre></div>
 <p>We retrieve a reference/handle to the table in the DB with <code>dplyr</code></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tbl_income</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/tbl.html" class="external-link">tbl</a></span><span class="op">(</span><span class="va">con</span>, <span class="st">"income"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl_income</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   table&lt;income&gt; [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 []</span>
 <span class="co">#&gt;      id   age salary</span>
@@ -109,16 +105,16 @@
 <span class="co">#&gt; 2     2    35     NA</span></code></pre></div>
 <p>Let’s define a rule set and confront the table with it:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
+<code class="sourceCode R"><span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html" class="external-link">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
                   , has_income <span class="op">=</span> <span class="va">salary</span> <span class="op">&gt;</span> <span class="fl">0</span>
-                  , mean_age   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">age</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">24</span>
-                  , has_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/is_complete.html">is_complete</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">salary</span><span class="op">)</span>
+                  , mean_age   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">age</span>,na.rm<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">24</span>
+                  , has_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/is_complete.html" class="external-link">is_complete</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">salary</span><span class="op">)</span>
                   <span class="op">)</span>
 
 <span class="co"># and confront!</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html" class="external-link">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt; Object of class 'tbl_validation'</span>
 <span class="co">#&gt; Call:</span>
 <span class="co">#&gt;     confront.tbl_sql(tbl = dat, x = x, ref = ref, key = key, sparse = sparse)</span>
@@ -130,7 +126,7 @@
 <span class="co">#&gt; Fails         : [??] (see `values`, `summary`)</span>
 <span class="co">#&gt; Errors        : 0</span>
 
-<span class="fu"><a href="https://rdrr.io/pkg/validate/man/validate-summary.html">summary</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/validate/man/validate-summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt;                  name items npass nfail nNA warning error</span>
 <span class="co">#&gt; is_adult     is_adult     2     1     1   0   FALSE FALSE</span>
 <span class="co">#&gt; has_income has_income     2     1     0   1   FALSE FALSE</span>
@@ -143,7 +139,7 @@
 <span class="co">#&gt; has_values     is_complete(age, salary)</span></code></pre></div>
 <p>Values (i.e. validations on the table) can be retrieved like in <code>validate</code> with <code>type="matrix"</code> or <code>type="list"</code></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>
 <span class="co">#&gt; [[1]]</span>
 <span class="co">#&gt;      is_adult has_income has_values</span>
 <span class="co">#&gt; [1,]    FALSE       TRUE       TRUE</span>
@@ -154,7 +150,7 @@
 <span class="co">#&gt; [1,]    FALSE</span></code></pre></div>
 <p>But often this seems more handy:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 5]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 []</span>
 <span class="co">#&gt;      id is_adult has_income mean_age has_values</span>
@@ -163,7 +159,7 @@
 <span class="co">#&gt; 2     2        1         NA        0          0</span></code></pre></div>
 <p>or</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">cf</span>, type <span class="op">=</span> <span class="st">"tbl"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 []</span>
 <span class="co">#&gt;      id rule        fail</span>
@@ -175,7 +171,7 @@
 <span class="co">#&gt; 5     2 has_values     1</span></code></pre></div>
 <p>We can see the sql code by using <code>show_query</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html" class="external-link">show_query</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`, NULLIF(MIN(`has_values`), -1) AS `has_values`</span>
 <span class="co">#&gt; FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`, CASE `rule` WHEN ('has_values') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_values`</span>
@@ -299,14 +295,14 @@
 <span id="cb11-73"><a href="#cb11-73"></a><span class="kw">WHERE</span> (((`age`) <span class="kw">IS</span> <span class="kw">NULL</span>) <span class="kw">OR</span> ((`salary`) <span class="kw">IS</span> <span class="kw">NULL</span>))</span>
 <span id="cb11-74"><a href="#cb11-74"></a></span>
 <span id="cb11-75"><a href="#cb11-75"></a><span class="co">--------------------------------------</span></span></code></pre></div>
-<div id="aggregate-example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#aggregate-example" class="anchor"></a>Aggregate example</h3>
+<div class="section level3">
+<h3 id="aggregate-example">Aggregate example<a class="anchor" aria-label="anchor" href="#aggregate-example"></a>
+</h3>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
-<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/memdb_frame.html">src_memdb</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html">copy_to</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">income</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">tbl_income</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">income</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, age<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">12</span>,<span class="fl">35</span><span class="op">)</span>, salary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>,<span class="cn">NA</span><span class="op">)</span><span class="op">)</span>
+<span class="va">con</span> <span class="op">&lt;-</span> <span class="fu">dbplyr</span><span class="fu">::</span><span class="fu"><a href="https://dbplyr.tidyverse.org/reference/memdb_frame.html" class="external-link">src_memdb</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">tbl_income</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">con</span>, <span class="va">income</span>, overwrite<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">tbl_income</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   table&lt;income&gt; [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
 <span class="co">#&gt;      id   age salary</span>
@@ -315,21 +311,21 @@
 <span class="co">#&gt; 2     2    35     NA</span>
 
 <span class="co"># Let's define a rule set and confront the table with it:</span>
-<span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
+<span class="va">rules</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/validator.html" class="external-link">validator</a></span><span class="op">(</span> is_adult   <span class="op">=</span> <span class="va">age</span> <span class="op">&gt;=</span> <span class="fl">18</span>
                     , has_income <span class="op">=</span> <span class="va">salary</span> <span class="op">&gt;</span> <span class="fl">0</span>
 <span class="op">)</span>
 
 <span class="co"># and confront!</span>
 <span class="co"># in general with a db table it is handy to use a key</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"rule"</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html" class="external-link">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"rule"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 7]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
 <span class="co">#&gt;   rule       npass nfail   nNA rel.pass rel.fail rel.NA</span>
 <span class="co">#&gt;   &lt;chr&gt;      &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;lgl&gt;       &lt;dbl&gt;  &lt;dbl&gt;</span>
 <span class="co">#&gt; 1 is_adult       1     1     0 NA            0.5    0  </span>
 <span class="co">#&gt; 2 has_income     1     0     1 NA            0      0.5</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"record"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">cf</span>, by <span class="op">=</span> <span class="st">"record"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
 <span class="co">#&gt;      id nfails   nNA</span>
@@ -339,15 +335,15 @@
 
 <span class="co"># to tweak performance of the db query the following options are available</span>
 <span class="co"># 1) store validation result in db</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, compute <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html" class="external-link">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, compute <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co"># or identical</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span><span class="op">)</span>
-<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html">compute</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html" class="external-link">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span><span class="op">)</span>
+<span class="va">cf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/compute.html" class="external-link">compute</a></span><span class="op">(</span><span class="va">cf</span><span class="op">)</span>
 
 <span class="co"># 2) Store the validation sparsely</span>
-<span class="va">cf_sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span> <span class="op">)</span>
+<span class="va">cf_sparse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/validate/man/confront.html" class="external-link">confront</a></span><span class="op">(</span><span class="va">tbl_income</span>, <span class="va">rules</span>, key<span class="op">=</span><span class="st">"id"</span>, sparse<span class="op">=</span><span class="cn">TRUE</span> <span class="op">)</span>
 
-<span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html">show_query</a></span><span class="op">(</span><span class="va">cf_sparse</span><span class="op">)</span>
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/explain.html" class="external-link">show_query</a></span><span class="op">(</span><span class="va">cf_sparse</span><span class="op">)</span>
 <span class="co">#&gt; &lt;SQL&gt;</span>
 <span class="co">#&gt; SELECT `id`, 'is_adult' AS `rule`, 1 AS `fail`</span>
 <span class="co">#&gt; FROM (SELECT `id`, `age`</span>
@@ -368,7 +364,7 @@
 <span class="co">#&gt; FROM (SELECT `id`, `salary`</span>
 <span class="co">#&gt; FROM `income`)</span>
 <span class="co">#&gt; WHERE (((`salary`) IS NULL))</span>
-<span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html">values</a></span><span class="op">(</span><span class="va">cf_sparse</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/validate/man/values.html" class="external-link">values</a></span><span class="op">(</span><span class="va">cf_sparse</span>, type<span class="op">=</span><span class="st">"tbl"</span><span class="op">)</span>
 <span class="co">#&gt; # Source:   lazy query [?? x 3]</span>
 <span class="co">#&gt; # Database: sqlite 3.35.5 [:memory:]</span>
 <span class="co">#&gt;      id rule        fail</span>
@@ -377,12 +373,12 @@
 <span class="co">#&gt; 2     2 has_income    NA</span></code></pre></div>
 </div>
 </div>
-<div id="validate-specific-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#validate-specific-functions" class="anchor"></a>validate specific functions</h2>
-<div id="added" class="section level3">
-<h3 class="hasAnchor">
-<a href="#added" class="anchor"></a>Added:</h3>
+<div class="section level2">
+<h2 id="validate-specific-functions">validate specific functions<a class="anchor" aria-label="anchor" href="#validate-specific-functions"></a>
+</h2>
+<div class="section level3">
+<h3 id="added">Added:<a class="anchor" aria-label="anchor" href="#added"></a>
+</h3>
 <ul>
 <li>
 <input type="checkbox" disabled checked><code>is_complete</code>, <code>all_complete</code>
@@ -398,9 +394,9 @@
 </li>
 </ul>
 </div>
-<div id="todo" class="section level3">
-<h3 class="hasAnchor">
-<a href="#todo" class="anchor"></a>Todo</h3>
+<div class="section level3">
+<h3 id="todo">Todo<a class="anchor" aria-label="anchor" href="#todo"></a>
+</h3>
 <p>Some newly added <code>validate</code> utility functions are (still) missing from <code>validatedb</code>.</p>
 <ul>
 <li>
@@ -420,49 +416,59 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=validatedb">https://​cloud.r-project.org/​package=validatedb</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/data-cleaning/validatedb/">https://​github.com/​data-cleaning/​validatedb/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/data-cleaning/validatedb/issues">https://​github.com/​data-cleaning/​validatedb/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li><a href="LICENSE.html">Full license</a></li>
-<li><small><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></small></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Edwin de Jonge <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6580-4718" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="https://cloud.r-project.org/package=validatedb" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/data-cleaning/validatedb/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/data-cleaning/validatedb/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=validatedb"><img src="https://www.r-pkg.org/badges/version/validatedb" alt="CRAN status"></a></li>
-<li><a href="https://github.com/data-cleaning/validatedb/actions"><img src="https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/gh/data-cleaning/validatedb?branch=master"><img src="https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="http://www.awesomeofficialstatistics.org"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Official Statistics"></a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing validatedb</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Edwin de Jonge <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-6580-4718" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=validatedb" class="external-link"><img src="https://www.r-pkg.org/badges/version/validatedb" alt="CRAN status"></a></li>
+<li><a href="https://github.com/data-cleaning/validatedb/actions" class="external-link"><img src="https://github.com/data-cleaning/validatedb/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/gh/data-cleaning/validatedb?branch=master" class="external-link"><img src="https://codecov.io/gh/data-cleaning/validatedb/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="http://www.awesomeofficialstatistics.org" class="external-link"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Official Statistics"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Edwin de Jonge.</p>
+  <p></p>
+<p>Developed by Edwin de Jonge.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -470,6 +476,8 @@
 
   
 
+
+  
 
   </body>
 </html>
