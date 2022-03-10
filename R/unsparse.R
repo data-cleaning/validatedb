@@ -15,7 +15,7 @@ unsparse <- function(cf){
  c_cols <- 
    lapply(rnms, function(n){
     bquote(switch( rule
-                 , ..(elist(n = dplyr::coalesce(1L - fail, -1L))) #invalid = 0, or NA = -1
+                 , ..(elist(n = dplyr::coalesce(1L-as.integer(fail), -1L))) #invalid = 0, or NA = -1
                  , 1L  # valid = 1
                  ), splice = TRUE)
  })
@@ -26,5 +26,6 @@ unsparse <- function(cf){
  # and summarise to have the same rows are the original table
  passes <- dplyr::summarise(passes, dplyr::across(!!rnms, min, na.rm=TRUE))
  passes <- dplyr::mutate(passes, dplyr::across(!!rnms, na_if, -1L))
+ passes <- dplyr::mutate(passes, dplyr::across(!!rnms, as.logical))
  passes
 }

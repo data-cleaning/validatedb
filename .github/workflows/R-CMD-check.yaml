@@ -69,6 +69,12 @@ jobs:
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
 
+      - name: Install duckdb (extra test)
+        if: runner.os == 'macOS'
+        run: |
+          remotes::install_cran("duckdb")
+        shell: Rscript {0}
+
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_REMOTE_: false

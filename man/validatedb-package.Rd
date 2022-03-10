@@ -6,9 +6,7 @@
 \alias{validatedb-package}
 \title{validatedb: Validate Data in a Database using 'validate'}
 \description{
-Check whether records in a database table are valid using 
-   validation rules in R syntax specified with R package 'validate'. 
-   R validation checks are automatically translated to SQL using 'dbplyr'.
+Check whether records in a database table are valid using validation rules in R syntax specified with R package 'validate'. R validation checks are automatically translated to SQL using 'dbplyr'.
 }
 \seealso{
 Useful links:
