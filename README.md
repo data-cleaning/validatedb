@@ -51,7 +51,7 @@ We retrieve a reference/handle to the table in the DB with `dplyr`
 tbl_income <- tbl(con, "income")
 print(tbl_income)
 #> # Source:   table<income> [?? x 3]
-#> # Database: sqlite 3.35.5 []
+#> # Database: sqlite 3.37.2 []
 #>      id   age salary
 #>   <int> <dbl>  <dbl>
 #> 1     1    12   1000
@@ -115,7 +115,7 @@ But often this seems more handy:
 ``` r
 values(cf, type = "tbl")
 #> # Source:   lazy query [?? x 5]
-#> # Database: sqlite 3.35.5 []
+#> # Database: sqlite 3.37.2 []
 #>      id is_adult has_income mean_age has_values
 #>   <int>    <int>      <int>    <int>      <int>
 #> 1     1        0          1        0          1
@@ -127,7 +127,7 @@ or
 ``` r
 values(cf, type = "tbl", sparse=TRUE)
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.35.5 []
+#> # Database: sqlite 3.37.2 []
 #>      id rule        fail
 #>   <int> <chr>      <int>
 #> 1     1 is_adult       1
@@ -142,8 +142,10 @@ We can see the sql code by using `show_query`:
 ``` r
 show_query(cf)
 #> <SQL>
-#> SELECT `id`, NULLIF(MIN(`is_adult`), -1) AS `is_adult`, NULLIF(MIN(`has_income`), -1) AS `has_income`, NULLIF(MIN(`mean_age`), -1) AS `mean_age`, NULLIF(MIN(`has_values`), -1) AS `has_values`
-#> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `mean_age`, CASE `rule` WHEN ('has_values') THEN (COALESCE(NOT(`fail`), -1)) ELSE (1) END AS `has_values`
+#> SELECT `id`, CAST(`is_adult` AS BOOLEAN) AS `is_adult`, CAST(`has_income` AS BOOLEAN) AS `has_income`, CAST(`mean_age` AS BOOLEAN) AS `mean_age`, CAST(`has_values` AS BOOLEAN) AS `has_values`
+#> FROM (SELECT `id`, NULLIF(`is_adult`, -1) AS `is_adult`, NULLIF(`has_income`, -1) AS `has_income`, NULLIF(`mean_age`, -1) AS `mean_age`, NULLIF(`has_values`, -1) AS `has_values`
+#> FROM (SELECT `id`, MIN(`is_adult`) AS `is_adult`, MIN(`has_income`) AS `has_income`, MIN(`mean_age`) AS `mean_age`, MIN(`has_values`) AS `has_values`
+#> FROM (SELECT `id`, CASE `rule` WHEN ('is_adult') THEN (COALESCE(1 - CAST(`fail` AS INTEGER), -1)) ELSE (1) END AS `is_adult`, CASE `rule` WHEN ('has_income') THEN (COALESCE(1 - CAST(`fail` AS INTEGER), -1)) ELSE (1) END AS `has_income`, CASE `rule` WHEN ('mean_age') THEN (COALESCE(1 - CAST(`fail` AS INTEGER), -1)) ELSE (1) END AS `mean_age`, CASE `rule` WHEN ('has_values') THEN (COALESCE(1 - CAST(`fail` AS INTEGER), -1)) ELSE (1) END AS `has_values`
 #> FROM (SELECT `LHS`.`id` AS `id`, `rule`, `fail`
 #> FROM (SELECT `id`
 #> FROM `income`) AS `LHS`
@@ -185,7 +187,7 @@ show_query(cf)
 #> WHERE (((`age`) IS NULL) OR ((`salary`) IS NULL))) AS `RHS`
 #> ON (`LHS`.`id` = `RHS`.`id`)
 #> ))
-#> GROUP BY `id`
+#> GROUP BY `id`))
 ```
 
 Or write the sql to a file for documentation (and inspiration)
@@ -197,11 +199,11 @@ dump_sql(cf, "validation.sql")
 ``` sql
 ------------------------------------------------------------
 -- Do not edit, automatically generated with R package validatedb.
--- validatedb: 0.3.0.9004
+-- validatedb: 0.3.1.9000
 -- validate: 1.1.0
 -- R version 4.1.2 (2021-11-01)
 -- Database: '', Table: 'income'
--- Date: 2021-12-01
+-- Date: 2022-03-10
 ------------------------------------------------------------
 
 --------------------------------------
@@ -280,7 +282,7 @@ con <- dbplyr::src_memdb()
 tbl_income <- dplyr::copy_to(con, income, overwrite=TRUE)
 print(tbl_income)
 #> # Source:   table<income> [?? x 3]
-#> # Database: sqlite 3.35.5 [:memory:]
+#> # Database: sqlite 3.37.2 [:memory:]
 #>      id   age salary
 #>   <int> <dbl>  <dbl>
 #> 1     1    12   1000
@@ -296,14 +298,14 @@ rules <- validator( is_adult   = age >= 18
 cf <- confront(tbl_income, rules, key="id")
 aggregate(cf, by = "rule")
 #> # Source:   lazy query [?? x 7]
-#> # Database: sqlite 3.35.5 [:memory:]
+#> # Database: sqlite 3.37.2 [:memory:]
 #>   rule       npass nfail   nNA rel.pass rel.fail rel.NA
 #>   <chr>      <int> <int> <int> <lgl>       <dbl>  <dbl>
 #> 1 is_adult       1     1     0 NA            0.5    0  
 #> 2 has_income     1     0     1 NA            0      0.5
 aggregate(cf, by = "record")
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.35.5 [:memory:]
+#> # Database: sqlite 3.37.2 [:memory:]
 #>      id nfails   nNA
 #>   <int>  <int> <int>
 #> 1     1      1     0
@@ -342,7 +344,7 @@ show_query(cf_sparse)
 #> WHERE (((`salary`) IS NULL))
 values(cf_sparse, type="tbl")
 #> # Source:   lazy query [?? x 3]
-#> # Database: sqlite 3.35.5 [:memory:]
+#> # Database: sqlite 3.37.2 [:memory:]
 #>      id rule        fail
 #>   <int> <chr>      <int>
 #> 1     1 is_adult       1
