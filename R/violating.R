@@ -2,6 +2,7 @@ violating.tbl_sql <- function(x, y, include_missing=FALSE, key  = NULL, ...){
   if (inherits(y, "validator")){
     y <- confront(x, y, key = key, ...)
   }
+  
   qry <- y$query
   if (!isTRUE(include_missing)){
     qry <- dplyr::filter(qry, fail == 1)
@@ -13,5 +14,16 @@ violating.tbl_sql <- function(x, y, include_missing=FALSE, key  = NULL, ...){
 }
 
 satisfying.tbl_sql <- function(x,y, include_missing = FALSE, key = NULL, ...){
+  if (inherits(y, "validator")){
+    y <- confront(x, y, key = key, ...)
+  }
   
+  qry <- y$query
+  if (isTRUE(include_missing)){
+    qry <- dplyr::filter(qry, fail == 1)
+  }
+  keys <- lapply(key, as.symbol)
+  qry <- dplyr::distinct(qry, !!!keys)
+  
+  dplyr::anti_join(y$tbl, qry,by = key) |> show_query()
 }
