@@ -1,4 +1,7 @@
 violating.tbl_sql <- function(x, y, include_missing=FALSE, key  = NULL, ...){
+  # CRAN check
+  fail <- NULL
+  
   if (inherits(y, "validator")){
     y <- confront(x, y, key = key, ...)
   }
@@ -14,6 +17,9 @@ violating.tbl_sql <- function(x, y, include_missing=FALSE, key  = NULL, ...){
 }
 
 satisfying.tbl_sql <- function(x,y, include_missing = FALSE, key = NULL, ...){
+  # CRAN check
+  fail <- NULL
+
   if (inherits(y, "validator")){
     y <- confront(x, y, key = key, ...)
   }
@@ -30,6 +36,9 @@ satisfying.tbl_sql <- function(x,y, include_missing = FALSE, key = NULL, ...){
 
 
 lacking.tbl_sql <- function(x, y, key  = NULL, ...){
+  # CRAN check
+  fail <- NULL
+
   if (inherits(y, "validator")){
     y <- confront(x, y, key = key, ...)
   }

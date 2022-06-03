@@ -33,12 +33,14 @@ value, while the database column is of type "varchar".
 \item To debug your rules, a useful thing to do is first to test the rules on a
 small sub set of the table
 \item e.g.
-}\preformatted{tbl |> 
+}
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{tbl |> 
   head() |>          # debugging on db
   as.data.frame() |> # debugging "rules", do they work on a data.frame
   confront(rules, key = "id") |> 
   summary()
-}
+}\if{html}{\out{</div>}}
 
 But it can also be that some R functions are not available on the database,
 in which case you have to reformulate the rule.
