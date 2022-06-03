@@ -133,7 +133,14 @@ describe("Confront", {
     v <- values(cf, sparse=FALSE, type="matrix")
     v_df <- values(cf_df)
     expect_equal(v, v_df)
+  })
+  
+  it("works with an if statement", {
+    rules <- validator(if (x > 1) id == "a")
+    cf <- confront(tbl, rules, key = "id")
     
+    vls <- values(cf, type="data.frame")
+    expect_equal(vls, data.frame(id = c("a","b"), V1=c(TRUE, FALSE)))
   })
   
 })

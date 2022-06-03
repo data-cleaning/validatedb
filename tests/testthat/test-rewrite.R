@@ -118,4 +118,10 @@ describe("rewrite", {
     expect_equal(l$e, quote(max(is.na(sector) | is.na(size), na.rm=TRUE) < 1L))
   })
   
+  it("negate an if statement", {
+    e <- quote(if(age < 11) name == "a")
+    ne <- negate(e)
+    expect_equal(ne, quote(age < 11 & name != "a"))
+  })
+  
 })

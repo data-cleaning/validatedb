@@ -56,13 +56,14 @@ negate <- function(e){
   l <- e[[2]]
   r <- if (length(e) >= 3) e[[3]]
   switch( op
-        , "!" = l
-        , ">" = bquote(.(l) <= .(r))
+        , "!"  = l
+        , ">"  = bquote(.(l) <= .(r))
         , ">=" = bquote(.(l) < .(r))
-        , "<" = bquote(.(l) >= .(r))
+        , "<"  = bquote(.(l) >= .(r))
         , "<=" = bquote(.(l) > .(r))
         , "!=" = bquote(.(l) == .(r))
         , "==" = bquote(.(l) != .(r))
+        , "if" = bquote(.(l) & .(negate(r)))
         , bquote(!.(e))
         )
 }
